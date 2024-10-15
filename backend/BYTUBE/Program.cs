@@ -2,9 +2,20 @@ using Microsoft.EntityFrameworkCore;
 
 internal class Program
 {
+
+
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddDistributedMemoryCache();
+
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
 
         // Add services to the container.
 
@@ -24,6 +35,8 @@ internal class Program
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
+
+        app.UseSession();
 
         app.MapControllers();
 
