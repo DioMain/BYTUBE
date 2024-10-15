@@ -1,23 +1,21 @@
 {
-    "compilerOptions": {
-        "target": "ES5",
-        "module": "ESNext",
-        "jsx": "react-jsx",
-        "lib": ["dom", "es2015"],
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "baseUrl": "src",
-        "paths": {
-            "@components/*": ["components/*"],
-            "@redux/*": ["redux/*"],
-            "@styles/*": ["styles/*"],
-            "@hooks/*": ["hooks/*"],
-        }
-    },
-    "include": [
-        "./src/**/*"
-    ]
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "lib": ["dom", "es2015"],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@redux/*": ["redux/*"],
+      "@styles/*": ["styles/*"],
+      "@hooks/*": ["hooks/*"]
+    }
+  },
+  "include": ["./src/**/*"]
 }
