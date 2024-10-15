@@ -3,9 +3,9 @@
 namespace BYTUBE.Controllers
 {
     [ApiController]
-    public class MainController : ControllerBase
+    public class AppController : ControllerBase
     {
-        public MainController()
+        public AppController()
         {
 
         }

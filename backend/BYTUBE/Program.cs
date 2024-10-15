@@ -23,8 +23,6 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
-
         app.UseStaticFiles();
 
         app.MapControllers();

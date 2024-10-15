@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "ESNext",
+        "jsx": "react",
+        "lib": ["dom", "es2015"],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        //"noImplicitAny": false,
+        "baseUrl": "src",
+        "paths": {
+            "@components/*": ["components/*"]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
