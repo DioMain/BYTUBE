@@ -11,7 +11,10 @@
         "strict": true,
         "baseUrl": "src",
         "paths": {
-            "@components/*": ["components/*"]
+            "@components/*": ["components/*"],
+            "@redux/*": ["redux/*"],
+            "@styles/*": ["styles/*"],
+            "@hooks/*": ["hooks/*"],
         }
     },
     "include": [
