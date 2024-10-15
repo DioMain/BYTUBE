@@ -1,17 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
 
-// Add services to the container.
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+        // Add services to the container.
 
-var app = builder.Build();
+        builder.Services.AddControllers();
 
-// Configure the HTTP request pipeline.
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection0");
 
-app.UseHttpsRedirection();
+        builder.Services.AddDbContext<PostgresDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
 
-app.UseAuthorization();
+        var app = builder.Build();
 
-app.MapControllers();
+        // Configure the HTTP request pipeline.
 
-app.Run();
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.UseStaticFiles();
+
+        app.MapControllers();
+
+        app.Run();
+    }
+}
