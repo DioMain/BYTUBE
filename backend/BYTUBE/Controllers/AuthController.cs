@@ -14,24 +14,25 @@ namespace BYTUBE.Controllers
     {
         private readonly JwtManager _jwtManager;
 
-        private readonly CookieOptions _jwtCookieOptions;
-
         public AuthController(JwtManager jwtManager)
         {
             _jwtManager = jwtManager;
-
-            _jwtCookieOptions = new CookieOptions()
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                MaxAge = TimeSpan.FromMinutes(5)
-            };
         }
 
         [HttpGet("signin-jwt")]
         public IResult loginJwt()
         {
-            HttpContext.Response.Cookies.Append("Authorization", $"Bearer {_jwtManager.GenerateJwtToken("TestUser")}", _jwtCookieOptions);
+            HttpContext.Response.Cookies.Append(
+                "AccessToken", 
+                JwtManager.GenerateJwtToken(_jwtManager.AccessToken, "TestUser"), 
+                _jwtManager.JwtCookieOptions
+            );
+
+            HttpContext.Response.Cookies.Append(
+                "RefreshToken", 
+                JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, "TestUser"), 
+                _jwtManager.JwtCookieOptions
+            );
 
             return Results.Redirect("/App");
         }
@@ -39,7 +40,8 @@ namespace BYTUBE.Controllers
         [HttpGet("signout-jwt")]
         public IResult logoutJwt()
         {
-            HttpContext.Response.Cookies.Delete("Authorization");
+            HttpContext.Response.Cookies.Delete("AccessToken");
+            HttpContext.Response.Cookies.Delete("RefreshToken");
 
             return Results.Redirect("/App");
         }

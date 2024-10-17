@@ -3,7 +3,6 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -13,9 +12,10 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        var accessToken = builder.Configuration.GetSection("AccessToken").Get<JwtSettings>();
+        var refreshToken = builder.Configuration.GetSection("RefreshToken").Get<JwtSettings>();
 
-        builder.Services.AddSingleton(new JwtManager(jwtSettings));
+        builder.Services.AddSingleton(new JwtManager(accessToken, refreshToken));
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -34,29 +34,12 @@ internal class Program
             })
             .AddJwtBearer(options =>
             {
-                var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.Issuer,
-                    ValidAudience = jwtSettings.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.TokenValidationParameters = JwtManager.GetParameters(accessToken);
             });
-
-
-
-        // Add services to the container.
 
         builder.Services.AddControllers();
 
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection0");
-
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
