@@ -50,6 +50,7 @@ module.exports = {
   devServer: {
     compress: true,
     port: 3000,
+    historyApiFallback: true,
     proxy: [
       {
         context: ["/api", "/videos", "/channels", "/users"],

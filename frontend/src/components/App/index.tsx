@@ -1,21 +1,19 @@
-import { observer } from "mobx-react-lite";
-import counterStore from "stores/counter-store";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-const App: React.FC = observer(() => {
-  const { count, increment, total } = counterStore;
-
-  console.log(count);
-  console.log(increment);
-  console.log(total);
-
+const App: React.FC = () => {
   return (
     <div>
-      <div>{total}</div>
-      <input type="button" value="remove" onClick={() => increment(-1)} />
-      <div>{count}</div>
-      <input type="button" value="add" onClick={() => increment(1)} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/Catalog" />
+          <Route path="/Search" />
+          <Route path="/Video" />
+          <Route path="/Channel" />
+          <Route path="/Playlist" />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
-});
+};
 
 export default App;

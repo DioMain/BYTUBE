@@ -14,7 +14,10 @@
       "@components/*": ["components/*"],
       "@redux/*": ["redux/*"],
       "@styles/*": ["styles/*"],
-      "@hooks/*": ["hooks/*"]
+      "@stores/*": ["stores/*"],
+      "@axios/*": ["axios/*"],
+      "@hooks/*": ["hooks/*"],
+      "@assets/*": ["assets/*"]
     }
   },
   "include": ["./src/**/*"]
