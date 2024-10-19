@@ -1,30 +1,21 @@
-import { BrowserRouter, Routes } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import counterStore from "stores/counter-store";
 
-const App: React.FC = () => {
-  const getSecret = () => {
-    fetch("/api/auth/secret-jwt", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((raw) => raw.text())
-      .then((data) => {
-        console.log(data);
-      });
-  };
+const App: React.FC = observer(() => {
+  const { count, increment, total } = counterStore;
+
+  console.log(count);
+  console.log(increment);
+  console.log(total);
 
   return (
     <div>
-      <header>
-        <video src="/videos/template/video.mp4" controls width={512}></video>
-      </header>
-      <BrowserRouter>
-        <Routes></Routes>
-      </BrowserRouter>
-      <a href={"/api/auth/signin-jwt"}>sign in</a> <br />
-      <a href={"/api/auth/signout-jwt"}>sign out</a> <br />
-      <button onClick={() => getSecret()}>Secret data</button>
+      <div>{total}</div>
+      <input type="button" value="remove" onClick={() => increment(-1)} />
+      <div>{count}</div>
+      <input type="button" value="add" onClick={() => increment(1)} />
     </div>
   );
-};
+});
 
 export default App;
