@@ -1,0 +1,16 @@
+.signin {
+  &-content {
+    background-color: rgb(28, 28, 28);
+
+    padding: 16px;
+
+    border-radius: 12px;
+  }
+
+  &-background {
+    margin-top: 200px;
+
+    display: flex;
+    justify-content: center;
+  }
+}

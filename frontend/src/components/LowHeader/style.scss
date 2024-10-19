@@ -9,5 +9,7 @@
     cursor: pointer;
 
     @include defaultFont(16px);
+
+    width: min-content;
   }
 }

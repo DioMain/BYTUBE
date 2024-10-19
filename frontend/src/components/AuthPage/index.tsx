@@ -1,11 +1,11 @@
 import LowHeader from "@components/LowHeader";
-import "./style.scss";
+import { Outlet } from "react-router-dom";
 
 const AuthPage: React.FC = () => {
   return (
     <div>
       <LowHeader />
-      <div className="authpage"></div>
+      <Outlet />
     </div>
   );
 };
