@@ -15,10 +15,9 @@
       "@redux/*": ["redux/*"],
       "@styles/*": ["styles/*"],
       "@stores/*": ["stores/*"],
-      "@axios/*": ["axios/*"],
       "@hooks/*": ["hooks/*"],
       "@assets/*": ["assets/*"],
-      "@types/*": ["types/*"]
+      "@type/*": ["types/*"]
     }
   },
   "include": ["./src/**/*"]

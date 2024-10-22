@@ -9,10 +9,12 @@ namespace BYTUBE.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtManager _jwtManager;
+        private readonly PasswordHasher _passwordHasher;
 
-        public AuthController(JwtManager jwtManager)
+        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher)
         {
             _jwtManager = jwtManager;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpGet("signin-jwt")]

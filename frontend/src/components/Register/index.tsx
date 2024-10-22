@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import defaultIcon from "@assets/images/UnknownUser.jpg";
 import UploadIcon from "@mui/icons-material/Upload";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import axios, { AxiosError } from "axios";
 import "./style.scss";
+import ValidationError from "@type/ValidationError";
 
 const Register: React.FC = () => {
   const [curIcon, setCurIcon] = useState(defaultIcon);
@@ -18,6 +20,27 @@ const Register: React.FC = () => {
   const openFileDialog = () => {
     let fileInput = document.getElementById("registerInputIcon") as HTMLInputElement;
     fileInput.click();
+  };
+
+  const registerUser = () => {
+    const usernameField = document.getElementById("nicknameField") as HTMLInputElement;
+    const emailField = document.getElementById("emailField") as HTMLInputElement;
+    const passwordField = document.getElementById("passwordField") as HTMLInputElement;
+    const cpasswordField = document.getElementById("cpasswordField") as HTMLInputElement;
+
+    axios
+      .post("/api/auth/register", {
+        UserName: usernameField.value,
+        Email: emailField.value,
+        Password: passwordField.value,
+        ConfirmPassword: cpasswordField.value,
+      })
+      .then()
+      .catch((err: AxiosError) => {
+        let data = new ValidationError(err.response?.data);
+
+        setError(data.getFirstError());
+      });
   };
 
   return (
@@ -39,7 +62,7 @@ const Register: React.FC = () => {
           <TextField id="emailField" label="Почта" type="email" />
           <TextField id="passwordField" label="Пароль" type="password" />
           <TextField id="cpasswordField" label="Подтвердить пароль" type="password" />
-          <Button variant="contained" color="success">
+          <Button variant="contained" color="success" onClick={registerUser}>
             Подтвердить
           </Button>
           <a href="/Auth/Signin" className="register-signinlink">
