@@ -1,10 +1,4 @@
-import {
-  action,
-  computed,
-  makeAutoObservable,
-  makeObservable,
-  observable,
-} from "mobx";
+import { action, computed, makeAutoObservable, makeObservable, observable } from "mobx";
 
 class CounterStore {
   count = 0;

@@ -1,26 +1,25 @@
 @import "./../../styles/Mixins.scss";
 
-.signin {
+.register {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
 
   &-col {
     display: flex;
-
     flex-direction: column;
-  }
 
-  &-h1 {
-    margin-top: 75px;
-    text-align: center;
+    h1 {
+      text-align: center;
+    }
   }
 
   &-content {
-    margin-top: 100px;
-
     background-color: rgb(28, 28, 28);
 
     padding: 16px;
+
+    margin-top: 75px;
 
     border-radius: 12px;
 
@@ -29,37 +28,54 @@
     flex-direction: column;
 
     min-width: 300px;
+
+    & > div {
+      margin-bottom: 10px;
+    }
   }
 
-  &-error {
-    margin-top: 12px;
-    text-align: center;
-    color: red;
-  }
-
-  &-usericon {
+  &-icon-upload {
     position: relative;
 
     display: flex;
     justify-content: center;
 
     top: -64px;
-    height: 64px;
 
-    img {
-      width: 96px;
+    height: 48px;
+
+    &-img {
+      background-size: cover;
+      background-position: center;
+
       height: 96px;
-
+      width: 96px;
+  
       border-radius: 64px;
       border: solid 2px white;
+  
+      cursor: pointer;
+      
+      input {
+        display: none;
+      }
+    }
+
+    &-icon {
+      position: relative;
+
+      top: 60px;
+      left: 60px;
     }
   }
 
-  &-button.MuiButtonBase-root {
-    margin-top: 24px;
+  &-error {
+    text-align: center;
+    color: red;
+    margin-top: 10px;
   }
 
-  &-reglink {
+  &-signinlink {
     margin-top: 12px;
     text-align: center;
     

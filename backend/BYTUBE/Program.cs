@@ -3,8 +3,6 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 internal class Program
 {
@@ -14,8 +12,10 @@ internal class Program
 
         var accessToken = builder.Configuration.GetSection("AccessToken").Get<JwtSettings>();
         var refreshToken = builder.Configuration.GetSection("RefreshToken").Get<JwtSettings>();
+        var salt = builder.Configuration["Salt"];
 
-        builder.Services.AddSingleton(new JwtManager(accessToken, refreshToken));
+        builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
+        builder.Services.AddSingleton(new PasswordHasher(salt!));
 
         builder.Services.AddDistributedMemoryCache();
 

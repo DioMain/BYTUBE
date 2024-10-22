@@ -17,7 +17,8 @@
       "@stores/*": ["stores/*"],
       "@axios/*": ["axios/*"],
       "@hooks/*": ["hooks/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@types/*": ["types/*"]
     }
   },
   "include": ["./src/**/*"]

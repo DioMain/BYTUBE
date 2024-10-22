@@ -1,7 +1,13 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AppHeader from "@components/AppHeader";
+import { Outlet } from "react-router-dom";
 
 const App: React.FC = () => {
-  return <div></div>;
+  return (
+    <div>
+      <AppHeader />
+      <Outlet />
+    </div>
+  );
 };
 
 export default App;
