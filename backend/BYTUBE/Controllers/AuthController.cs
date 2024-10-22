@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.Google;
+﻿using Microsoft.AspNetCore.Mvc;
 using BYTUBE.Services;
-using Microsoft.AspNetCore.Authorization;
+using BYTUBE.Models;
 
 namespace BYTUBE.Controllers
 {
@@ -46,10 +42,10 @@ namespace BYTUBE.Controllers
             return Results.Redirect("/App");
         }
 
-        [HttpGet("secret-jwt"), Authorize]
-        public IResult secretJwt()
+        [HttpPost("register")]
+        public IResult Register([FromBody] RegisterModel model)
         {
-            return Results.Text("Secret", "text/plain");
+            return Results.Ok();
         }
     }
 }
