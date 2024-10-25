@@ -1,14 +1,11 @@
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import GeneralRoutes from "@components/GeneralRoutes";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material/styles";
-import "@styles/Base.scss";
-import "@styles/Fonts.scss";
 import { AppStoreContext } from "appStoreContext";
 import StoreWrapper from "@stores/storeWrapper";
+import "@styles/Base.scss";
+import "@styles/Fonts.scss";
 
 const darkTheme = createTheme({
   palette: {

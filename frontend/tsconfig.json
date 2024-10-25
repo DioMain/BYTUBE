@@ -12,7 +12,6 @@
     "baseUrl": "src",
     "paths": {
       "@components/*": ["components/*"],
-      "@redux/*": ["redux/*"],
       "@styles/*": ["styles/*"],
       "@stores/*": ["stores/*"],
       "@hooks/*": ["hooks/*"],
