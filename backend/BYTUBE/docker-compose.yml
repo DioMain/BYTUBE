@@ -1,0 +1,29 @@
+﻿version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgresdb;Port=5432;Database=BYTUBE;Username=admin;Password=root
+    depends_on:
+      - postgresdb
+
+  postgresdb:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: BYTUBE
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

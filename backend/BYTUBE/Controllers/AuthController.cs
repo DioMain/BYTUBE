@@ -10,11 +10,13 @@ namespace BYTUBE.Controllers
     {
         private readonly JwtManager _jwtManager;
         private readonly PasswordHasher _passwordHasher;
+        private readonly PostgresDbContext _db;
 
-        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher)
+        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher, PostgresDbContext db)
         {
             _jwtManager = jwtManager;
             _passwordHasher = passwordHasher;
+            _db = db;
         }
 
         [HttpGet("signin-jwt")]

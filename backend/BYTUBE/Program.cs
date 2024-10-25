@@ -3,6 +3,7 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 internal class Program
 {
@@ -39,7 +40,7 @@ internal class Program
 
         builder.Services.AddControllers();
 
-        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection0");
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
