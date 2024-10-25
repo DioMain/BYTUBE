@@ -4,9 +4,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Divider, Drawer } from "@mui/material";
 import { useState } from "react";
+import { useStores } from "appStoreContext";
+import { observer } from "mobx-react-lite";
+import AuthState from "@type/AuthState";
 
-const AppHeader: React.FC = () => {
+const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
+  const { user } = useStores();
+
+  const iconUrl = user.value ? `url(/users/${user.value?.id}/icon.png)` : "url(/users/template/icon.png)";
 
   return (
     <>
@@ -40,21 +46,21 @@ const AppHeader: React.FC = () => {
         <div className="header-accaunt">
           <div>
             <div className="header-accaunt-col0">
-              <div>
-                <span className="header-accaunt__tbtn" onClick={() => window.location.assign("/Auth/Register")}>
-                  Регистрация
-                </span>
-                {" / "}
-                <span className="header-accaunt__tbtn" onClick={() => window.location.assign("/Auth/Signin")}>
-                  Вход
-                </span>
-              </div>
-              <div className="header-accaunt__tbtn">USR NAME</div>
+              {user.status === AuthState.Authed ? (
+                <div className="header-accaunt__tbtn">{user.value?.name}</div>
+              ) : (
+                <div>
+                  <span className="header-accaunt__tbtn" onClick={() => window.location.assign("/Auth/Register")}>
+                    Регистрация
+                  </span>
+                  {" / "}
+                  <span className="header-accaunt__tbtn" onClick={() => window.location.assign("/Auth/Signin")}>
+                    Вход
+                  </span>
+                </div>
+              )}
             </div>
-            <div
-              className="header-accaunt__usericon"
-              style={{ backgroundImage: "url(/users/template/icon.png)" }}
-            ></div>
+            <div className="header-accaunt__usericon" style={{ backgroundImage: iconUrl }}></div>
           </div>
         </div>
       </div>
@@ -82,6 +88,6 @@ const AppHeader: React.FC = () => {
       </Drawer>
     </>
   );
-};
+});
 
 export default AppHeader;

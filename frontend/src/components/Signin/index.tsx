@@ -1,13 +1,12 @@
 import { Button, TextField } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
-import "./style.scss";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import ServerError from "@type/ServerError";
+import "./style.scss";
 
 const Signin: React.FC = () => {
   const [state, setState] = useState(0);
   const [userImgUrl, setUserImgUrl] = useState("/users/template/icon.png");
-  const [loading, setLoading] = useState(false);
   const [error, SetError] = useState("");
 
   const email = useRef("");

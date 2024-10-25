@@ -1,4 +1,5 @@
 ﻿using BYTUBE.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,29 @@ namespace BYTUBE.Controllers
             }
 
             return Results.Json(imgUrl);
+        }
+
+        [HttpGet("auth"), Authorize]
+        public IResult Auth()
+        {
+            int id = int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+
+            try
+            {
+                var user = _db.Users.First(i => i.Id == id);
+
+                return Results.Json(new UserModel()
+                {
+                    Email = user.Email,
+                    Name = user.Name,
+                    Id = id,
+                    Role = user.Role,
+                });
+            }
+            catch (Exception err)
+            {
+                return Results.Problem(err.Message);
+            }
         }
     }
 }

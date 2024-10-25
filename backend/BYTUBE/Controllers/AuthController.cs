@@ -36,13 +36,13 @@ namespace BYTUBE.Controllers
 
                 HttpContext.Response.Cookies.Append(
                     "AccessToken",
-                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, "TestUser"),
+                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, user.Id.ToString()),
                     _jwtManager.JwtCookieOptions
                 );
 
                 HttpContext.Response.Cookies.Append(
                     "RefreshToken",
-                    JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, "TestUser"),
+                    JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, user.Id.ToString()),
                     _jwtManager.JwtCookieOptions
                 );
             }
