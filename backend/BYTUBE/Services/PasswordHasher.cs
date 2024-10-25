@@ -28,9 +28,7 @@ namespace BYTUBE.Services
 
         public bool Verify(string password, string hash)
         {
-            string controlHash = Hash(password);
-
-            return controlHash == hash;
+            return Hash(password) == hash;
         }
     }
 }

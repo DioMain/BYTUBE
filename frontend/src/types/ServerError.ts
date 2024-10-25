@@ -1,4 +1,4 @@
-class ValidationError {
+class ServerError {
   type: string = "";
   title: string = "";
   status: number = 400;
@@ -24,4 +24,4 @@ class ValidationError {
   }
 }
 
-export default ValidationError;
+export default ServerError;

@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import defaultIcon from "@assets/images/UnknownUser.jpg";
 import UploadIcon from "@mui/icons-material/Upload";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios, { AxiosError } from "axios";
 import "./style.scss";
-import ValidationError from "@type/ValidationError";
+import ServerError from "@type/ServerError";
 
 const Register: React.FC = () => {
   const [curIcon, setCurIcon] = useState(defaultIcon);
@@ -28,16 +28,26 @@ const Register: React.FC = () => {
     const passwordField = document.getElementById("passwordField") as HTMLInputElement;
     const cpasswordField = document.getElementById("cpasswordField") as HTMLInputElement;
 
+    const formData = new FormData();
+
+    formData.append("UserName", usernameField.value);
+    formData.append("Email", emailField.value);
+    formData.append("Password", passwordField.value);
+    formData.append("ConfirmPassword", cpasswordField.value);
+
+    if (curIconFile) formData.append("ImageFile", curIconFile!);
+
     axios
-      .post("/api/auth/register", {
-        UserName: usernameField.value,
-        Email: emailField.value,
-        Password: passwordField.value,
-        ConfirmPassword: cpasswordField.value,
+      .post("/api/auth/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .then()
+      .then(() => {
+        window.location.assign("/Auth/Signin");
+      })
       .catch((err: AxiosError) => {
-        let data = new ValidationError(err.response?.data);
+        let data = new ServerError(err.response?.data);
 
         setError(data.getFirstError());
       });

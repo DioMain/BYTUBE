@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BYTUBE.Services;
 using BYTUBE.Models;
+using System.IO;
+using Npgsql;
+using BYTUBE.Exceptions;
 
 namespace BYTUBE.Controllers
 {
@@ -19,36 +22,93 @@ namespace BYTUBE.Controllers
             _db = db;
         }
 
-        [HttpGet("signin-jwt")]
-        public IResult loginJwt()
+        [HttpPost("signin")]
+        public IResult signinJwt([FromBody] SigninModel model)
         {
-            HttpContext.Response.Cookies.Append(
-                "AccessToken", 
-                JwtManager.GenerateJwtToken(_jwtManager.AccessToken, "TestUser"), 
-                _jwtManager.JwtCookieOptions
-            );
+            try
+            {
+                var user = _db.Users.First(i => i.Email == model.Email);
 
-            HttpContext.Response.Cookies.Append(
-                "RefreshToken", 
-                JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, "TestUser"), 
-                _jwtManager.JwtCookieOptions
-            );
+                if (!_passwordHasher.Verify(model.Password, user.Password))
+                {
+                    throw new ServerException("Пароли не совпадают");
+                }
 
-            return Results.Redirect("/App");
+                HttpContext.Response.Cookies.Append(
+                    "AccessToken",
+                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, "TestUser"),
+                    _jwtManager.JwtCookieOptions
+                );
+
+                HttpContext.Response.Cookies.Append(
+                    "RefreshToken",
+                    JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, "TestUser"),
+                    _jwtManager.JwtCookieOptions
+                );
+            }
+            catch (ServerException apperr)
+            {
+                return Results.Json(apperr.GetModel(), statusCode: apperr.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Problem(err.Message, statusCode: 400);
+            }
+
+            return Results.Ok();
         }
 
-        [HttpGet("signout-jwt")]
+        [HttpGet("signout")]
         public IResult logoutJwt()
         {
             HttpContext.Response.Cookies.Delete("AccessToken");
             HttpContext.Response.Cookies.Delete("RefreshToken");
 
-            return Results.Redirect("/App");
+            return Results.Ok();
         }
 
         [HttpPost("register")]
-        public IResult Register([FromBody] RegisterModel model)
+        public async Task<IResult> Register([FromForm] RegisterModel model)
         {
+            try
+            {
+                var usr = await _db.Users.AddAsync(new()
+                {
+                    Name = model.UserName,
+                    Email = model.Email,
+                    Password = _passwordHasher.Hash(model.Password)
+                });
+
+                await _db.SaveChangesAsync();
+
+                string userImgPath = $"./wwwroot/users/{usr.Entity.Id}/icon.png";
+                string uploadImgPath = "./Uploads/img.png";
+
+                Directory.CreateDirectory($"./wwwroot/users/{usr.Entity.Id}");
+
+                if (model.ImageFile != null)
+                {
+                    using (var stream = new FileStream(uploadImgPath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    System.IO.File.Copy(uploadImgPath, userImgPath);
+                    System.IO.File.Delete(uploadImgPath);
+                }
+                else
+                {
+                    System.IO.File.Copy("./wwwroot/users/template/icon.png", userImgPath);
+                }
+            }
+            catch
+            {
+                var errorModel = new ServerErrorModel(400);
+                errorModel.errors.Add("email", ["Пользователь с такой почтой уже сущетсвует"]);
+
+                return Results.Json(errorModel, statusCode: 400);
+            }
+
             return Results.Ok();
         }
     }

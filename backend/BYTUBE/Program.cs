@@ -48,6 +48,9 @@ internal class Program
 
         var app = builder.Build();
 
+        if (!Directory.Exists("./Uploads"))
+            Directory.CreateDirectory("./Uploads");
+
         // Configure the HTTP request pipeline.
 
         app.UseHttpsRedirection();

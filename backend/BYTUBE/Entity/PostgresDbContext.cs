@@ -17,4 +17,11 @@ public class PostgresDbContext : DbContext
     {
         Database.EnsureCreated();   
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+        base.OnModelCreating(modelBuilder);
+    }
 }
