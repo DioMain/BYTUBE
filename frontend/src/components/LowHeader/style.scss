@@ -1,0 +1,15 @@
+@import "./../../styles/Mixins.scss";
+
+.lowheader {
+  background-color: rgb(19, 19, 19);
+
+  padding: 16px;
+
+  &-logo {
+    cursor: pointer;
+
+    @include defaultFont(16px);
+
+    width: min-content;
+  }
+}

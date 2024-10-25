@@ -1,0 +1,6 @@
+@mixin defaultFont($fontsize) {
+  font-family: "Montserrat", serif;
+  font-weight: 300;
+
+  font-size: $fontsize;
+}

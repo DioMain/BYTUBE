@@ -1,11 +1,22 @@
-import ReactDOM from 'react-dom';
-import App from '@components/App';
-import "./styles/Base.scss";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { createRoot } from "react-dom/client";
+import GeneralRoutes from "@components/GeneralRoutes";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material/styles";
+import { AppStoreContext } from "appStoreContext";
+import StoreWrapper from "@stores/storeWrapper";
+import "@styles/Base.scss";
+import "@styles/Fonts.scss";
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>, 
-  document.getElementById('root'));
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
+createRoot(document.getElementById("root")!).render(
+  <AppStoreContext.Provider value={new StoreWrapper()}>
+    <ThemeProvider theme={darkTheme}>
+      <GeneralRoutes />
+    </ThemeProvider>
+  </AppStoreContext.Provider>
+);

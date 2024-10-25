@@ -1,0 +1,138 @@
+.header {
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 8px;
+  padding-right: 16px;
+
+  background-color: rgb(31, 31, 31);
+
+
+  &__sidebarbtn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &-logo {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+
+    cursor: pointer;
+  }
+
+  &-searchbar {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    &-row {
+      display: flex;
+    }
+
+    &__input {
+
+      border: solid 1px grey;
+      border-radius: 32px 0 0 32px;
+      
+      padding: 8px;
+      padding-left: 16px;
+
+      input {
+        width: 320px;
+
+        background-color: transparent;
+        border: none;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    &__sbtn {
+      border: solid 1px grey;
+      border-radius: 0 32px 32px 0;
+
+      border-left: none;
+    }
+  }
+
+  &-accaunt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &-col0 {
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+
+      
+    }
+
+    & > div {
+      display: flex;
+      
+      gap: 8px;
+    }
+
+    &__tbtn {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;  
+      }
+    }
+
+
+
+    &__usericon {
+      
+      border-radius: 32px;
+
+      width: 48px;
+      height: 48px;
+
+      background-position: center;
+      background-size: cover;
+    }
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+
+  padding: 8px;
+  padding-right: 16px;
+  padding-top: 12px;
+
+  &-head {
+    display: flex;
+
+    gap: 8px;
+  } 
+
+  &-content {
+    display: flex;
+
+    margin-top: 12px;
+
+    flex-direction: column;
+  }
+
+  &__logo {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+
+    cursor: pointer;
+  }
+}
