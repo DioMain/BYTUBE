@@ -2,6 +2,7 @@ import App from "@components/App";
 import AuthPage from "@components/AuthPage";
 import Register from "@components/Register";
 import Signin from "@components/Signin";
+import VideoMain from "@components/VideoMain";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const GeneralRoutes: React.FC = () => {
@@ -10,7 +11,7 @@ const GeneralRoutes: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/App/" Component={App}>
-            <Route path="Browser" />
+            <Route path="Main" Component={VideoMain} />
             <Route path="Search" />
             <Route path="Video" />
             <Route path="Channel" />
@@ -21,7 +22,15 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Register" Component={Register} />
           </Route>
           <Route path="/Accaunt" />
-          <Route path="/Studio" />
+          <Route path="/Studio/">
+            <Route path="ChoiceChannel" />
+            <Route path="Main" />
+            <Route path="Video/">
+              <Route path="View" />
+              <Route path="Edit" />
+              <Route path="Upload" />
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

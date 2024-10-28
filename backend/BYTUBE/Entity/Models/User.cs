@@ -25,6 +25,9 @@ namespace BYTUBE.Entity.Models
 
         public string? Token { get; set; }
 
+        [Column(TypeName = "jsonb")]
+        public List<int> LikedVideo { get; set; } = [];
+
         public List<Channel> Channels { get; set; } = [];
 
         public List<Subscribe> Subscribes { get; set; } = [];

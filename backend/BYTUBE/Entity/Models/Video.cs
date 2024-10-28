@@ -5,12 +5,6 @@ namespace BYTUBE.Entity.Models
 {
     public class Video
     {
-        [Serializable]
-        public class UserIds
-        {
-            public List<int> Ids = [];
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -19,11 +13,19 @@ namespace BYTUBE.Entity.Models
 
         public string? Description { get; set; } = string.Empty;
 
-        [Column(TypeName = "jsonb")]
-        public UserIds Likes { get; set; } = new UserIds();
+        public int Views { get; set; } = 0;
+
+        [Required]
+        public string Duration { get; set; } = string.Empty;
 
         [Column(TypeName = "jsonb")]
-        public UserIds Dislikes { get; set; } = new UserIds();
+        public List<string> Tags { get; set; } = [];
+
+        [Column(TypeName = "jsonb")]
+        public List<int> Likes { get; set; } = [];
+
+        [Column(TypeName = "jsonb")]
+        public List<int> Dislikes { get; set; } = [];
 
         public DateTime Created {  get; set; } = DateTime.Now;
 

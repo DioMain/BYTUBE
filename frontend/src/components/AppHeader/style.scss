@@ -124,6 +124,8 @@
 
     margin-top: 12px;
 
+    gap: 6px;
+
     flex-direction: column;
   }
 
@@ -135,4 +137,8 @@
 
     cursor: pointer;
   }
+}
+
+.MuiPaper-root {
+  background-color: black;
 }

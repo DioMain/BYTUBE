@@ -2,11 +2,13 @@ import "./style.scss";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Divider, Drawer } from "@mui/material";
 import { useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
+import Button0 from "@components/Button0";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
@@ -81,7 +83,11 @@ const AppHeader: React.FC = observer(() => {
           </div>
           <div className="sidebar-content">
             <Divider />
+            <Button0 text="Главная" prefix={<MenuIcon />} />
+            <Button0 text="Подписки" prefix={<MenuIcon />} />
             <Divider />
+            <Button0 text="Студиа" prefix={<AddBoxIcon />} />
+            <Button0 text="Подписки" prefix={<MenuIcon />} />
             <Divider />
           </div>
         </div>

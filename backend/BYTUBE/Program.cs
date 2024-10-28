@@ -4,6 +4,7 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Npgsql;
 
 internal class Program
 {
@@ -43,7 +44,10 @@ internal class Program
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+            dataSourceBuilder.EnableDynamicJson();
+
+            options.UseNpgsql(dataSourceBuilder.Build());
         });
 
         var app = builder.Build();
