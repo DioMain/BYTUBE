@@ -25,7 +25,7 @@ const AppHeader: React.FC = observer(() => {
               <MenuIcon />
             </IconButton>
           </div>
-          <div onClick={() => window.location.assign("/App/Browser")} className="header-logo">
+          <div onClick={() => window.location.assign("/App/Main")} className="header-logo">
             <h2>
               <span style={{ color: "red" }}>B</span>
               <span style={{ color: "green", marginRight: "4px" }}>Y</span>
@@ -73,7 +73,7 @@ const AppHeader: React.FC = observer(() => {
             <IconButton onClick={() => setDrawerOpen(false)}>
               <MenuIcon />
             </IconButton>
-            <div onClick={() => window.location.assign("/App/Browser")} className="sidebar__logo">
+            <div onClick={() => window.location.assign("/App/Main")} className="sidebar__logo">
               <h2>
                 <span style={{ color: "red" }}>B</span>
                 <span style={{ color: "green", marginRight: "4px" }}>Y</span>

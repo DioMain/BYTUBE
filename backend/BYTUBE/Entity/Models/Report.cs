@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BYTUBE.Entity.Models
 {
     public class Report
-    {
+    {      
         public enum ReportType
         {
             SexyalContent = 0, GoreContent, InsultContent, BullyOrAbuse, LieInCriticalInfomation,

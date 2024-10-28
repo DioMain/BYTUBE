@@ -3,6 +3,7 @@ import AuthPage from "@components/AuthPage";
 import Register from "@components/Register";
 import Signin from "@components/Signin";
 import VideoMain from "@components/VideoMain";
+import VideoPage from "@components/VideoPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const GeneralRoutes: React.FC = () => {
@@ -13,7 +14,7 @@ const GeneralRoutes: React.FC = () => {
           <Route path="/App/" Component={App}>
             <Route path="Main" Component={VideoMain} />
             <Route path="Search" />
-            <Route path="Video" />
+            <Route path="Video" Component={VideoPage} />
             <Route path="Channel" />
             <Route path="Playlist" />
           </Route>

@@ -41,14 +41,22 @@ internal class Program
 
         builder.Services.AddControllers();
 
+        // DataSource
+
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+        dataSourceBuilder.EnableDynamicJson();
+
+        var dataSource = dataSourceBuilder.Build();
+        builder.Services.AddSingleton(dataSource);
+
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-            dataSourceBuilder.EnableDynamicJson();
-
-            options.UseNpgsql(dataSourceBuilder.Build());
+            options.UseNpgsql(dataSource);
         });
+
+        // DataSource
 
         var app = builder.Build();
 

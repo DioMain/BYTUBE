@@ -1,6 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 public class PostgresDbContext : DbContext
 {
@@ -13,10 +12,9 @@ public class PostgresDbContext : DbContext
     public DbSet<Playlist> Playlists { get; set; }
     public DbSet<PlaylistItem> PlaylistItems { get; set; }
 
-
     public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
     {
-        Database.EnsureCreated();   
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,10 +22,5 @@ public class PostgresDbContext : DbContext
         modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
 
         base.OnModelCreating(modelBuilder);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
     }
 }

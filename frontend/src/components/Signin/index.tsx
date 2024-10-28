@@ -46,7 +46,7 @@ const Signin: React.FC = () => {
               Password: authP.value,
             })
             .then((ax: AxiosResponse) => {
-              window.location.assign("/App/Browser");
+              window.location.assign("/App/Main");
             })
             .catch((err: AxiosError) => {
               let data = new ServerError(err.response?.data);

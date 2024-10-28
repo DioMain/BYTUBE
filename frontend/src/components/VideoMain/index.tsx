@@ -4,6 +4,7 @@ import ReactPlayer from "react-player";
 
 const VideoMain: React.FC = () => {
   const { data, status, fail } = useVideos(0, 5);
+
   return (
     <div style={{ display: "flex", gap: "16px", padding: "16px", flexWrap: "wrap" }}>
       {data.map((val, index) => {

@@ -2,6 +2,7 @@
 using BYTUBE.Exceptions;
 using BYTUBE.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Xabe.FFmpeg;
 
 namespace BYTUBE.Controllers
@@ -18,16 +19,16 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet]
-        public IResult Get([FromQuery] int id)
+        public async Task<IResult> Get([FromQuery] int id)
         {
             try
             {
-                Video? videoData = _db.Videos.FirstOrDefault(i => i.Id == i.Id);
+                Video? videoData = await _db.Videos.FirstOrDefaultAsync(i => i.Id == i.Id);
 
                 if (videoData == null)
                     throw new ServerException("Видео не найдено", 404);
 
-                Channel channel = _db.Channels.First(i => i.Id == videoData.OwnerId);
+                Channel channel = await _db.Channels.FirstAsync(i => i.Id == videoData.OwnerId);
 
                 VideoModel videoModel = new VideoModel()
                 {
@@ -60,15 +61,15 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("range")]
-        public IResult GetRange([FromQuery] int skip = 0, [FromQuery] int take = 30)
+        public async Task<IResult> GetRange([FromQuery] int skip = 0, [FromQuery] int take = 30)
         {
             try
             {
-                Video[] videoDatas = [.. _db.Videos.Skip(skip).Take(take)];
+                Video[] videoDatas = [.. await _db.Videos.Skip(skip).Take(take).OrderBy(i => i.Id).Include(i => i.Owner).ToArrayAsync()];
 
                 VideoModel[] models = videoDatas.Select(videoData =>
                 {
-                    Channel channel = _db.Channels.First(i => i.Id == videoData.OwnerId);
+                    Channel channel = videoData.Owner;
 
                     return new VideoModel()
                     {
