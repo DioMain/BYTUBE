@@ -1,13 +1,18 @@
 import VideoModel from "@type/VideoModel";
 import getCreatedTimeText from "@helpers/getCreatedTimeText";
 import "./styles.scss";
+import { url } from "inspector";
 
 const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
   const createdTime = getCreatedTimeText(video.created);
 
   return (
     <div className="videoelement">
-      <div className="videoelement-image" style={{ backgroundImage: `url("/videos/${video.id}/preview.jpg")` }}>
+      <div
+        className="videoelement-image"
+        style={{ backgroundImage: `url("/videos/${video.id}/preview.jpg")` }}
+        onClick={() => window.location.assign(`/App/Video?vid=${video.id}`)}
+      >
         <div className="videoelement-image-row">
           <div className="videoelement-image-duration">{video.duration}</div>
         </div>

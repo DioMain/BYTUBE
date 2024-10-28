@@ -3,7 +3,6 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Npgsql;
 
 internal class Program
