@@ -1,0 +1,11 @@
+.videopage {
+  padding: 16px;
+
+  display: flex;
+
+  &-col0, &-col1 {
+    display: flex;
+
+    flex-direction: column;
+  }
+}

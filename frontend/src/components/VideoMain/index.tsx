@@ -1,6 +1,5 @@
 import VideoElement from "@components/VideoElement";
 import useVideos from "@hooks/useVideos";
-import ReactPlayer from "react-player";
 
 const VideoMain: React.FC = () => {
   const { data, status, fail } = useVideos(0, 5);
