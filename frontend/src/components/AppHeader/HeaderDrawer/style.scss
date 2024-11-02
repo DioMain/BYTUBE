@@ -1,0 +1,33 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+
+  padding: 8px;
+  padding-right: 16px;
+  padding-top: 12px;
+
+  &-head {
+    display: flex;
+
+    gap: 8px;
+  } 
+
+  &-content {
+    display: flex;
+
+    margin-top: 12px;
+
+    gap: 6px;
+
+    flex-direction: column;
+  }
+
+  &__logo {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+
+    cursor: pointer;
+  }
+}

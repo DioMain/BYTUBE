@@ -1,6 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
-using BYTUBE.Models;
+using BYTUBE.Models.VideoModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +36,7 @@ namespace BYTUBE.Controllers
                 var videoLocalData = _localDataManager.GetVideoData(id);
                 var channelLocalData = _localDataManager.GetChannelData(channel.Id);
 
-                VideoModel videoModel = new VideoModel()
+                VideoFullModel videoModel = new VideoFullModel()
                 {
                     Id = videoData.Id,
                     Title = videoData.Title,
@@ -80,14 +80,14 @@ namespace BYTUBE.Controllers
                     .Include(i => i.Owner)
                     .Include(i => i.Owner.Subscribes).ToArrayAsync()];
 
-                VideoModel[] models = videoDatas.Select(videoData =>
+                VideoFullModel[] models = videoDatas.Select(videoData =>
                 {
                     Channel channel = videoData.Owner;
 
                     var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
                     var channelLocalData = _localDataManager.GetChannelData(channel.Id);
 
-                    return new VideoModel()
+                    return new VideoFullModel()
                     {
                         Id = videoData.Id,
                         Title = videoData.Title,

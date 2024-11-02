@@ -1,14 +1,12 @@
-import "./style.scss";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import { Divider, Drawer } from "@mui/material";
 import { useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
-import Button0 from "./Button0";
+import HeaderDrawer from "./HeaderDrawer";
+import "./style.scss";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
@@ -67,31 +65,7 @@ const AppHeader: React.FC = observer(() => {
         </div>
       </div>
 
-      <Drawer open={drawerOpened} onClose={() => setDrawerOpen(false)}>
-        <div className="sidebar">
-          <div className="sidebar-head">
-            <IconButton onClick={() => setDrawerOpen(false)}>
-              <MenuIcon />
-            </IconButton>
-            <div onClick={() => window.location.assign("/App/Main")} className="sidebar__logo">
-              <h2>
-                <span style={{ color: "red" }}>B</span>
-                <span style={{ color: "green", marginRight: "4px" }}>Y</span>
-                TUBE
-              </h2>
-            </div>
-          </div>
-          <div className="sidebar-content">
-            <Divider />
-            <Button0 text="Главная" prefix={<MenuIcon />} />
-            <Button0 text="Подписки" prefix={<MenuIcon />} />
-            <Divider />
-            <Button0 text="Студиа" prefix={<AddBoxIcon />} />
-            <Button0 text="Подписки" prefix={<MenuIcon />} />
-            <Divider />
-          </div>
-        </div>
-      </Drawer>
+      <HeaderDrawer isOpened={drawerOpened} closeCallback={() => setDrawerOpen(false)} />
     </>
   );
 });

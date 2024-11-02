@@ -1,8 +1,8 @@
 ﻿using BYTUBE.Entity.Models;
 
-namespace BYTUBE.Models
+namespace BYTUBE.Models.UserModels
 {
-    public class UserModel
+    public class UserPrivateModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

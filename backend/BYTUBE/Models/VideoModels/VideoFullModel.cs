@@ -1,6 +1,8 @@
-﻿namespace BYTUBE.Models
+﻿using BYTUBE.Models.ChannelModels;
+
+namespace BYTUBE.Models.VideoModels
 {
-    public class VideoModel
+    public class VideoFullModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -17,6 +19,6 @@
         public string PreviewUrl { get; set; }
         public string VideoUrl { get; set; }
 
-        public ChannelModel Channel { get; set; }
+        public ChannelFullModel Channel { get; set; }
     }
 }

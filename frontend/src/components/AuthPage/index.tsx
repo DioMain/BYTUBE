@@ -1,4 +1,4 @@
-import LowHeader from "@components/LowHeader";
+import LowHeader from "./Header";
 import { Outlet } from "react-router-dom";
 
 const AuthPage: React.FC = () => {

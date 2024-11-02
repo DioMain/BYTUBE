@@ -19,5 +19,7 @@ namespace BYTUBE.Controllers
         {
             return Results.Ok();
         }
+
+        [HttpGet("channel")]
     }
 }
