@@ -16,15 +16,6 @@
     justify-content: center;
   }
 
-  &-logo {
-    display: flex;
-
-    flex-direction: column;
-    justify-content: center;
-
-    cursor: pointer;
-  }
-
   &-searchbar {
     display: flex;
 
@@ -33,11 +24,6 @@
     justify-content: center;
 
     width: 35%;
-
-
-    &-row {
-      display: flex;
-    }
 
     &__input {
 
@@ -70,24 +56,6 @@
   }
 
   &-accaunt {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    &-col0 {
-      flex-direction: column;
-      display: flex;
-      justify-content: center;
-
-      
-    }
-
-    & > div {
-      display: flex;
-      
-      gap: 8px;
-    }
-
     &__tbtn {
       cursor: pointer;
 
@@ -95,8 +63,6 @@
         text-decoration: underline;  
       }
     }
-
-
 
     &__usericon {
       

@@ -8,6 +8,8 @@ import AuthState from "@type/AuthState";
 import HeaderDrawer from "./HeaderDrawer";
 import "./style.scss";
 import CreateChannelModal from "./CreateChannelModal";
+import { Stack } from "@mui/material";
+import Logo from "@components/Logo";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
@@ -24,22 +26,16 @@ const AppHeader: React.FC = observer(() => {
   return (
     <>
       <div className="header">
-        <div style={{ display: "flex", gap: "8px" }}>
+        <Stack direction={"row"} spacing={"8px"}>
           <div className="header__sidebarbtn">
             <IconButton onClick={() => setDrawerOpen(true)}>
               <MenuIcon />
             </IconButton>
           </div>
-          <div onClick={() => window.location.assign("/App/Main")} className="header-logo">
-            <h2>
-              <span style={{ color: "red" }}>B</span>
-              <span style={{ color: "green", marginRight: "4px" }}>Y</span>
-              TUBE
-            </h2>
-          </div>
-        </div>
+          <Logo />
+        </Stack>
         <div className="header-searchbar">
-          <div className="header-searchbar-row">
+          <Stack direction={"row"}>
             <div className="header-searchbar__input">
               <input type="text" id="headerSearchBar" placeholder="Поиск" />
             </div>
@@ -48,11 +44,11 @@ const AppHeader: React.FC = observer(() => {
                 <SearchIcon />
               </IconButton>
             </div>
-          </div>
+          </Stack>
         </div>
-        <div className="header-accaunt">
-          <div>
-            <div className="header-accaunt-col0">
+        <Stack justifyContent={"center"} className="header-accaunt">
+          <Stack direction={"row"} spacing={"8px"}>
+            <Stack justifyContent={"center"}>
               {user.status === AuthState.Authed ? (
                 <div className="header-accaunt__tbtn">{user.value?.name}</div>
               ) : (
@@ -66,10 +62,10 @@ const AppHeader: React.FC = observer(() => {
                   </span>
                 </div>
               )}
-            </div>
+            </Stack>
             <div className="header-accaunt__usericon" style={{ backgroundImage: iconUrl }}></div>
-          </div>
-        </div>
+          </Stack>
+        </Stack>
       </div>
 
       <HeaderDrawer

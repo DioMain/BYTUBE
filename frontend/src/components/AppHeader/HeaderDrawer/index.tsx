@@ -1,4 +1,5 @@
 import { Divider, Drawer } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useStores } from "appStoreContext";
 import Button0 from "../Button0";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -8,11 +9,10 @@ import PropsBase from "@type/PropsBase";
 import AuthState from "@type/AuthState";
 import HomeIcon from "@mui/icons-material/Home";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
-import useUserChannelList from "@hooks/useUserChannelList";
-import StatusBase from "@type/StatusBase";
-import "./style.scss";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
+import ChannelModel from "@type/models/ChannelModel";
+import "./style.scss";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
@@ -23,7 +23,15 @@ interface HDProps extends PropsBase {
 const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChannelCreation }) => {
   const { user } = useStores();
 
-  const channelsList = useUserChannelList();
+  const [channelsList, setChannelsList] = useState<ChannelModel[]>([]);
+
+  useEffect(() => {
+    if (user.status === AuthState.Authed) {
+      axios.get(QueriesUrls.GET_USER_CHANNELS_LIST).then((res: AxiosResponse) => {
+        setChannelsList(res.data);
+      });
+    }
+  }, [user.value]);
 
   const handleSignout = () => {
     axios.get(QueriesUrls.SIGNOUT).then(() => {
@@ -57,21 +65,20 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
               <Button0 text="Главная" prefix={<HomeIcon />} />
               <Button0 text="Подписки" prefix={<SubscriptionsIcon />} />
               <Divider />
-              {channelsList.status === StatusBase.Success &&
-                channelsList.data?.map((item, index) => {
-                  return (
-                    <Button0
-                      text={`${item.name}`}
-                      prefix={
-                        <div
-                          className="sidebar-content-channel-item-icon"
-                          style={{ backgroundImage: `url("${item.iconUrl}")` }}
-                        ></div>
-                      }
-                      key={`channellistitem${index}`}
-                    />
-                  );
-                })}
+              {channelsList.map((item, index) => {
+                return (
+                  <Button0
+                    text={`${item.name}`}
+                    prefix={
+                      <div
+                        className="sidebar-content-channel-item-icon"
+                        style={{ backgroundImage: `url("${item.iconUrl}")` }}
+                      ></div>
+                    }
+                    key={`channellistitem${index}`}
+                  />
+                );
+              })}
               <Button0 text="Создать канал" prefix={<AddBoxIcon />} onClick={onClickChannelCreation} />
               <Divider />
               <Button0 text="Выйти" prefix={<MenuIcon />} onClick={handleSignout} />
