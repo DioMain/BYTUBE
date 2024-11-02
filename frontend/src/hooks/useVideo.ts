@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 function useVideo(id: number) {
-  const [data, setData] = useState<VideoModel[]>([]);
+  const [data, setData] = useState<VideoModel | undefined>(undefined);
   const [status, setStatus] = useState(StatusBase.Loading);
   const [fail, setFail] = useState("");
 

@@ -8,6 +8,7 @@
 
   background-color: rgb(31, 31, 31);
 
+  position: sticky;
 
   &__sidebarbtn {
     display: flex;
@@ -31,6 +32,9 @@
 
     justify-content: center;
 
+    width: 35%;
+
+
     &-row {
       display: flex;
     }
@@ -43,8 +47,10 @@
       padding: 8px;
       padding-left: 16px;
 
+      width: 100%;
+
       input {
-        width: 320px;
+        width: 100%;
 
         background-color: transparent;
         border: none;

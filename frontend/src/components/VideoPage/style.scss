@@ -3,9 +3,40 @@
 
   display: flex;
 
-  &-col0, &-col1 {
-    display: flex;
+  margin-left: 60px;
+  margin-right: 60px;
 
+  justify-content: space-between;
+
+  gap: 16px;
+
+  &-othervideos, &-main {
+    display: flex;
     flex-direction: column;
+  }
+
+  &-main {
+    width: 60%;
+  }
+
+  &-othervideos {
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .videopage {
+    flex-direction: column;
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    &-main {
+      width: 100%;
+    }
+  
+    &-othervideos {
+      width: auto;
+    }
   }
 }

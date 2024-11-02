@@ -1,4 +1,4 @@
-import VideoElement from "@components/VideoElement";
+import VideoElement from "./VideoElement";
 import useVideos from "@hooks/useVideos";
 
 const VideoMain: React.FC = () => {

@@ -6,7 +6,7 @@ const App: React.FC = () => {
   useAuth();
 
   return (
-    <div style={{ backgroundColor: "#111111" }}>
+    <div style={{ backgroundColor: "#111111", minHeight: "720px" }}>
       <AppHeader />
       <Outlet />
     </div>
