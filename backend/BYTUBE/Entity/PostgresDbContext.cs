@@ -12,10 +12,9 @@ public class PostgresDbContext : DbContext
     public DbSet<Playlist> Playlists { get; set; }
     public DbSet<PlaylistItem> PlaylistItems { get; set; }
 
-
     public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
     {
-        Database.EnsureCreated();   
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

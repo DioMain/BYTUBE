@@ -16,7 +16,8 @@
       "@stores/*": ["stores/*"],
       "@hooks/*": ["hooks/*"],
       "@assets/*": ["assets/*"],
-      "@type/*": ["types/*"]
+      "@type/*": ["types/*"],
+      "@helpers/*": ["helpers/*"]
     }
   },
   "include": ["./src/**/*"]

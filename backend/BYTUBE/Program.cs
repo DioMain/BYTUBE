@@ -3,7 +3,7 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
+using Npgsql;
 
 internal class Program
 {
@@ -17,6 +17,7 @@ internal class Program
 
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
+        builder.Services.AddSingleton(new LocalDataManager());
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -40,11 +41,22 @@ internal class Program
 
         builder.Services.AddControllers();
 
+        // DataSource
+
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+        dataSourceBuilder.EnableDynamicJson();
+
+        var dataSource = dataSourceBuilder.Build();
+        builder.Services.AddSingleton(dataSource);
+
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(dataSource);
         });
+
+        // DataSource
 
         var app = builder.Build();
 

@@ -1,0 +1,84 @@
+@import "@styles/Mixins.scss";
+
+.register {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+
+  &-col {
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+      text-align: center;
+    }
+  }
+
+  &-content {
+    background-color: rgb(28, 28, 28);
+
+    padding: 16px;
+
+    margin-top: 75px;
+
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    min-width: 300px;
+
+    & > div {
+      margin-bottom: 10px;
+    }
+  }
+
+  &-icon-upload {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+
+    top: -64px;
+
+    height: 48px;
+
+    &-img {
+      background-size: cover;
+      background-position: center;
+
+      height: 96px;
+      width: 96px;
+  
+      border-radius: 64px;
+      border: solid 2px white;
+  
+      cursor: pointer;
+      
+      input {
+        display: none;
+      }
+    }
+
+    &-icon {
+      position: relative;
+
+      top: 60px;
+      left: 60px;
+    }
+  }
+
+  &-error {
+    text-align: center;
+    color: red;
+    margin-top: 10px;
+  }
+
+  &-signinlink {
+    margin-top: 12px;
+    text-align: center;
+    
+    @include defaultFont(12px);
+  }
+}

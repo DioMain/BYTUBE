@@ -14,12 +14,14 @@ namespace BYTUBE.Controllers
         private readonly JwtManager _jwtManager;
         private readonly PasswordHasher _passwordHasher;
         private readonly PostgresDbContext _db;
+        private readonly LocalDataManager _localDataManager;
 
-        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher, PostgresDbContext db)
+        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher, PostgresDbContext db, LocalDataManager localDataManager)
         {
             _jwtManager = jwtManager;
             _passwordHasher = passwordHasher;
             _db = db;
+            _localDataManager = localDataManager;
         }
 
         [HttpPost("signin")]
@@ -81,8 +83,10 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                string userImgPath = $"./wwwroot/users/{usr.Entity.Id}/icon.png";
-                string uploadImgPath = "./Uploads/img.png";
+                string imgEx = model.ImageFile?.FileName.Split('.').Last();
+
+                string userImgPath = $"./wwwroot/users/{usr.Entity.Id}/icon.{imgEx}";
+                string uploadImgPath = $"./Uploads/img.{imgEx}";
 
                 Directory.CreateDirectory($"./wwwroot/users/{usr.Entity.Id}");
 
@@ -93,11 +97,21 @@ namespace BYTUBE.Controllers
                         await model.ImageFile.CopyToAsync(stream);
                     }
 
+                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
+                    {
+                        IconExtention = imgEx!
+                    });
+
                     System.IO.File.Copy(uploadImgPath, userImgPath);
                     System.IO.File.Delete(uploadImgPath);
                 }
                 else
                 {
+                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
+                    {
+                        IconExtention = "png"
+                    });
+
                     System.IO.File.Copy("./wwwroot/users/template/icon.png", userImgPath);
                 }
             }

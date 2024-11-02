@@ -1,0 +1,68 @@
+@import "@styles/Mixins.scss";
+
+.signin {
+  display: flex;
+  justify-content: center;
+
+  &-col {
+    display: flex;
+
+    flex-direction: column;
+  }
+
+  &-h1 {
+    margin-top: 75px;
+    text-align: center;
+  }
+
+  &-content {
+    margin-top: 100px;
+
+    background-color: rgb(28, 28, 28);
+
+    padding: 16px;
+
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    min-width: 300px;
+  }
+
+  &-error {
+    margin-top: 12px;
+    text-align: center;
+    color: red;
+  }
+
+  &-usericon {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+
+    top: -64px;
+    height: 64px;
+
+    img {
+      width: 96px;
+      height: 96px;
+
+      border-radius: 64px;
+      border: solid 2px white;
+    }
+  }
+
+  &-button.MuiButtonBase-root {
+    margin-top: 24px;
+  }
+
+  &-reglink {
+    margin-top: 12px;
+    text-align: center;
+    
+    @include defaultFont(12px);
+  }
+}

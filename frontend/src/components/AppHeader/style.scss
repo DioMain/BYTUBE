@@ -8,20 +8,12 @@
 
   background-color: rgb(31, 31, 31);
 
+  position: sticky;
 
   &__sidebarbtn {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-
-  &-logo {
-    display: flex;
-
-    flex-direction: column;
-    justify-content: center;
-
-    cursor: pointer;
   }
 
   &-searchbar {
@@ -31,9 +23,7 @@
 
     justify-content: center;
 
-    &-row {
-      display: flex;
-    }
+    width: 35%;
 
     &__input {
 
@@ -43,8 +33,10 @@
       padding: 8px;
       padding-left: 16px;
 
+      width: 100%;
+
       input {
-        width: 320px;
+        width: 100%;
 
         background-color: transparent;
         border: none;
@@ -64,24 +56,6 @@
   }
 
   &-accaunt {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    &-col0 {
-      flex-direction: column;
-      display: flex;
-      justify-content: center;
-
-      
-    }
-
-    & > div {
-      display: flex;
-      
-      gap: 8px;
-    }
-
     &__tbtn {
       cursor: pointer;
 
@@ -89,8 +63,6 @@
         text-decoration: underline;  
       }
     }
-
-
 
     &__usericon {
       
@@ -105,34 +77,6 @@
   }
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-
-  padding: 8px;
-  padding-right: 16px;
-  padding-top: 12px;
-
-  &-head {
-    display: flex;
-
-    gap: 8px;
-  } 
-
-  &-content {
-    display: flex;
-
-    margin-top: 12px;
-
-    flex-direction: column;
-  }
-
-  &__logo {
-    display: flex;
-
-    flex-direction: column;
-    justify-content: center;
-
-    cursor: pointer;
-  }
+.MuiPaper-root {
+  background-color: black;
 }

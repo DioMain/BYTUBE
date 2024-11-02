@@ -1,0 +1,60 @@
+@import "@styles/Mixins";
+
+.videopage {
+  padding: 16px;
+
+  display: flex;
+
+  margin-left: 60px;
+  margin-right: 60px;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  &-othervideos, &-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-main {
+    width: 60%;
+    
+    gap: 8px;
+  }
+
+  &-othervideos {
+    width: 40%;
+  }
+
+  &-vtitle {
+    @include boldFont(22px);
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  &-control {
+    display: flex;
+    justify-content: space-between;
+    
+    gap: 8px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .videopage {
+    flex-direction: column;
+
+    margin-left: 20px;
+    margin-right: 20px;
+
+    &-main {
+      width: 100%;
+    }
+  
+    &-othervideos {
+      width: auto;
+    }
+  }
+}

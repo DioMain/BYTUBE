@@ -3,7 +3,7 @@ import GeneralRoutes from "@components/GeneralRoutes";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material/styles";
 import { AppStoreContext } from "appStoreContext";
-import StoreWrapper from "@stores/storeWrapper";
+import StoreWrapper from "@stores/StoreWrapper";
 import "@styles/Base.scss";
 import "@styles/Fonts.scss";
 

@@ -1,0 +1,36 @@
+.channel {
+  padding: 8px;
+
+  border-radius: 8px;
+
+  background-color: rgb(30, 30, 30);
+
+  display: flex;
+  gap: 8px;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(35, 35, 35);
+  }
+
+  &-icon {
+    border-radius: 999px;
+
+    background-position: center;
+    background-size: cover;
+  }
+
+  &-col {
+    display: flex;
+
+    justify-content: center;
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  &-subscounter {
+    font-size: 12px;
+  }
+}

@@ -1,12 +1,11 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const TsconfigPathsPlugin =
-  require("tsconfig-paths-webpack-plugin").TsconfigPathsPlugin;
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin").TsconfigPathsPlugin;
 
 module.exports = {
   entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "build/"),
     filename: "bundle.js",
     publicPath: "/",
   },
@@ -33,7 +32,7 @@ module.exports = {
         exclude: /mode_modules/,
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
       },
       {

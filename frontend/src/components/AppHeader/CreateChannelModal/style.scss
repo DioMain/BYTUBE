@@ -1,0 +1,44 @@
+@import "@styles/Inputs";
+@import "@styles/Variables";
+
+.createchannel {
+
+  box-sizing: border-box;
+  &-title {
+    text-align: center;
+  }
+
+  &-banner {
+    width: 100%;
+    height: 200px;
+
+    box-sizing: border-box;
+
+    background-position: center;
+    background-size: cover;
+
+    background-color: rgb(33, 33, 33);
+
+    padding: $CommonPadding;
+  }
+
+  &-icon {
+    @include Avatar(100px);
+
+    background-color: rgb(33, 33, 33);
+
+    padding: $CommonPadding;
+  }
+
+  &__textarea {
+    @include Textarea;
+  }
+
+  &__name {
+    @include TextField;
+  }
+
+  &__inputfile {
+    display: none;
+  }
+}

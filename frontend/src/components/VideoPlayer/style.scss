@@ -1,0 +1,35 @@
+.player {
+  background-color: black;
+
+  border-radius: 8px;
+  clip-path: view-box;
+
+  &__main {
+    width: min-content;
+    height: min-content;
+
+    & > div {
+      width: inherit;
+      height: inherit;
+    }
+
+    & video {
+
+    }
+  }
+
+  &-controls {
+    padding: 10px;
+
+    display: none;
+    flex-direction: column;
+    justify-content: end;
+
+    position: absolute;
+    bottom: 70px;
+
+    &-row {
+      display: flex;
+    }
+  }
+}
