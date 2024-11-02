@@ -1,5 +1,5 @@
 import VideoModel from "@type/models/VideoModel";
-import getCreatedTimeText from "@helpers/getCreatedTimeText";
+import getCreatedTimeText from "@helpers/GetCreatedTimeText";
 import "./styles.scss";
 import { url } from "inspector";
 
@@ -10,7 +10,7 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
     <div className="videoelement">
       <div
         className="videoelement-image"
-        style={{ backgroundImage: `url("/videos/${video.id}/preview.jpg")` }}
+        style={{ backgroundImage: `url("/videos/${video.id}/preview.png")` }}
         onClick={() => window.location.assign(`/App/Video?vid=${video.id}`)}
       >
         <div className="videoelement-image-row">
@@ -21,7 +21,7 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
         <div className="videoelement-info-col0">
           <div
             className="videoelement-info-col0__chicon"
-            style={{ backgroundImage: `url("/channels/${video.channel?.id}/icon.jpg")` }}
+            style={{ backgroundImage: `url("/channels/${video.channel?.id}/icon.png")` }}
           ></div>
         </div>
         <div className="videoelement-info-col1">

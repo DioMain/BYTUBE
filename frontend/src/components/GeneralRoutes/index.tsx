@@ -1,7 +1,7 @@
 import App from "@components/App";
 import AuthPage from "@components/AuthPage";
-import Register from "@components/Register";
-import Signin from "@components/Signin";
+import Register from "@components/AuthPage/Register";
+import Signin from "@components/AuthPage/Signin";
 import VideoMain from "@components/VideoMain";
 import VideoPage from "@components/VideoPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";

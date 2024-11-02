@@ -28,7 +28,17 @@
   }
 
   &-vtitle {
-    @include boldFont(26px);
+    @include boldFont(22px);
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  &-control {
+    display: flex;
+    justify-content: space-between;
+    
+    gap: 8px;
   }
 }
 

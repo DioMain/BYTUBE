@@ -1,4 +1,4 @@
-import StoreWrapper from "@stores/storeWrapper";
+import StoreWrapper from "@stores/StoreWrapper";
 import { createContext, useContext } from "react";
 
 export const AppStoreContext = createContext<StoreWrapper | null>(null);

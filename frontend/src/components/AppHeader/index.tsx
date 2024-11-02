@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
-import Button0 from "@components/Button0";
+import Button0 from "./Button0";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
