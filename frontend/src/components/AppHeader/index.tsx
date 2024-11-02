@@ -14,7 +14,7 @@ const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
   const { user } = useStores();
 
-  const iconUrl = user.value ? `url(/users/${user.value?.id}/icon.png)` : "url(/users/template/icon.png)";
+  const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/users/template/icon.png)";
 
   return (
     <>

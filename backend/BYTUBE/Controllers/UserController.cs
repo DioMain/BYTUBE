@@ -1,4 +1,6 @@
-﻿using BYTUBE.Models;
+﻿using BYTUBE.Entity.Models;
+using BYTUBE.Models;
+using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,12 @@ namespace BYTUBE.Controllers
     public class UserController : ControllerBase
     {
         private readonly PostgresDbContext _db;
+        private readonly LocalDataManager _localDataManager;
 
-        public UserController(PostgresDbContext db)
+        public UserController(PostgresDbContext db, LocalDataManager localDataManager)
         {
             _db = db;
+            _localDataManager = localDataManager;
         }   
 
         [HttpGet("geticon")]
@@ -24,8 +28,9 @@ namespace BYTUBE.Controllers
             try
             {
                 var usr = _db.Users.First(i => i.Email == email);
+                var ext = _localDataManager.GetUserData(usr.Id).IconExtention;
 
-                imgUrl = $"/users/{usr.Id}/icon.png";
+                imgUrl = $"/users/{usr.Id}/icon.{ext}";
             }
             catch
             {
@@ -46,6 +51,7 @@ namespace BYTUBE.Controllers
             try
             {
                 var user = _db.Users.First(i => i.Id == id);
+                var iconExt = _localDataManager.GetUserData(user.Id).IconExtention;
 
                 return Results.Json(new UserModel()
                 {
@@ -53,6 +59,7 @@ namespace BYTUBE.Controllers
                     Name = user.Name,
                     Id = id,
                     Role = user.Role,
+                    IconUrl = $"/users/{user.Id}/icon.{iconExt}",
                 });
             }
             catch (Exception err)

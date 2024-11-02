@@ -1,6 +1,7 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
 using BYTUBE.Models;
+using BYTUBE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xabe.FFmpeg;
@@ -12,10 +13,12 @@ namespace BYTUBE.Controllers
     public class VideoController : ControllerBase
     {
         private readonly PostgresDbContext _db;
+        private readonly LocalDataManager _localDataManager;
 
-        public VideoController(PostgresDbContext db)
+        public VideoController(PostgresDbContext db, LocalDataManager localDataManager)
         {
             _db = db;
+            _localDataManager = localDataManager;
         }
 
         [HttpGet]
@@ -30,6 +33,9 @@ namespace BYTUBE.Controllers
 
                 Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == videoData.OwnerId);
 
+                var videoLocalData = _localDataManager.GetVideoData(id);
+                var channelLocalData = _localDataManager.GetChannelData(channel.Id);
+
                 VideoModel videoModel = new VideoModel()
                 {
                     Id = videoData.Id,
@@ -39,13 +45,17 @@ namespace BYTUBE.Controllers
                     Created = videoData.Created,
                     Views = videoData.Views,
                     Tags = videoData.Tags,
+                    VideoUrl = $"/videos/{id}/video.{videoLocalData.VideoExtention}",
+                    PreviewUrl = $"/videos/{id}/preview.{videoLocalData.PreviewExtention}",
                     Channel = new ChannelModel()
                     {
                         Id = channel.Id,
                         Name = channel.Name,
                         Description = channel.Description ?? "",
                         Created = channel.Created,
-                        Subscribes = channel.Subscribes.Count
+                        Subscribes = channel.Subscribes.Count,
+                        IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}",
+                        HeaderUrl = $"/channels/{channel.Id}/banner.{channelLocalData.HeaderExtention}"
                     }
                 };
 
@@ -74,6 +84,9 @@ namespace BYTUBE.Controllers
                 {
                     Channel channel = videoData.Owner;
 
+                    var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
+                    var channelLocalData = _localDataManager.GetChannelData(channel.Id);
+
                     return new VideoModel()
                     {
                         Id = videoData.Id,
@@ -83,13 +96,17 @@ namespace BYTUBE.Controllers
                         Created = videoData.Created,
                         Views = videoData.Views,
                         Tags = videoData.Tags,
+                        VideoUrl = $"/videos/{videoData.Id}/video.{videoLocalData.VideoExtention}",
+                        PreviewUrl = $"/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
                         Channel = new ChannelModel()
                         {
                             Id = channel.Id,    
                             Name = channel.Name,
                             Description = channel.Description ?? "",
                             Created = channel.Created,
-                            Subscribes = channel.Subscribes.Count
+                            Subscribes = channel.Subscribes.Count,
+                            IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}",
+                            HeaderUrl = $"/channels/{channel.Id}/banner.{channelLocalData.HeaderExtention}"
                         }
                     };
                 }).ToArray();

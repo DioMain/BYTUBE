@@ -11,5 +11,8 @@ namespace BYTUBE.Models
         public DateTime Created { get; set; }
 
         public int Subscribes {  get; set; }
+
+        public string IconUrl { get; set; }
+        public string HeaderUrl { get; set; }
     }
 }

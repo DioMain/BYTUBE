@@ -8,5 +8,7 @@ namespace BYTUBE.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public User.RoleType Role { get; set; }
+
+        public string IconUrl { get; set; }
     }
 }

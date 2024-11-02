@@ -23,7 +23,7 @@ const VideoPage: React.FC = () => {
       return (
         <div className="videopage">
           <div className="videopage-main">
-            <VideoPlayer url={`/videos/${vid}/video.mp4`} className="videopage__player" width={`auto`} />
+            <VideoPlayer url={video.data?.videoUrl!} className="videopage__player" width={`auto`} />
 
             <h1 className="videopage-vtitle">{video.data?.title}</h1>
             <div className="videopage-control">

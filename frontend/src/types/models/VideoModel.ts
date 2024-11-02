@@ -6,8 +6,14 @@ interface VideoModel {
   description: string;
   created: string;
   duration: string;
+
   views: number;
+
   tags: string[];
+
+  previewUrl: string;
+  videoUrl: string;
+
   channel?: ChannelModel;
 }
 

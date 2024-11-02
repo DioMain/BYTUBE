@@ -66,7 +66,7 @@ const Register: React.FC = () => {
               onClick={openFileDialog}
             >
               <UploadIcon className="register-icon-upload-icon" sx={{ fontSize: "32px" }} />
-              <input id="registerInputIcon" type="file" onChange={handleFileInput} accept=".png" />
+              <input id="registerInputIcon" type="file" onChange={handleFileInput} accept="image/png, image/jpeg" />
             </div>
           </div>
           <TextField id="nicknameField" label="Никнейм" />

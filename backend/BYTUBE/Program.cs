@@ -17,6 +17,7 @@ internal class Program
 
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
+        builder.Services.AddSingleton(new LocalDataManager());
 
         builder.Services.AddDistributedMemoryCache();
 

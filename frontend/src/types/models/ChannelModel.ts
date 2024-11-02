@@ -5,6 +5,9 @@ interface ChannelModel {
   created: string;
 
   subscribes: number;
+
+  iconUrl: string;
+  headerUrl: string;
 }
 
 export default ChannelModel;

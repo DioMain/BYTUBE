@@ -14,6 +14,9 @@
 
         public string Duration { get; set; }
 
+        public string PreviewUrl { get; set; }
+        public string VideoUrl { get; set; }
+
         public ChannelModel Channel { get; set; }
     }
 }

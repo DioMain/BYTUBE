@@ -12,7 +12,7 @@ const ChannelView: React.FC<CVProps> = ({ channel, imgSize, style }) => {
     <div className="channel" style={style}>
       <div
         className="channel-icon"
-        style={{ backgroundImage: `url("/channels/${channel.id}/icon.png")`, width: imgSize, height: imgSize }}
+        style={{ backgroundImage: `url("${channel.iconUrl}")`, width: imgSize, height: imgSize }}
       ></div>
       <div className="channel-col">
         <h4 className="channel-name">{channel.name}</h4>

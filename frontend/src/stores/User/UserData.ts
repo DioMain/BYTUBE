@@ -8,6 +8,8 @@ interface User {
   name: string;
   email: string;
   role: Role;
+
+  iconUrl: string;
 }
 
 export { Role, User };

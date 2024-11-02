@@ -18,6 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\static\**" />
+    <Content Remove="wwwroot\static\**" />
+    <EmbeddedResource Remove="wwwroot\static\**" />
+    <None Remove="wwwroot\static\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Public\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -25,9 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Uploads\" />
-    <Folder Include="wwwroot\static\css\" />
-    <Folder Include="wwwroot\static\js\" />
-    <Folder Include="wwwroot\static\media\" />
     <Folder Include="wwwroot\users\template\" />
   </ItemGroup>
 
