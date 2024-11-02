@@ -11,3 +11,13 @@
 
   font-size: $fontsize;
 }
+
+@mixin Avatar($size) {
+  width: $size;
+  height: $size;
+  
+  border-radius: 999px;
+
+  background-position: center;
+  background-size: cover;
+}

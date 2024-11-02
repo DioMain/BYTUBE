@@ -20,6 +20,16 @@
     gap: 6px;
 
     flex-direction: column;
+
+    &-channel-item-icon {
+      background-size: cover;
+      background-position: center;
+  
+      border-radius: 999px;
+  
+      width: 26px;
+      height: 26px;
+    }
   }
 
   &__logo {

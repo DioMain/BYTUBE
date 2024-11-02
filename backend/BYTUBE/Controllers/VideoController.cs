@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.VideoModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -51,11 +52,8 @@ namespace BYTUBE.Controllers
                     {
                         Id = channel.Id,
                         Name = channel.Name,
-                        Description = channel.Description ?? "",
-                        Created = channel.Created,
                         Subscribes = channel.Subscribes.Count,
-                        IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}",
-                        HeaderUrl = $"/channels/{channel.Id}/banner.{channelLocalData.HeaderExtention}"
+                        IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
                 };
 
@@ -80,33 +78,27 @@ namespace BYTUBE.Controllers
                     .Include(i => i.Owner)
                     .Include(i => i.Owner.Subscribes).ToArrayAsync()];
 
-                VideoFullModel[] models = videoDatas.Select(videoData =>
+                VideoModel[] models = videoDatas.Select(videoData =>
                 {
                     Channel channel = videoData.Owner;
 
                     var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
                     var channelLocalData = _localDataManager.GetChannelData(channel.Id);
 
-                    return new VideoFullModel()
+                    return new VideoModel()
                     {
                         Id = videoData.Id,
                         Title = videoData.Title,
-                        Description = videoData.Description ?? "",
                         Duration = videoData.Duration,
                         Created = videoData.Created,
                         Views = videoData.Views,
-                        Tags = videoData.Tags,
-                        VideoUrl = $"/videos/{videoData.Id}/video.{videoLocalData.VideoExtention}",
                         PreviewUrl = $"/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
                         Channel = new ChannelModel()
                         {
                             Id = channel.Id,    
                             Name = channel.Name,
-                            Description = channel.Description ?? "",
-                            Created = channel.Created,
                             Subscribes = channel.Subscribes.Count,
-                            IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}",
-                            HeaderUrl = $"/channels/{channel.Id}/banner.{channelLocalData.HeaderExtention}"
+                            IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                         }
                     };
                 }).ToArray();
@@ -122,5 +114,7 @@ namespace BYTUBE.Controllers
                 return Results.Problem(statusCode: 400);
             }
         }
+
+
     }
 }

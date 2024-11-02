@@ -8,15 +8,28 @@ import PropsBase from "@type/PropsBase";
 import AuthState from "@type/AuthState";
 import HomeIcon from "@mui/icons-material/Home";
 import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
+import useUserChannelList from "@hooks/useUserChannelList";
+import StatusBase from "@type/StatusBase";
 import "./style.scss";
+import axios from "axios";
+import QueriesUrls from "@helpers/QeuriesUrls";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
-  closeCallback: () => void;
+  closeCallback?: () => void;
+  onClickChannelCreation?: () => void;
 }
 
-const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback }) => {
+const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChannelCreation }) => {
   const { user } = useStores();
+
+  const channelsList = useUserChannelList();
+
+  const handleSignout = () => {
+    axios.get(QueriesUrls.SIGNOUT).then(() => {
+      window.location.reload();
+    });
+  };
 
   return (
     <Drawer open={isOpened} onClose={closeCallback}>
@@ -37,17 +50,31 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback }) => {
           <Divider />
           {user.status === AuthState.NotAuthed ? (
             <>
-              <Button0 text="Войти" prefix={<MenuIcon />} />
+              <Button0 text="Войти" prefix={<MenuIcon />} onClick={() => window.location.assign("/Auth/Signin")} />
             </>
           ) : (
             <>
               <Button0 text="Главная" prefix={<HomeIcon />} />
               <Button0 text="Подписки" prefix={<SubscriptionsIcon />} />
               <Divider />
-              <Button0 text="Студиа" prefix={<AddBoxIcon />} />
-              <Button0 text="Подписки" prefix={<MenuIcon />} />
+              {channelsList.status === StatusBase.Success &&
+                channelsList.data?.map((item, index) => {
+                  return (
+                    <Button0
+                      text={`${item.name}`}
+                      prefix={
+                        <div
+                          className="sidebar-content-channel-item-icon"
+                          style={{ backgroundImage: `url("${item.iconUrl}")` }}
+                        ></div>
+                      }
+                      key={`channellistitem${index}`}
+                    />
+                  );
+                })}
+              <Button0 text="Создать канал" prefix={<AddBoxIcon />} onClick={onClickChannelCreation} />
               <Divider />
-              <Button0 text="Выйти" prefix={<MenuIcon />} />
+              <Button0 text="Выйти" prefix={<MenuIcon />} onClick={handleSignout} />
             </>
           )}
         </div>

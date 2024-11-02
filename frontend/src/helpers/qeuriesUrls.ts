@@ -3,10 +3,12 @@ const QueriesUrls = {
   REGISTER: "/api/auth/register",
   SIGNIN: "/api/auth/signin",
   SIGNOUT: "/api/auth/signout",
-  GETVIDEO: "/api/video",
-  GETVIDEOS: "/api/video/range",
-  GETUSERICON: "/api/user/geticon",
-  GETCHANNELINFO: "/api/channel",
+  GET_VIDEO: "/api/video",
+  GET_VIDEOS: "/api/video/range",
+  GET_USERICON: "/api/user/geticon",
+  GET_CHANNEL_INFO: "/api/channel",
+  GET_USER_CHANNELS_LIST: "/api/user/channelslist",
+  ADD_NEW_CHANNEL: "/api/channel",
 };
 
 export default QueriesUrls;

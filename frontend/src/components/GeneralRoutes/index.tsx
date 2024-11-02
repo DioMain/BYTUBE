@@ -23,15 +23,7 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Register" Component={Register} />
           </Route>
           <Route path="/Accaunt" />
-          <Route path="/Studio/">
-            <Route path="ChoiceChannel" />
-            <Route path="Main" />
-            <Route path="Video/">
-              <Route path="View" />
-              <Route path="Edit" />
-              <Route path="Upload" />
-            </Route>
-          </Route>
+          <Route path="/Studio" />
         </Routes>
       </BrowserRouter>
     </div>

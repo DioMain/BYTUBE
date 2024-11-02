@@ -3,16 +3,16 @@ import ChannelModel from "./ChannelModel";
 interface VideoModel {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   created: string;
   duration: string;
 
   views: number;
 
-  tags: string[];
+  tags?: string[];
 
   previewUrl: string;
-  videoUrl: string;
+  videoUrl?: string;
 
   channel?: ChannelModel;
 }

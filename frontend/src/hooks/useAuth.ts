@@ -15,7 +15,7 @@ function useAuth() {
         user.setUser(res.data);
       })
       .catch((err: AxiosError) => {
-        if (err.code === "401") {
+        if (err.response?.status === 401) {
           user.setStatus(AuthState.NotAuthed);
         } else {
           user.setStatus(AuthState.Failed);

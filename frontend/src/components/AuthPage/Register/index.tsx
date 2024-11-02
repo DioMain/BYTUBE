@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import defaultIcon from "@assets/images/UnknownUser.jpg";
 import UploadIcon from "@mui/icons-material/Upload";
 import TextField from "@mui/material/TextField";
@@ -7,15 +7,17 @@ import axios, { AxiosError } from "axios";
 import ServerError from "@type/ServerError";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import "./style.scss";
+import GetFileUrl from "@helpers/GetFileUrl";
+import IsRightImageFormat from "@helpers/IsRightImageFormat";
 
 const Register: React.FC = () => {
   const [curIcon, setCurIcon] = useState(defaultIcon);
-  const [curIconFile, setIconFile] = useState<null | File | undefined>(undefined);
   const [error, setError] = useState("");
 
+  const iconFileRef = useRef<HTMLInputElement | null>(null);
+
   const handleFileInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setCurIcon(URL.createObjectURL(evt.target.files?.item(0) as Blob));
-    setIconFile(evt.target.files?.item(0));
+    setCurIcon(GetFileUrl(evt.target));
   };
 
   const openFileDialog = () => {
@@ -36,7 +38,14 @@ const Register: React.FC = () => {
     formData.append("Password", passwordField.value);
     formData.append("ConfirmPassword", cpasswordField.value);
 
-    if (curIconFile) formData.append("ImageFile", curIconFile!);
+    if (iconFileRef.current?.files?.item(0) !== null) {
+      if (!IsRightImageFormat(iconFileRef.current)) {
+        setError("Фаил имеет не верный формат!");
+        return;
+      }
+
+      formData.append("ImageFile", iconFileRef.current?.files?.item(0)!);
+    }
 
     axios
       .post(QueriesUrls.REGISTER, formData, {
@@ -66,7 +75,13 @@ const Register: React.FC = () => {
               onClick={openFileDialog}
             >
               <UploadIcon className="register-icon-upload-icon" sx={{ fontSize: "32px" }} />
-              <input id="registerInputIcon" type="file" onChange={handleFileInput} accept="image/png, image/jpeg" />
+              <input
+                ref={iconFileRef}
+                id="registerInputIcon"
+                type="file"
+                onChange={handleFileInput}
+                accept="image/png, image/jpeg"
+              />
             </div>
           </div>
           <TextField id="nicknameField" label="Никнейм" />

@@ -1,16 +1,23 @@
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
 import HeaderDrawer from "./HeaderDrawer";
 import "./style.scss";
+import CreateChannelModal from "./CreateChannelModal";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
+  const [channelCreationOpened, setChannelCreationOpened] = useState(false);
   const { user } = useStores();
+
+  const handleOpenChannelCreation = useCallback(() => {
+    setChannelCreationOpened(true);
+    setDrawerOpen(false);
+  }, [setChannelCreationOpened, setDrawerOpen]);
 
   const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/users/template/icon.png)";
 
@@ -65,7 +72,12 @@ const AppHeader: React.FC = observer(() => {
         </div>
       </div>
 
-      <HeaderDrawer isOpened={drawerOpened} closeCallback={() => setDrawerOpen(false)} />
+      <HeaderDrawer
+        isOpened={drawerOpened}
+        closeCallback={() => setDrawerOpen(false)}
+        onClickChannelCreation={handleOpenChannelCreation}
+      />
+      <CreateChannelModal isOpened={channelCreationOpened} closeCallback={() => setChannelCreationOpened(false)} />
     </>
   );
 });

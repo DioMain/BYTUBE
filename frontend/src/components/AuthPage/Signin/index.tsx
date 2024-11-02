@@ -22,7 +22,7 @@ const Signin: React.FC = () => {
       case 0:
         if (authE.checkValidity() && authE.value !== "") {
           axios
-            .get(QueriesUrls.GETUSERICON, {
+            .get(QueriesUrls.GET_USERICON, {
               params: {
                 email: authE.value,
               },

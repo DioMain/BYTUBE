@@ -13,7 +13,7 @@ namespace BYTUBE.Services
         public class ChannelData
         {
             public string IconExtention { get; set; } = "png";
-            public string HeaderExtention { get; set; } = "png";
+            public string BannerExtention { get; set; } = "png";
         }
 
         public class VideoData

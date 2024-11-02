@@ -11,7 +11,7 @@ function useVideos(skip: number, take: number) {
 
   useEffect(() => {
     axios
-      .get(QueriesUrls.GETVIDEOS, {
+      .get(QueriesUrls.GET_VIDEOS, {
         params: {
           skip: skip,
           take: take,
