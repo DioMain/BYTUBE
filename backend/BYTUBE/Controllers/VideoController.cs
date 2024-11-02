@@ -28,7 +28,7 @@ namespace BYTUBE.Controllers
                 if (videoData == null)
                     throw new ServerException("Видео не найдено", 404);
 
-                Channel channel = await _db.Channels.FirstAsync(i => i.Id == videoData.OwnerId);
+                Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == videoData.OwnerId);
 
                 VideoModel videoModel = new VideoModel()
                 {
@@ -44,7 +44,8 @@ namespace BYTUBE.Controllers
                         Id = channel.Id,
                         Name = channel.Name,
                         Description = channel.Description ?? "",
-                        Created = channel.Created
+                        Created = channel.Created,
+                        Subscribes = channel.Subscribes.Count
                     }
                 };
 
@@ -65,7 +66,9 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Video[] videoDatas = [.. await _db.Videos.Skip(skip).Take(take).OrderBy(i => i.Id).Include(i => i.Owner).ToArrayAsync()];
+                Video[] videoDatas = [.. await _db.Videos.Skip(skip).Take(take).OrderBy(i => i.Id)
+                    .Include(i => i.Owner)
+                    .Include(i => i.Owner.Subscribes).ToArrayAsync()];
 
                 VideoModel[] models = videoDatas.Select(videoData =>
                 {
@@ -85,7 +88,8 @@ namespace BYTUBE.Controllers
                             Id = channel.Id,    
                             Name = channel.Name,
                             Description = channel.Description ?? "",
-                            Created = channel.Created
+                            Created = channel.Created,
+                            Subscribes = channel.Subscribes.Count
                         }
                     };
                 }).ToArray();

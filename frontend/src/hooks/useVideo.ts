@@ -1,5 +1,6 @@
+import QueriesUrls from "@helpers/QeuriesUrls";
 import StatusBase from "@type/StatusBase";
-import VideoModel from "@type/VideoModel";
+import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
@@ -10,7 +11,7 @@ function useVideo(id: number) {
 
   useEffect(() => {
     axios
-      .get("/api/video", {
+      .get(QueriesUrls.GETVIDEO, {
         params: {
           id: id,
         },

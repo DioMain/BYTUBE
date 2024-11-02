@@ -4,8 +4,9 @@ import UploadIcon from "@mui/icons-material/Upload";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios, { AxiosError } from "axios";
-import "./style.scss";
 import ServerError from "@type/ServerError";
+import QueriesUrls from "@helpers/QeuriesUrls";
+import "./style.scss";
 
 const Register: React.FC = () => {
   const [curIcon, setCurIcon] = useState(defaultIcon);
@@ -38,7 +39,7 @@ const Register: React.FC = () => {
     if (curIconFile) formData.append("ImageFile", curIconFile!);
 
     axios
-      .post("/api/auth/register", formData, {
+      .post(QueriesUrls.REGISTER, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

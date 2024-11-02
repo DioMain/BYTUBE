@@ -8,7 +8,7 @@ interface VideoModel {
   duration: string;
   views: number;
   tags: string[];
-  channel: ChannelModel;
+  channel?: ChannelModel;
 }
 
 export default VideoModel;

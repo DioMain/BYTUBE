@@ -1,4 +1,4 @@
-import VideoModel from "@type/VideoModel";
+import VideoModel from "@type/models/VideoModel";
 import "./style.scss";
 
 const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {

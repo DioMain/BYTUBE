@@ -3,6 +3,8 @@ interface ChannelModel {
   name: string;
   description: string;
   created: string;
+
+  subscribes: number;
 }
 
 export default ChannelModel;

@@ -1,3 +1,4 @@
+import QueriesUrls from "@helpers/QeuriesUrls";
 import AuthState from "@type/AuthState";
 import { useStores } from "appStoreContext";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -8,7 +9,7 @@ function useAuth() {
 
   useEffect(() => {
     axios
-      .get("/api/user/auth")
+      .get(QueriesUrls.AUTH)
       .then((res: AxiosResponse) => {
         user.setStatus(AuthState.Authed);
         user.setUser(res.data);

@@ -2,7 +2,7 @@ import useVideo from "@hooks/useVideo";
 import VideoPlayer from "@components/VideoPlayer";
 import "./style.scss";
 import StatusBase from "@type/StatusBase";
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Button } from "@mui/material";
 import VideoElement from "./VideoElement";
 import useVideos from "@hooks/useVideos";
 import { useState } from "react";
@@ -24,8 +24,16 @@ const VideoPage: React.FC = () => {
           <div className="videopage-main">
             <VideoPlayer url={`/videos/${vid}/video.mp4`} className="videopage__player" width={`auto`} />
 
-            <div className="videpage-vtitle">{data?.title}</div>
-            <div className="videopage-control"></div>
+            <h1 className="videopage-vtitle">{data?.title}</h1>
+            <div className="videopage-control">
+              <div className="videopage-control-channel">
+                <div className="videopage-control-channel-icon"></div>
+                <div className="videopage-control-channel-col">
+                  <div className="videopage-control-channel-name"></div>
+                  <div className="videopage-control-channel-subscounter"></div>
+                </div>
+              </div>
+            </div>
             <div className="videopage-description"></div>
             <div className="videopage-comments">{data?.description}</div>
           </div>

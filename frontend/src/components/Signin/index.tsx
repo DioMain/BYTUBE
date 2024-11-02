@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import ServerError from "@type/ServerError";
+import QueriesUrls from "@helpers/QeuriesUrls";
 import "./style.scss";
 
 const Signin: React.FC = () => {
@@ -21,7 +22,7 @@ const Signin: React.FC = () => {
       case 0:
         if (authE.checkValidity() && authE.value !== "") {
           axios
-            .get("/api/user/geticon", {
+            .get(QueriesUrls.GETUSERICON, {
               params: {
                 email: authE.value,
               },
@@ -41,7 +42,7 @@ const Signin: React.FC = () => {
       case 1:
         if (authP.value !== "") {
           axios
-            .post("/api/auth/signin", {
+            .post(QueriesUrls.SIGNIN, {
               Email: email.current,
               Password: authP.value,
             })

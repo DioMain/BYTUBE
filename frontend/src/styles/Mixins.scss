@@ -4,3 +4,10 @@
 
   font-size: $fontsize;
 }
+
+@mixin boldFont($fontsize) {
+  font-family: "Montserrat", serif;
+  font-weight: bold;
+
+  font-size: $fontsize;
+}

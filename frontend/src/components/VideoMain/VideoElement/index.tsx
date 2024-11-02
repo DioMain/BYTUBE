@@ -1,4 +1,4 @@
-import VideoModel from "@type/VideoModel";
+import VideoModel from "@type/models/VideoModel";
 import getCreatedTimeText from "@helpers/getCreatedTimeText";
 import "./styles.scss";
 import { url } from "inspector";
@@ -21,12 +21,12 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
         <div className="videoelement-info-col0">
           <div
             className="videoelement-info-col0__chicon"
-            style={{ backgroundImage: `url("/channels/${video.channel.id}/icon.jpg")` }}
+            style={{ backgroundImage: `url("/channels/${video.channel?.id}/icon.jpg")` }}
           ></div>
         </div>
         <div className="videoelement-info-col1">
           <div className="videoelement-info-col1-title">{video.title}</div>
-          <div className="videoelement-info-col1__channelname">{video.channel.name}</div>
+          <div className="videoelement-info-col1__channelname">{video.channel?.name}</div>
           <div className="videoelement-info-col1-viewsandcreated">{`${video.views} просмотров - ${createdTime}`}</div>
         </div>
       </div>
