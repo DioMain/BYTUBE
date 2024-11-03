@@ -83,37 +83,7 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                string imgEx = model.ImageFile?.FileName.Split('.').Last();
-
-                string userImgPath = $"./wwwroot/users/{usr.Entity.Id}/icon.{imgEx}";
-                string uploadImgPath = $"./Uploads/img.{imgEx}";
-
-                Directory.CreateDirectory($"./wwwroot/users/{usr.Entity.Id}");
-
-                if (model.ImageFile != null)
-                {
-                    using (var stream = new FileStream(uploadImgPath, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
-                    {
-                        IconExtention = imgEx!
-                    });
-
-                    System.IO.File.Copy(uploadImgPath, userImgPath);
-                    System.IO.File.Delete(uploadImgPath);
-                }
-                else
-                {
-                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
-                    {
-                        IconExtention = "png"
-                    });
-
-                    System.IO.File.Copy("./wwwroot/users/template/icon.png", userImgPath);
-                }
+                await _localDataManager.SaveUserFiles(usr.Entity.Id, model.ImageFile);
             }
             catch
             {

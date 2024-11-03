@@ -97,34 +97,9 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                string previewEx = model.PreviewFile?.FileName.Split('.').Last();
-                string videoEx = model.VideoFile?.FileName.Split('.').Last();
+                await _localDataManager.SaveVideoFiles(video.Id, model.PreviewFile!, model.VideoFile!);
 
-                string previewNewPath = $"./wwwroot/videos/{video.Id}/preview.{previewEx}";
-                string previewUploadPath = $"./Uploads/pimg.{previewEx}";
-
-                string videoNewPath = $"./wwwroot/videos/{video.Id}/video.{videoEx}";
-                string videoUploadPath = $"./Uploads/vid.{videoEx}";
-
-                Directory.CreateDirectory($"./wwwroot/videos/{video.Id}");
-
-                using (var stream = new FileStream(previewUploadPath, FileMode.Create))
-                {
-                    await model.PreviewFile?.CopyToAsync(stream)!;
-                }
-
-                System.IO.File.Copy(previewUploadPath, previewNewPath);
-                System.IO.File.Delete(previewUploadPath);
-
-                using (var stream = new FileStream(videoUploadPath, FileMode.Create))
-                {
-                    await model.VideoFile?.CopyToAsync(stream)!;
-                }
-
-                System.IO.File.Copy(videoUploadPath, videoNewPath);
-                System.IO.File.Delete(videoUploadPath);
-
-                var videoInfo = await _videoMediaService.GetMediaInfo(videoNewPath);
+                var videoInfo = await _videoMediaService.GetMediaInfo("");
 
                 int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);

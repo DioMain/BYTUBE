@@ -10,9 +10,19 @@ services:
       - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgresdb;Port=5432;Database=BYTUBE;Username=admin;Password=root
     depends_on:
       - postgresdb
+
+    # Настройки для авто-определения URL для запуска
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webapp-http.rule=Host(`localhost`)"
+      - "traefik.http.services.webapp.loadbalancer.server.port=8080"
+      - "traefik.http.routers.webapp-https.rule=Host(`localhost`)"
+      - "traefik.http.routers.webapp-https.tls=true"
+      - "traefik.http.services.webapp-https.loadbalancer.server.port=8081"
 
   postgresdb:
     image: postgres:15

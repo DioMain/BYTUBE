@@ -81,8 +81,6 @@ namespace BYTUBE.Controllers
             }
         }
 
-
-
         [HttpPost, Authorize]
         public async Task<IResult> Post([FromForm] CreateChannelModel model)
         {
@@ -98,38 +96,7 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                string iconEx = model.IconFile?.FileName.Split('.').Last();
-                string bannerEx = model.BannerFile?.FileName.Split('.').Last();
-
-                string iconNewPath = $"./wwwroot/channels/{cur.Id}/icon.{iconEx}";
-                string iconUploadPath = $"./Uploads/iimg.{iconEx}";
-
-                string bannerNewPath = $"./wwwroot/channels/{cur.Id}/banner.{bannerEx}";
-                string bannerUploadPath = $"./Uploads/bimg.{bannerEx}";
-
-                Directory.CreateDirectory($"./wwwroot/channels/{cur.Id}");
-
-                using (var stream = new FileStream(iconUploadPath, FileMode.Create))
-                {
-                    await model.IconFile?.CopyToAsync(stream)!;
-                }
-
-                System.IO.File.Copy(iconUploadPath, iconNewPath);
-                System.IO.File.Delete(iconUploadPath);
-
-                using (var stream = new FileStream(bannerUploadPath, FileMode.Create))
-                {
-                    await model.BannerFile?.CopyToAsync(stream)!;
-                }
-
-                System.IO.File.Copy(bannerUploadPath, bannerNewPath);
-                System.IO.File.Delete(bannerUploadPath);
-
-                _localDataManager.SetChannelData(cur.Id, new LocalDataManager.ChannelData()
-                {
-                    IconExtention = iconEx!,
-                    BannerExtention = bannerEx!,
-                });
+                await _localDataManager.SaveChannelFiles(cur.Id, model.IconFile!, model.BannerFile!);
 
                 return Results.Ok();
             }
