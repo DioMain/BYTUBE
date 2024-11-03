@@ -18,6 +18,7 @@ internal class Program
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
         builder.Services.AddSingleton(new LocalDataManager());
+        builder.Services.AddSingleton(new VideoMediaService("./ffmpeg"));
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -51,6 +52,8 @@ internal class Program
         var dataSource = dataSourceBuilder.Build();
         builder.Services.AddSingleton(dataSource);
 
+        builder.Services.AddSwaggerGen();
+
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
             options.UseNpgsql(dataSource);
@@ -77,6 +80,9 @@ internal class Program
         app.UseSession();
 
         app.MapControllers();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.Run();
     }

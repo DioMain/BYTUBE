@@ -3,6 +3,7 @@ using BYTUBE.Exceptions;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.VideoModels;
 using BYTUBE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xabe.FFmpeg;
@@ -15,11 +16,15 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
         private readonly LocalDataManager _localDataManager;
+        private readonly VideoMediaService _videoMediaService;
 
-        public VideoController(PostgresDbContext db, LocalDataManager localDataManager)
+        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+
+        public VideoController(PostgresDbContext db, LocalDataManager localDataManager, VideoMediaService videoMediaService)
         {
             _db = db;
             _localDataManager = localDataManager;
+            _videoMediaService = videoMediaService;
         }
 
         [HttpGet]
@@ -66,6 +71,75 @@ namespace BYTUBE.Controllers
             catch
             {
                 return Results.Problem(statusCode: 400);
+            }
+        }
+
+        [HttpPost, Authorize]
+        public async Task<IResult> Post([FromForm] CreateVideoModel model, [FromQuery] int channelId)
+        {
+            try
+            {
+                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                    throw new ServerException("Канал вам не пренадлежит", 401);
+
+                Video video = (await _db.Videos.AddAsync(new Video()
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    Created = DateTime.Now.ToUniversalTime(),
+                    Dislikes = [],
+                    Likes = [],
+                    Views = 0,
+                    Tags = model.Tags,
+                    Duration = "00:00",
+                    OwnerId = channelId
+                })).Entity;
+
+                await _db.SaveChangesAsync();
+
+                string previewEx = model.PreviewFile?.FileName.Split('.').Last();
+                string videoEx = model.VideoFile?.FileName.Split('.').Last();
+
+                string previewNewPath = $"./wwwroot/videos/{video.Id}/preview.{previewEx}";
+                string previewUploadPath = $"./Uploads/pimg.{previewEx}";
+
+                string videoNewPath = $"./wwwroot/videos/{video.Id}/video.{videoEx}";
+                string videoUploadPath = $"./Uploads/vid.{videoEx}";
+
+                Directory.CreateDirectory($"./wwwroot/videos/{video.Id}");
+
+                using (var stream = new FileStream(previewUploadPath, FileMode.Create))
+                {
+                    await model.PreviewFile?.CopyToAsync(stream)!;
+                }
+
+                System.IO.File.Copy(previewUploadPath, previewNewPath);
+                System.IO.File.Delete(previewUploadPath);
+
+                using (var stream = new FileStream(videoUploadPath, FileMode.Create))
+                {
+                    await model.VideoFile?.CopyToAsync(stream)!;
+                }
+
+                System.IO.File.Copy(videoUploadPath, videoNewPath);
+                System.IO.File.Delete(videoUploadPath);
+
+                var videoInfo = await _videoMediaService.GetMediaInfo(videoNewPath);
+
+                int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
+                int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
+
+                video.Duration = $"{minutes}:{secound}";
+
+                _db.Videos.Update(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException srvErr)
+            {
+                return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
             }
         }
 

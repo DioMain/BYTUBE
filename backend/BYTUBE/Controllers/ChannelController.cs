@@ -25,13 +25,35 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet]
-        public IResult Get()
+        public async Task<IResult> Get([FromQuery] int id)
         {
-            return Results.Ok();
+            try
+            {
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
+
+                if (channel == null)
+                    throw new ServerException("Не найден подходящий канал", 404);
+
+                var localData = _localDataManager.GetChannelData(id);
+
+                return Results.Json(new ChannelFullModel()
+                {
+                    Id = id,
+                    Name = channel.Name,
+                    Description = channel.Description!,
+                    Subscribes = channel.Subscribes.Count,
+                    IconUrl = $"/channels/{id}/icon.{localData.IconExtention}",
+                    BannerUrl = $"/channels/{id}/banner.{localData.BannerExtention}",
+                });
+            }
+            catch (ServerException srvError)
+            {
+                return Results.Json(srvError.GetModel(), statusCode: srvError.Code);
+            }
         }
 
         [HttpGet("check"), Authorize]
-        public async Task<IResult> GetChannel([FromQuery] int id)
+        public async Task<IResult> CheckChannel([FromQuery] int id)
         {
             try
             {
@@ -62,7 +84,7 @@ namespace BYTUBE.Controllers
 
 
         [HttpPost, Authorize]
-        public async Task<IResult> CreateNew([FromForm] CreateChannelModel model)
+        public async Task<IResult> Post([FromForm] CreateChannelModel model)
         {
             try
             {
