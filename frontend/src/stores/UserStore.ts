@@ -1,5 +1,5 @@
 import AuthState from "@type/AuthState";
-import { User } from "./UserData";
+import { User } from "@type/models/UserModel";
 import { makeAutoObservable } from "mobx";
 
 class UserStore {
