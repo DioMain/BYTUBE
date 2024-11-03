@@ -1,9 +1,11 @@
 ﻿using BYTUBE.Entity.Models;
+using BYTUBE.Exceptions;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BYTUBE.Controllers
 {
@@ -28,10 +30,33 @@ namespace BYTUBE.Controllers
             return Results.Ok();
         }
 
-        [HttpGet("channel")]
-        public IResult GetChannel()
+        [HttpGet("check"), Authorize]
+        public async Task<IResult> GetChannel([FromQuery] int id)
         {
-            return Results.Ok();
+            try
+            {
+                Channel? channel = await _db.Channels.Include(i => i.Subscribes)
+                                         .FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
+
+                if (channel == null)
+                    throw new ServerException("Не найден подходящий канал", 401);
+
+                var localData = _localDataManager.GetChannelData(id);
+
+                return Results.Json(new ChannelFullModel()
+                {
+                    Id = id,
+                    Name = channel.Name,
+                    Description = channel.Description!,
+                    Subscribes = channel.Subscribes.Count,
+                    IconUrl = $"/channels/{id}/icon.{localData.IconExtention}",
+                    BannerUrl = $"/channels/{id}/banner.{localData.BannerExtention}",
+                });
+            }
+            catch (ServerException srvError)
+            {
+                return Results.Json(srvError.GetModel(), statusCode: srvError.Code);
+            }
         }
 
 

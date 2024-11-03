@@ -1,0 +1,13 @@
+@import "@styles/mixins";
+
+.studio {
+  &-header {
+    &-channelicon {
+      @include Avatar(32px);
+    }
+
+    &-name {
+      @include boldFont(8px);
+    }
+  }
+}

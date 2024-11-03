@@ -7,9 +7,10 @@ import useVideos from "@hooks/useVideos";
 import MoreIcon from "@mui/icons-material/MoreHoriz";
 import ChannelView from "./ChannelView";
 import "./style.scss";
+import GetUrlParams from "@helpers/GetUrlParams";
 
 const VideoPage: React.FC = () => {
-  const vid = parseInt(URL.parse(window.location.href)?.searchParams.get("vid")!);
+  const vid = GetUrlParams().get("vid") as number;
 
   const video = useVideo(vid);
   const otherVideos = useVideos(0, 10);

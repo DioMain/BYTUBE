@@ -2,6 +2,7 @@ import App from "@components/App";
 import AuthPage from "@components/AuthPage";
 import Register from "@components/AuthPage/Register";
 import Signin from "@components/AuthPage/Signin";
+import StudioPage from "@components/StudioPage";
 import VideoMain from "@components/VideoMain";
 import VideoPage from "@components/VideoPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -23,7 +24,7 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Register" Component={Register} />
           </Route>
           <Route path="/Accaunt" />
-          <Route path="/Studio" />
+          <Route path="/Studio" Component={StudioPage} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -12,6 +12,7 @@ import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import axios, { AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import ChannelModel from "@type/models/ChannelModel";
+
 import "./style.scss";
 
 interface HDProps extends PropsBase {
@@ -37,6 +38,10 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
     axios.get(QueriesUrls.SIGNOUT).then(() => {
       window.location.reload();
     });
+  };
+
+  const handleClickChannel = (channelId: number) => {
+    window.location.assign(`/Studio?channelid=${channelId}`);
   };
 
   return (
@@ -76,6 +81,7 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
                       ></div>
                     }
                     key={`channellistitem${index}`}
+                    onClick={() => handleClickChannel(item.id)}
                   />
                 );
               })}

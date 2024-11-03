@@ -13,6 +13,6 @@ namespace BYTUBE.Models.ChannelModels
         public int Subscribes { get; set; }
 
         public string IconUrl { get; set; }
-        public string HeaderUrl { get; set; }
+        public string BannerUrl { get; set; }
     }
 }

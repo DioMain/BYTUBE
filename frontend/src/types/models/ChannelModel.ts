@@ -7,7 +7,7 @@ interface ChannelModel {
   subscribes: number;
 
   iconUrl: string;
-  headerUrl?: string;
+  bannerUrl?: string;
 }
 
 export default ChannelModel;

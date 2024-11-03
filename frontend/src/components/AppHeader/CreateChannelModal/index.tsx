@@ -32,7 +32,7 @@ const CreateChannelModal: React.FC<CCMProps> = ({ isOpened, closeCallback }) => 
     form.append("IconFile", iconFileRef.current?.files?.item(0)!);
     form.append("BannerFile", bannerFileRef.current?.files?.item(0)!);
 
-    if (!IsRightImageFormat(bannerFileRef.current) || !IsRightImageFormat(bannerFileRef.current)) {
+    if (!IsRightImageFormat(bannerFileRef.current) || !IsRightImageFormat(iconFileRef.current)) {
       setError("Фаил не указан или имеет не верный формат!");
       return;
     }
