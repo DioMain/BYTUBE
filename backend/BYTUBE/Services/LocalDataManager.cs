@@ -25,15 +25,14 @@ namespace BYTUBE.Services
             public string VideoExtention { get; set; } = "mp4";
         }
 
-        public const string VideosPath = "./wwwroot/videos";
-        public const string ChannelsPath = "./wwwroot/channels";
-        public const string UsersPath = "./wwwroot/users";
-        public const string UploadPath = "./Uploads";
+        public const string VideosPath = "./Data/videos";
+        public const string ChannelsPath = "./Data/channels";
+        public const string UsersPath = "./Data/users";
 
         public LocalDataManager()
         {
-            if (!Directory.Exists(UploadPath))
-                Directory.CreateDirectory(UploadPath);
+            if (!Directory.Exists("./Data"))
+                Directory.CreateDirectory("./Data");
 
             if (!Directory.Exists(VideosPath)) 
                 Directory.CreateDirectory(VideosPath);

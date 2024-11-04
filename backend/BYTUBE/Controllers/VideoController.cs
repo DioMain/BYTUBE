@@ -51,14 +51,14 @@ namespace BYTUBE.Controllers
                     Created = videoData.Created,
                     Views = videoData.Views,
                     Tags = videoData.Tags,
-                    VideoUrl = $"/videos/{id}/video.{videoLocalData.VideoExtention}",
-                    PreviewUrl = $"/videos/{id}/preview.{videoLocalData.PreviewExtention}",
+                    VideoUrl = $"/data/videos/{id}/video.{videoLocalData.VideoExtention}",
+                    PreviewUrl = $"/data/videos/{id}/preview.{videoLocalData.PreviewExtention}",
                     Channel = new ChannelModel()
                     {
                         Id = channel.Id,
                         Name = channel.Name,
                         Subscribes = channel.Subscribes.Count,
-                        IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
+                        IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
                 };
 
@@ -99,7 +99,8 @@ namespace BYTUBE.Controllers
 
                 await _localDataManager.SaveVideoFiles(video.Id, model.PreviewFile!, model.VideoFile!);
 
-                var videoInfo = await _videoMediaService.GetMediaInfo("");
+                var videoInfo = await _videoMediaService
+                    .GetMediaInfo($"{LocalDataManager.VideosPath}/{video.Id}/video.{_localDataManager.GetVideoData(video.Id).VideoExtention}");
 
                 int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
@@ -141,13 +142,13 @@ namespace BYTUBE.Controllers
                         Duration = videoData.Duration,
                         Created = videoData.Created,
                         Views = videoData.Views,
-                        PreviewUrl = $"/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
+                        PreviewUrl = $"/data/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
                         Channel = new ChannelModel()
                         {
                             Id = channel.Id,    
                             Name = channel.Name,
                             Subscribes = channel.Subscribes.Count,
-                            IconUrl = $"/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
+                            IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                         }
                     };
                 }).ToArray();

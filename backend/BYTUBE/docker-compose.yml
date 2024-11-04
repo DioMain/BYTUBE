@@ -1,7 +1,7 @@
 ﻿version: '3.8'
 
 services:
-  webapp:
+  server:
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,9 +13,7 @@ services:
       - ASPNETCORE_URLS=https://+:8081;http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgresdb;Port=5432;Database=BYTUBE;Username=admin;Password=root
     depends_on:
-      - postgresdb
-
-    # Настройки для авто-определения URL для запуска
+      - database
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.webapp-http.rule=Host(`localhost`)"
@@ -23,8 +21,10 @@ services:
       - "traefik.http.routers.webapp-https.rule=Host(`localhost`)"
       - "traefik.http.routers.webapp-https.tls=true"
       - "traefik.http.services.webapp-https.loadbalancer.server.port=8081"
+    volumes:
+      - ./Data:/app/Data
 
-  postgresdb:
+  database:
     image: postgres:15
     environment:
       POSTGRES_DB: BYTUBE

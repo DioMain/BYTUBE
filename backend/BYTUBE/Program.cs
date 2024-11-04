@@ -3,6 +3,7 @@ using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Npgsql;
 
 internal class Program
@@ -18,7 +19,7 @@ internal class Program
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
         builder.Services.AddSingleton(new LocalDataManager());
-        builder.Services.AddSingleton(new VideoMediaService("./ffmpeg"));
+        builder.Services.AddSingleton(new VideoMediaService("C:\\ffmpeg"));
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -72,7 +73,20 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseStaticFiles();
+        Console.WriteLine(Directory.GetCurrentDirectory());
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+            RequestPath = ""
+        });
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Data")),
+            RequestPath = "/data"
+        });
 
         app.UseSession();
 

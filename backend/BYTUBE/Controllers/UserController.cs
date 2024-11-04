@@ -35,7 +35,7 @@ namespace BYTUBE.Controllers
                 var usr = _db.Users.First(i => i.Email == email);
                 var ext = _localDataManager.GetUserData(usr.Id).IconExtention;
 
-                imgUrl = $"/users/{usr.Id}/icon.{ext}";
+                imgUrl = $"/data/users/{usr.Id}/icon.{ext}";
             }
             catch
             {
@@ -62,7 +62,7 @@ namespace BYTUBE.Controllers
                     Name = user.Name,
                     Id = UserId,
                     Role = user.Role,
-                    IconUrl = $"/users/{user.Id}/icon.{iconExt}",
+                    IconUrl = $"/data/users/{user.Id}/icon.{iconExt}",
                 });
             }
             catch (Exception err)
@@ -86,7 +86,7 @@ namespace BYTUBE.Controllers
                     {
                         Id = item.Id,
                         Name = item.Name,
-                        IconUrl = $"/channels/{item.Id}/icon.{iconEx}"
+                        IconUrl = $"/data/channels/{item.Id}/icon.{iconEx}"
                     };
                 }));
             }

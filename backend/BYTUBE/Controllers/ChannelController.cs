@@ -42,8 +42,8 @@ namespace BYTUBE.Controllers
                     Name = channel.Name,
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
-                    IconUrl = $"/channels/{id}/icon.{localData.IconExtention}",
-                    BannerUrl = $"/channels/{id}/banner.{localData.BannerExtention}",
+                    IconUrl = $"/data/channels/{id}/icon.{localData.IconExtention}",
+                    BannerUrl = $"/data/channels/{id}/banner.{localData.BannerExtention}",
                 });
             }
             catch (ServerException srvError)
@@ -71,8 +71,8 @@ namespace BYTUBE.Controllers
                     Name = channel.Name,
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
-                    IconUrl = $"/channels/{id}/icon.{localData.IconExtention}",
-                    BannerUrl = $"/channels/{id}/banner.{localData.BannerExtention}",
+                    IconUrl = $"/data/channels/{id}/icon.{localData.IconExtention}",
+                    BannerUrl = $"/data/channels/{id}/banner.{localData.BannerExtention}",
                 });
             }
             catch (ServerException srvError)

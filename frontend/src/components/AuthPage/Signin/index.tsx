@@ -7,7 +7,7 @@ import "./style.scss";
 
 const Signin: React.FC = () => {
   const [state, setState] = useState(0);
-  const [userImgUrl, setUserImgUrl] = useState("/users/template/icon.png");
+  const [userImgUrl, setUserImgUrl] = useState("/data/users/template/icon.png");
   const [error, SetError] = useState("");
 
   const email = useRef("");

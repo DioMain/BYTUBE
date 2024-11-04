@@ -21,7 +21,7 @@ const AppHeader: React.FC = observer(() => {
     setDrawerOpen(false);
   }, [setChannelCreationOpened, setDrawerOpen]);
 
-  const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/users/template/icon.png)";
+  const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";
 
   return (
     <>
