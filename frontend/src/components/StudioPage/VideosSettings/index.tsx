@@ -9,7 +9,7 @@ import UploadIcon from "@mui/icons-material/UploadFile";
 
 import "./style.scss";
 
-const VideosWrapper: React.FC = () => {
+const VideosSettings: React.FC = () => {
   const [videos, setVideos] = useState<VideoModel[]>([]);
 
   const { channel } = useStores();
@@ -44,4 +44,4 @@ const VideosWrapper: React.FC = () => {
   );
 };
 
-export default VideosWrapper;
+export default VideosSettings;

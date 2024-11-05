@@ -12,7 +12,7 @@ import { useState } from "react";
 import ChannelSettings from "./ChannelSettings";
 
 import "./style.scss";
-import VideosWrapper from "./VideosWrapper";
+import VideosSettings from "./VideosSettings";
 
 const StudioPage: React.FC = observer(() => {
   const cid = GetUrlParams().get("channelid") as number;
@@ -31,7 +31,7 @@ const StudioPage: React.FC = observer(() => {
   const getElementByTab = () => {
     switch (tabIndex) {
       case 0:
-        return <VideosWrapper />;
+        return <VideosSettings />;
       case 1:
         return <ChannelSettings />;
       default:
