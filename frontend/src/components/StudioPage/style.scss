@@ -1,11 +1,14 @@
 @import "@styles/mixins";
 
 .studio {
+  background-color: rgb(10, 10, 10);
+  min-height: 700px;
+
   &-header {
     padding: 8px;
     padding-right: 36px;
     padding-left: 36px;
-  
+
     background-color: rgb(31, 31, 31);
 
     &-channelicon {

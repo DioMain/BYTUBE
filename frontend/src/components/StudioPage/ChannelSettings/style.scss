@@ -1,28 +1,42 @@
 @import "@styles/inputs";
 
+$innerPadding: 64px;
+
 .settings {
   &-banner {
+    padding: 8px;
+    padding-top: 16px;
+    padding-left: $innerPadding;
+    padding-right: $innerPadding;
+
     height: 200px;
 
-    padding: 8px;
+    background-position: center;
+    background-size: cover;
 
-    &__btn, &__name {
-      padding: 4px;
+    &__btn,
+    &__name {
+      padding: 8px;
 
-      border-radius: 8px;
+      border-radius: 12px;
 
       background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &__name {
+      font-size: 24px;
+      font-weight: 500;
     }
   }
 
   &-content {
-    padding-left: 64px;
-    padding-right: 64px;
+    padding-left: $innerPadding;
+    padding-right: $innerPadding;
 
     &-icon {
       @include Avatar(128px);
-      
-      border: solid 2px gray;
+
+      border: solid 2px white;
     }
 
     &__btn {

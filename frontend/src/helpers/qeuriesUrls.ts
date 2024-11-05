@@ -10,6 +10,7 @@ const QueriesUrls = {
   GET_USER_CHANNELS_LIST: "/api/user/channelslist",
   ADD_NEW_CHANNEL: "/api/channel",
   CHECK_CHENNEL_IS_OWN: "/api/channel/check",
+  GET_CHANNEL_VIDEOS: "/api/video/channel",
 };
 
 export default QueriesUrls;

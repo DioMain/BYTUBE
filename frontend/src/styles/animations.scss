@@ -1,0 +1,27 @@
+@mixin fadingAnimation($dur, $inColor, $outColor) {
+  animation: out_anim $dur ease-in both;
+
+  &:hover {
+    animation: in_anim $dur ease-in both;
+  }
+
+  @keyframes in_anim {
+    from {
+      background-color: $inColor;
+    }
+
+    to {
+      background-color: $outColor;
+    }
+  }
+
+  @keyframes out_anim {
+    from {
+      background-color: $outColor;
+    }
+
+    to {
+      background-color: $inColor;
+    }
+  }
+}

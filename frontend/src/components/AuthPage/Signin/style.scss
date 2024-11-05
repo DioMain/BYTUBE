@@ -40,17 +40,12 @@
   &-usericon {
     position: relative;
 
-    display: flex;
-    justify-content: center;
-
     top: -64px;
     height: 64px;
 
-    img {
-      width: 96px;
-      height: 96px;
+    & > div {
+      @include Avatar(96px);
 
-      border-radius: 64px;
       border: solid 2px white;
     }
   }
@@ -62,7 +57,7 @@
   &-reglink {
     margin-top: 12px;
     text-align: center;
-    
+
     @include defaultFont(12px);
   }
 }

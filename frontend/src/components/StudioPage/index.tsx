@@ -4,14 +4,15 @@ import Logo from "@components/Logo";
 import useAuth from "@hooks/useAuth";
 import { useStores } from "appStoreContext";
 import AuthState from "@type/AuthState";
-
-import "./style.scss";
 import useProtected from "@hooks/useProtected";
 import useOwnChannel from "@hooks/useOwnChannel";
 import GetUrlParams from "@helpers/GetUrlParams";
 import StatusBase from "@type/StatusBase";
 import { useState } from "react";
 import ChannelSettings from "./ChannelSettings";
+
+import "./style.scss";
+import VideosWrapper from "./VideosWrapper";
 
 const StudioPage: React.FC = observer(() => {
   const cid = GetUrlParams().get("channelid") as number;
@@ -30,7 +31,7 @@ const StudioPage: React.FC = observer(() => {
   const getElementByTab = () => {
     switch (tabIndex) {
       case 0:
-        return <div>123</div>;
+        return <VideosWrapper />;
       case 1:
         return <ChannelSettings />;
       default:
