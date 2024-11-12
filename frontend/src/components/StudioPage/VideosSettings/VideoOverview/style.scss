@@ -1,0 +1,24 @@
+@import "@styles/animations.scss";
+
+$upload_in_bg: rgb(20, 20, 20);
+$upload_out_bg: rgb(30, 30, 30);
+
+.studio-videooverview {
+  &__upload {
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    cursor: pointer;
+
+    background-color: $upload_in_bg;
+
+    outline: 1px rgb(48, 48, 48) solid;
+
+    @include fadingAnimation(0.1s, $upload_in_bg, $upload_out_bg);
+  }
+
+  &-videos {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
