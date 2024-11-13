@@ -15,11 +15,12 @@ internal class Program
         var accessToken = builder.Configuration.GetSection("AccessToken").Get<JwtSettings>();
         var refreshToken = builder.Configuration.GetSection("RefreshToken").Get<JwtSettings>();
         var salt = builder.Configuration["Salt"];
+        var ffmpegPath = builder.Configuration["FFMpegPath"];
 
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
         builder.Services.AddSingleton(new LocalDataManager());
-        builder.Services.AddSingleton(new VideoMediaService("C:\\ffmpeg"));
+        builder.Services.AddSingleton(new VideoMediaService(ffmpegPath!));
 
         builder.Services.AddDistributedMemoryCache();
 

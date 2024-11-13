@@ -6,7 +6,6 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Xabe.FFmpeg;
 
 namespace BYTUBE.Controllers
 {
@@ -32,7 +31,7 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Video? videoData = await _db.Videos.FirstOrDefaultAsync(i => i.Id == i.Id);
+                Video? videoData = await _db.Videos.FirstOrDefaultAsync(i => i.Id == id);
 
                 if (videoData == null)
                     throw new ServerException("Видео не найдено", 404);
@@ -74,6 +73,48 @@ namespace BYTUBE.Controllers
             }
         }
 
+        [HttpGet("channel")]
+        public async Task<IResult> GetChannelVideos([FromQuery] int channelId)
+        {
+            try
+            {
+                Video[] videos = await _db.Videos.Where(item => item.OwnerId == channelId).Include(video => video.Owner).ToArrayAsync();
+
+                List<VideoModel> models = [];
+
+                foreach (Video video in videos)
+                {
+                    var videoLocalData = _localDataManager.GetVideoData(video.Id);
+                    var channelLocalData = _localDataManager.GetChannelData(video.Owner!.Id);
+
+                    VideoModel videoModel = new VideoModel()
+                    {
+                        Id = video.Id,
+                        Title = video.Title,
+                        Duration = video.Duration,
+                        Created = video.Created,
+                        Views = video.Views,
+                        PreviewUrl = $"/data/videos/{video.Id}/preview.{videoLocalData.PreviewExtention}",
+                        Channel = new ChannelModel()
+                        {
+                            Id = video.Owner!.Id,
+                            Name = video.Owner!.Name,
+                            Subscribes = video.Owner!.Subscribes.Count,
+                            IconUrl = $"/data/channels/{video.Owner!.Id}/icon.{channelLocalData.IconExtention}"
+                        }
+                    };
+
+                    models.Add(videoModel);
+                }
+
+                return Results.Json(models);
+            }
+            catch
+            {
+                return Results.Problem(statusCode: 400);
+            }
+        }
+
         [HttpPost, Authorize]
         public async Task<IResult> Post([FromForm] CreateVideoModel model, [FromQuery] int channelId)
         {
@@ -82,7 +123,7 @@ namespace BYTUBE.Controllers
                 if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
                     throw new ServerException("Канал вам не пренадлежит", 401);
 
-                Video video = (await _db.Videos.AddAsync(new Video()
+                var video = await _db.Videos.AddAsync(new Video()
                 {
                     Title = model.Title,
                     Description = model.Description,
@@ -93,21 +134,21 @@ namespace BYTUBE.Controllers
                     Tags = model.Tags,
                     Duration = "00:00",
                     OwnerId = channelId
-                })).Entity;
+                });
 
                 await _db.SaveChangesAsync();
 
-                await _localDataManager.SaveVideoFiles(video.Id, model.PreviewFile!, model.VideoFile!);
+                await _localDataManager.SaveVideoFiles(video.Entity.Id, model.PreviewFile!, model.VideoFile!);
 
                 var videoInfo = await _videoMediaService
-                    .GetMediaInfo($"{LocalDataManager.VideosPath}/{video.Id}/video.{_localDataManager.GetVideoData(video.Id).VideoExtention}");
+                    .GetMediaInfo($"{LocalDataManager.VideosPath}/{video.Entity.Id}/video.{_localDataManager.GetVideoData(video.Entity.Id).VideoExtention}");
 
                 int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
 
-                video.Duration = $"{minutes}:{secound}";
+                video.Entity.Duration = $"{minutes}:{secound}";
 
-                _db.Videos.Update(video);
+                _db.Videos.Update(video.Entity);
 
                 await _db.SaveChangesAsync();
 
@@ -116,6 +157,10 @@ namespace BYTUBE.Controllers
             catch (ServerException srvErr)
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
+            }
+            catch
+            {
+                return Results.Problem("Error", statusCode: 400);
             }
         }
 
@@ -130,7 +175,7 @@ namespace BYTUBE.Controllers
 
                 VideoModel[] models = videoDatas.Select(videoData =>
                 {
-                    Channel channel = videoData.Owner;
+                    Entity.Models.Channel channel = videoData.Owner;
 
                     var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
                     var channelLocalData = _localDataManager.GetChannelData(channel.Id);
@@ -164,7 +209,5 @@ namespace BYTUBE.Controllers
                 return Results.Problem(statusCode: 400);
             }
         }
-
-
     }
 }

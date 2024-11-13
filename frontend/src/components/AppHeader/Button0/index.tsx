@@ -13,12 +13,12 @@ interface ButtonProps extends PropsBase {
 
 const Button0: React.FC<ButtonProps> = ({ prefix, postfix, text, style, className, onClick }) => {
   return (
-    <div className={`${className} button0`} style={style} onClick={onClick}>
-      <div className="button0-start">
-        <div className="button0__prefix">{prefix}</div>
-        <div className="button0__text">{text}</div>
+    <div className={`${className} ahbutton0`} style={style} onClick={onClick}>
+      <div className="ahbutton0-start">
+        <div className="ahbutton0__prefix">{prefix}</div>
+        <div className="ahbutton0__text">{text}</div>
       </div>
-      <div className="button0__postfix">{postfix}</div>
+      <div className="ahbutton0__postfix">{postfix}</div>
     </div>
   );
 };

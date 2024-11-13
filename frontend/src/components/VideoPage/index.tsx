@@ -1,4 +1,4 @@
-import { LinearProgress, IconButton } from "@mui/material";
+import { LinearProgress, IconButton, Stack } from "@mui/material";
 import useVideo from "@hooks/useVideo";
 import VideoPlayer from "@components/VideoPlayer";
 import StatusBase from "@type/StatusBase";
@@ -36,14 +36,14 @@ const VideoPage: React.FC = () => {
             <div className="videopage-description">{video.data?.description}</div>
             <div className="videopage-comments"></div>
           </div>
-          <div className="videopage-othervideos">
+          <Stack className="videopage-othervideos" spacing={1}>
             {otherVideos.status === StatusBase.Success &&
               otherVideos.data.map((item, index) => {
                 if (item.id === vid) return null;
 
                 return <VideoElement video={item} key={`othervideo${index}`} />;
               })}
-          </div>
+          </Stack>
         </div>
       );
   }

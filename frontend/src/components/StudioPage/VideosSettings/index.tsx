@@ -1,36 +1,25 @@
-import { useCallback, useState } from "react";
-import VideoModel from "@type/models/VideoModel";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import QueriesUrls from "@helpers/QeuriesUrls";
-import { useStores } from "appStoreContext";
-import { IconButton, Stack } from "@mui/material";
-
-import "./style.scss";
+import { Stack } from "@mui/material";
 import VideosOverview from "./VideoOverview";
+import { useState } from "react";
+import VideoCreate from "./VideoCreate";
 
 const VideosSettings: React.FC = () => {
-  const [videos, setVideos] = useState<VideoModel[]>([]);
+  const [page, setPage] = useState(0);
 
-  const { channel } = useStores();
-
-  useCallback(() => {
-    axios
-      .get(QueriesUrls.GET_CHANNEL_VIDEOS, {
-        params: {
-          channelId: channel.value?.id,
-        },
-      })
-      .then((res: AxiosResponse) => {
-        setVideos(res.data);
-      })
-      .catch((err: AxiosError) => {
-        console.log(err.message);
-      });
-  }, [channel.value]);
+  const getPage = () => {
+    switch (page) {
+      case 0:
+        return <VideosOverview setPage={setPage} />;
+      case 1:
+        return <VideoCreate />;
+      case 2:
+        return <VideosOverview setPage={setPage} />;
+    }
+  };
 
   return (
     <Stack className="studiovideowrapper" spacing={3}>
-      <VideosOverview />
+      {getPage()}
     </Stack>
   );
 };

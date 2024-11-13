@@ -12,16 +12,16 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #383838;  
+    background-color: #383838;
   }
 
   &-image {
     background-position: center;
     background-size: cover;
 
-    width: 160px;
+    min-width: 160px;
     height: 90px;
-  
+
     display: flex;
     flex-direction: column;
     justify-content: end;

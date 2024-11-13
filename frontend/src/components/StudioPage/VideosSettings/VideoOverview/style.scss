@@ -14,6 +14,10 @@ $upload_out_bg: rgb(30, 30, 30);
 
     outline: 1px rgb(48, 48, 48) solid;
 
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+
     @include fadingAnimation(0.1s, $upload_in_bg, $upload_out_bg);
   }
 

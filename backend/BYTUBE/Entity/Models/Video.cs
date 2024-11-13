@@ -27,13 +27,13 @@ namespace BYTUBE.Entity.Models
         [Column(TypeName = "jsonb")]
         public List<int> Dislikes { get; set; } = [];
 
-        public DateTime Created {  get; set; } = DateTime.Now;
+        public DateTime Created {  get; set; } = DateTime.Now.ToUniversalTime();
 
         [Required]
         public int OwnerId { get; set; }
 
         [ForeignKey(nameof(OwnerId))]
-        public Channel Owner { get; set; } = new();
+        public Channel? Owner { get; set; }
 
         public List<Report> Reports { get; set; } = [];
 

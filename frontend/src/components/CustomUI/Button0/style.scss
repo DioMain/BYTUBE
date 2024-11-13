@@ -1,0 +1,12 @@
+@import "@styles/animations.scss";
+
+.button0 {
+  border: solid 2px #313131;
+  border-radius: 8px;
+
+  padding: 8px;
+
+  cursor: pointer;
+
+  @include fadingAnimation(0.1s, #000000, #202020);
+}

@@ -11,7 +11,7 @@ namespace BYTUBE.Entity.Models
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
 
-        public DateTime Created {  get; set; } = DateTime.Now;
+        public DateTime Created {  get; set; } = DateTime.Now.ToUniversalTime();
 
         [Required]
         public int UserId { get; set; }

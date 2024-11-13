@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
@@ -8,13 +8,14 @@ import VideoItem from "./VideoItem";
 import UploadIcon from "@mui/icons-material/UploadFile";
 
 import "./style.scss";
+import { VSEProps } from "../types";
 
-const VideosOverview: React.FC = () => {
+const VideosOverview: React.FC<VSEProps> = ({ setPage }) => {
   const [videos, setVideos] = useState<VideoModel[]>([]);
 
   const { channel } = useStores();
 
-  useCallback(() => {
+  useEffect(() => {
     axios
       .get(QueriesUrls.GET_CHANNEL_VIDEOS, {
         params: {
@@ -31,10 +32,10 @@ const VideosOverview: React.FC = () => {
 
   return (
     <Stack className="studio-videooverview" spacing={3}>
-      <Stack className="studio-videooverview__upload" direction={"row"} justifyContent={"center"} spacing={2}>
+      <div className="studio-videooverview__upload" onClick={() => setPage(1)}>
         <h3>Загрузить видео</h3>
         <UploadIcon />
-      </Stack>
+      </div>
       <Stack className="studio-videooverview-videos" spacing={2}>
         {videos.map((video, index) => {
           return <VideoItem video={video} key={`vi${index}`} />;

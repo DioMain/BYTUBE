@@ -5,21 +5,22 @@
 
   display: flex;
 
-  margin-left: 60px;
-  margin-right: 60px;
+  margin-left: 48px;
+  margin-right: 48px;
 
   justify-content: space-between;
 
   gap: 16px;
 
-  &-othervideos, &-main {
+  &-othervideos,
+  &-main {
     display: flex;
     flex-direction: column;
   }
 
   &-main {
     width: 60%;
-    
+
     gap: 8px;
   }
 
@@ -37,7 +38,7 @@
   &-control {
     display: flex;
     justify-content: space-between;
-    
+
     gap: 8px;
   }
 }
@@ -52,7 +53,7 @@
     &-main {
       width: 100%;
     }
-  
+
     &-othervideos {
       width: auto;
     }
