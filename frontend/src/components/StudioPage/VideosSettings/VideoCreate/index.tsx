@@ -1,4 +1,4 @@
-import { Alert, Button, IconButton, Stack } from "@mui/material";
+import { Alert, Button, IconButton, Select, Stack, MenuItem, FormControlLabel, Checkbox } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import GetFileUrl from "@helpers/GetFileUrl";
 import VideoPlayer from "@components/VideoPlayer";
@@ -16,11 +16,15 @@ import "./style.scss";
 import { LoadingButton } from "@mui/lab";
 
 const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
+  const videoAccesses = ["Для всех", "По ссылке", "Для меня"];
+
   const [fileVideoUrl, setFileVideoUrl] = useState("");
   const [filePreviewUrl, setFilePreviewUrl] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [nolimit, setNolimit] = useState(true);
+  const [access, setAccess] = useState("0");
 
   const { channel } = useStores();
 
@@ -78,6 +82,8 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
 
     formData.append("PreviewFile", previewInput.current?.files?.item(0)!);
     formData.append("VideoFile", videoInput.current?.files?.item(0)!);
+    formData.append("VideoAccess", access);
+    formData.append("VideoStatus", nolimit ? "0" : "1");
 
     setLoading(true);
 
@@ -196,6 +202,29 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
               </label>
             </Stack>
           </Stack>
+        </Stack>
+        <Stack spacing={1}>
+          <h3>Доступ</h3>
+          <Stack direction={"row"}>
+            <Select value={access} onChange={(evt) => setAccess(evt.target.value)}>
+              {videoAccesses.map((val, index) => {
+                return (
+                  <MenuItem value={index} key={`vc_va_${index}`}>
+                    {val}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </Stack>
+        </Stack>
+        <Stack direction={"row"}>
+          <FormControlLabel
+            checked={nolimit}
+            onChange={(evt, checked) => setNolimit(checked)}
+            label="Это видео предназначено для лиц не достигших 18 лет?"
+            labelPlacement="end"
+            control={<Checkbox color="primary" />}
+          />
         </Stack>
         <Stack className="studio-videocreate-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
         <Stack direction={"row"} justifyContent={"end"}>

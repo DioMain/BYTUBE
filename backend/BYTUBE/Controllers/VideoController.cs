@@ -38,6 +38,12 @@ namespace BYTUBE.Controllers
 
                 Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == videoData.OwnerId);
 
+                if (videoData.VideoAccess == Video.Access.Private && channel.UserId != UserId)
+                    throw new ServerException("Видео вам не доступно", 403);
+
+                if (videoData.VideoStatus == Video.Status.Blocked)
+                    throw new ServerException("Видео более не доспутно", 403);
+
                 var videoLocalData = _localDataManager.GetVideoData(id);
                 var channelLocalData = _localDataManager.GetChannelData(channel.Id);
 
@@ -52,6 +58,9 @@ namespace BYTUBE.Controllers
                     Tags = videoData.Tags,
                     VideoUrl = $"/data/videos/{id}/video.{videoLocalData.VideoExtention}",
                     PreviewUrl = $"/data/videos/{id}/preview.{videoLocalData.PreviewExtention}",
+                    VideoAccess = videoData.VideoAccess,
+                    VideoStatus = videoData.VideoStatus,
+                    
                     Channel = new ChannelModel()
                     {
                         Id = channel.Id,
@@ -95,6 +104,8 @@ namespace BYTUBE.Controllers
                         Created = video.Created,
                         Views = video.Views,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoLocalData.PreviewExtention}",
+                        VideoAccess = video.VideoAccess,
+                        VideoStatus = video.VideoStatus,
                         Channel = new ChannelModel()
                         {
                             Id = video.Owner!.Id,
@@ -133,7 +144,9 @@ namespace BYTUBE.Controllers
                     Views = 0,
                     Tags = model.Tags,
                     Duration = "00:00",
-                    OwnerId = channelId
+                    OwnerId = channelId,
+                    VideoAccess = model.VideoAccess,
+                    VideoStatus = model.VideoStatus,
                 });
 
                 await _db.SaveChangesAsync();
@@ -175,7 +188,7 @@ namespace BYTUBE.Controllers
 
                 VideoModel[] models = videoDatas.Select(videoData =>
                 {
-                    Entity.Models.Channel channel = videoData.Owner;
+                    Channel channel = videoData.Owner;
 
                     var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
                     var channelLocalData = _localDataManager.GetChannelData(channel.Id);
@@ -187,6 +200,8 @@ namespace BYTUBE.Controllers
                         Duration = videoData.Duration,
                         Created = videoData.Created,
                         Views = videoData.Views,
+                        VideoAccess = videoData.VideoAccess,
+                        VideoStatus = videoData.VideoStatus,
                         PreviewUrl = $"/data/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
                         Channel = new ChannelModel()
                         {

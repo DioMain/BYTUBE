@@ -13,11 +13,14 @@ import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
 
 const VideoEdit: React.FC = () => {
+  const videoAccesses = ["Для всех", "По ссылке", "Для меня"];
+
   const { channel, video } = useStores();
 
   const [filePreviewUrl, setFilePreviewUrl] = useState<string>(video.value?.previewUrl!);
   const [tags, setTags] = useState<string[]>(video.value?.tags!);
   const [error, setError] = useState("");
+  const [access, setAccess] = useState("0");
 
   const previewInput = useRef<HTMLInputElement>(null);
   const nameInput = useRef<HTMLInputElement>(null);
@@ -151,6 +154,20 @@ const VideoEdit: React.FC = () => {
                 <Button0 text="Выбрать фото" icon={<UploadFile />} />
               </label>
             </Stack>
+          </Stack>
+        </Stack>
+        <Stack spacing={1}>
+          <h3>Доступ</h3>
+          <Stack direction={"row"}>
+            <Select value={access} onChange={(evt) => setAccess(evt.target.value)}>
+              {videoAccesses.map((val, index) => {
+                return (
+                  <MenuItem value={index} key={`vc_va_${index}`}>
+                    {val}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </Stack>
         </Stack>
         <Stack className="studio-videocreate-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>

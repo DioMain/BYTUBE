@@ -1,13 +1,13 @@
 import ChannelModel from "./ChannelModel";
 
 enum Access {
-  All,
+  All = 0,
   LinkOnly,
   Private,
 }
 
 enum Status {
-  NoLimit,
+  NoLimit = 0,
   Limited,
   Blocked,
 }
