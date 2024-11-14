@@ -13,6 +13,8 @@ const VideosSettings: React.FC = () => {
         return <VideosList setPage={setPage} />;
       case 1:
         return <VideoCreate setPage={setPage} />;
+      case 1:
+        return <VideoCreate setPage={setPage} />;
     }
   };
 

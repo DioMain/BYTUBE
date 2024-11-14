@@ -9,7 +9,7 @@ interface VIProps {
 const VideoItem: React.FC<VIProps> = ({ video }) => {
   return (
     <Stack direction={"row"}>
-      <Stack>{video.title}</Stack>
+      <Stack style={{ backgroundColor: `url("${video.previewUrl}")` }}></Stack>
     </Stack>
   );
 };
