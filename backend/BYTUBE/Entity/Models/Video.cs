@@ -5,6 +5,16 @@ namespace BYTUBE.Entity.Models
 {
     public class Video
     {
+        public enum Access
+        {
+            All, LinkOnly, Private
+        }
+
+        public enum Status
+        {
+            NoLimit, Limited, Blocked
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -28,6 +38,11 @@ namespace BYTUBE.Entity.Models
         public List<int> Dislikes { get; set; } = [];
 
         public DateTime Created {  get; set; } = DateTime.Now.ToUniversalTime();
+
+        [Column(TypeName = "int")]
+        public Access VideoAccess { get; set; } = Access.All;
+        [Column(TypeName = "int")]
+        public Status VideoStatus { get; set; } = Status.NoLimit;
 
         [Required]
         public int OwnerId { get; set; }

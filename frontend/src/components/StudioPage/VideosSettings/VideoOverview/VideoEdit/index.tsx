@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import GetFileUrl from "@helpers/GetFileUrl";
 import VideoPlayer from "@components/VideoPlayer";
 import { UploadFile, Add, Close } from "@mui/icons-material";
+import "./style.scss";
 import Button0 from "@components/CustomUI/Button0";
 import IsRightImageFormat from "@helpers/IsRightImageFormat";
 import IsRightVideoFormat from "@helpers/IsRightVideoFormat";
@@ -10,21 +11,14 @@ import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { VSEProps } from "../types";
-import "./style.scss";
-import { LoadingButton } from "@mui/lab";
 
-const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
-  const [fileVideoUrl, setFileVideoUrl] = useState("");
-  const [filePreviewUrl, setFilePreviewUrl] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+const VideoEdit: React.FC = () => {
+  const { channel, video } = useStores();
+
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string>(video.value?.previewUrl!);
+  const [tags, setTags] = useState<string[]>(video.value?.tags!);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const { channel } = useStores();
-
-  const videoInput = useRef<HTMLInputElement>(null);
   const previewInput = useRef<HTMLInputElement>(null);
   const nameInput = useRef<HTMLInputElement>(null);
   const tagInput = useRef<HTMLInputElement>(null);
@@ -62,11 +56,6 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
       return;
     }
 
-    if (!IsRightVideoFormat(videoInput.current)) {
-      setError("Видео не указано или не имеет верный формат!");
-      return;
-    }
-
     let formData = new FormData();
 
     formData.append("Title", nameInput.current?.value!);
@@ -77,59 +66,26 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
     });
 
     formData.append("PreviewFile", previewInput.current?.files?.item(0)!);
-    formData.append("VideoFile", videoInput.current?.files?.item(0)!);
-
-    setLoading(true);
 
     axios
-      .post(`${QueriesUrls.ADD_NEW_VIDEO}?channelId=${channel.value?.id}`, formData)
+      .put(`${QueriesUrls.ADD_NEW_VIDEO}?channelId=${channel.value?.id}`, formData)
       .then(() => {
         window.location.reload();
       })
       .catch((err: AxiosError) => {
-        if (err.code === "401") {
-          window.location.assign("/App/Main");
-        }
-
         let srvErr = new ServerError(err.response?.data);
-        setError(srvErr.getFirstError());
 
-        setLoading(false);
+        setError(srvErr.getFirstError());
       });
-  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading]);
+  }, [tags, previewInput, nameInput, descInput, setError]);
 
   return (
     <Stack className="studio-videocreate">
-      <Stack className="studio-videocreate-preview" spacing={4}>
-        <Stack direction={"row"} style={{ marginLeft: "48px" }}>
-          <IconButton onClick={() => setPage(0)}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Stack>
-        <Stack direction={"row"} justifyContent={"center"}>
-          {fileVideoUrl !== "" ? (
-            <VideoPlayer className="studio-videocreate-preview__player" url={fileVideoUrl} width="640px" />
-          ) : (
-            <Stack className="studio-videocreate-preview__notwork">Предпросмотр не доступен</Stack>
-          )}
-        </Stack>
+      <Stack className="studio-videocreate-preview" justifyContent={"center"} direction={"row"}>
+        <VideoPlayer className="studio-videocreate-preview__player" url={video.value?.videoUrl!} width="640px" />
       </Stack>
 
       <Stack style={{ margin: "48px", marginTop: "16px" }} spacing={3}>
-        <Stack direction={"row"} justifyContent={"center"}>
-          <Stack className="studio-videocreate-inputvideo">
-            <input
-              ref={videoInput}
-              type="file"
-              accept=".mp4"
-              id="inputVFile"
-              onChange={() => setFileVideoUrl(GetFileUrl(videoInput.current))}
-            />
-            <label htmlFor="inputVFile">
-              <Button0 text="Выбрать видео" icon={<UploadFile />} />
-            </label>
-          </Stack>
-        </Stack>
         <Stack className="studio-videocreate-namefield" spacing={1}>
           <h4>Название</h4>
           <Stack direction={"row"}>
@@ -198,20 +154,17 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
           </Stack>
         </Stack>
         <Stack className="studio-videocreate-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
-        <Stack direction={"row"} justifyContent={"end"}>
-          <LoadingButton
-            variant="contained"
-            onClick={confirm}
-            color="success"
-            loading={loading}
-            loadingPosition="start"
-          >
+        <Stack direction={"row"} justifyContent={"space-between"}>
+          <Button variant="contained" onClick={undefined} color="error">
+            Удалить
+          </Button>
+          <Button variant="contained" onClick={confirm} color="success">
             Подтвердить
-          </LoadingButton>
+          </Button>
         </Stack>
       </Stack>
     </Stack>
   );
 };
 
-export default VideoCreate;
+export default VideoEdit;

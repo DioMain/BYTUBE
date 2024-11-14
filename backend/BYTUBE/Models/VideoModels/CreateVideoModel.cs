@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BYTUBE.Entity.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace BYTUBE.Models.ChannelModels
 {
@@ -13,6 +14,11 @@ namespace BYTUBE.Models.ChannelModels
 
         [Required(ErrorMessage = "Теги дожны быть")]
         public List<string> Tags { get; set; } = [];
+
+        [Required]
+        public Video.Access VideoAccess { get; set; }
+        [Required]
+        public Video.Status VideoStatus { get; set; }
 
         [Required(ErrorMessage = "Превью видео должно быть указано")]
         public IFormFile? PreviewFile { get; set; }

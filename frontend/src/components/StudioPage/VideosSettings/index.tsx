@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import VideosOverview from "./VideoOverview";
+import VideosList from "./VideosList";
 import { useState } from "react";
 import VideoCreate from "./VideoCreate";
 
@@ -8,12 +8,11 @@ const VideosSettings: React.FC = () => {
 
   const getPage = () => {
     switch (page) {
+      default:
       case 0:
-        return <VideosOverview setPage={setPage} />;
+        return <VideosList setPage={setPage} />;
       case 1:
-        return <VideoCreate />;
-      case 2:
-        return <VideosOverview setPage={setPage} />;
+        return <VideoCreate setPage={setPage} />;
     }
   };
 
