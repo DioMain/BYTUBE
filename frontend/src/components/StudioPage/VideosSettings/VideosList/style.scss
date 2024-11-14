@@ -3,7 +3,7 @@
 $upload_in_bg: rgb(20, 20, 20);
 $upload_out_bg: rgb(30, 30, 30);
 
-.studio-videooverview {
+.studio-videolist {
   &__upload {
     padding-top: 16px;
     padding-bottom: 16px;
@@ -21,8 +21,8 @@ $upload_out_bg: rgb(30, 30, 30);
     @include fadingAnimation(0.1s, $upload_in_bg, $upload_out_bg);
   }
 
-  &-videos {
-    padding-left: 32px;
-    padding-right: 32px;
+  &__list {
+    padding-left: 64px;
+    padding-right: 64px;
   }
 }

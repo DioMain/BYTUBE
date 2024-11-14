@@ -23,6 +23,8 @@ namespace BYTUBE.Entity.Models
 
         public string? Description { get; set; } = string.Empty;
 
+        //public bool DeletionFlag { get; set; }
+
         public int Views { get; set; } = 0;
 
         [Required]

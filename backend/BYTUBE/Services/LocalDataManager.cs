@@ -89,6 +89,36 @@ namespace BYTUBE.Services
             }
         }
 
+        /// <exception cref="ServerException"></exception>
+        public async Task SaveVideoFiles(int id, IFormFile previewFile)
+        {
+            try
+            {
+                if (!Directory.Exists($"{VideosPath}/{id}"))
+                    Directory.CreateDirectory($"{VideosPath}/{id}");
+
+                string previewEx = previewFile.FileName.Split('.').Last();
+                string previewPath = $"{VideosPath}/{id}/preview.{previewEx}";
+
+                using (var stream = new FileStream(previewPath, FileMode.Create))
+                {
+                    await previewFile.CopyToAsync(stream)!;
+                }
+
+                var vData = GetVideoData(id);
+
+                SetVideoData(id, new VideoData()
+                {
+                    PreviewExtention = previewEx,
+                    VideoExtention = vData.VideoExtention,
+                });
+            }
+            catch
+            {
+                throw new ServerException("Ошибка при сохранение файлов видео", 500);
+            }
+        }
+
         public ChannelData GetChannelData(int id)
         {
             return JsonSerializer.Deserialize<ChannelData>(File.ReadAllText(Path.Combine(ChannelsPath, $"{id}/info.json")))!;

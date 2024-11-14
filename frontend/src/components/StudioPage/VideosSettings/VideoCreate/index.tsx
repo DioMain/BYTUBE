@@ -88,21 +88,25 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
     setLoading(true);
 
     axios
-      .post(`${QueriesUrls.ADD_NEW_VIDEO}?channelId=${channel.value?.id}`, formData)
+      .post(QueriesUrls.VIDEO_COMMON, formData, {
+        params: {
+          channelId: channel.value?.id,
+        },
+      })
       .then(() => {
         window.location.reload();
       })
       .catch((err: AxiosError) => {
         if (err.code === "401") {
-          window.location.assign("/App/Main");
+          window.location.assign(QueriesUrls.MAIN_PAGE);
+        } else {
+          let srvErr = new ServerError(err.response?.data);
+
+          setError(srvErr.getFirstError());
+          setLoading(false);
         }
-
-        let srvErr = new ServerError(err.response?.data);
-        setError(srvErr.getFirstError());
-
-        setLoading(false);
       });
-  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading]);
+  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, nolimit]);
 
   return (
     <Stack className="studio-videocreate">

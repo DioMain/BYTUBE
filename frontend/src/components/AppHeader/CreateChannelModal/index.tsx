@@ -38,7 +38,7 @@ const CreateChannelModal: React.FC<CCMProps> = ({ isOpened, closeCallback }) => 
     }
 
     axios
-      .post(QueriesUrls.ADD_NEW_CHANNEL, form)
+      .post(QueriesUrls.CHANNEL_COMMON, form)
       .then(() => {
         window.location.reload();
       })

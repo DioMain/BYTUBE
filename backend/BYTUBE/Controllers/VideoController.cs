@@ -6,6 +6,7 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
 
 namespace BYTUBE.Controllers
 {
@@ -18,6 +19,7 @@ namespace BYTUBE.Controllers
         private readonly VideoMediaService _videoMediaService;
 
         private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+        private bool HasUser => HttpContext.User.Claims.Count() > 0;
 
         public VideoController(PostgresDbContext db, LocalDataManager localDataManager, VideoMediaService videoMediaService)
         {
@@ -38,8 +40,14 @@ namespace BYTUBE.Controllers
 
                 Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == videoData.OwnerId);
 
-                if (videoData.VideoAccess == Video.Access.Private && channel.UserId != UserId)
-                    throw new ServerException("Видео вам не доступно", 403);
+                if (videoData.VideoAccess == Video.Access.Private)
+                {
+                    if (!HasUser || channel.UserId != UserId)
+                    {
+                        throw new ServerException("Видео вам не доступно", 403);
+
+                    }
+                }
 
                 if (videoData.VideoStatus == Video.Status.Blocked)
                     throw new ServerException("Видео более не доспутно", 403);
@@ -132,7 +140,7 @@ namespace BYTUBE.Controllers
             try
             {
                 if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
-                    throw new ServerException("Канал вам не пренадлежит", 401);
+                    throw new ServerException("Канал вам не пренадлежит", 403);
 
                 var video = await _db.Videos.AddAsync(new Video()
                 {
@@ -174,6 +182,114 @@ namespace BYTUBE.Controllers
             catch
             {
                 return Results.Problem("Error", statusCode: 400);
+            }
+        }
+
+        [HttpPut, Authorize]
+        public async Task<IResult> Put([FromForm] EditVideoModel model, [FromQuery] int id, [FromQuery] int channelId)
+        {
+            try
+            {
+                 if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                    throw new ServerException("Канал вам не пренадлежит", 403);
+
+                Video? video = await _db.Videos.FirstOrDefaultAsync(v => v.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не существует", 404);
+
+                if (video.OwnerId != channelId)
+                    throw new ServerException("Видео вам не пренадлежит", 403);
+
+                video.Title = model.Title;
+                video.Description = model.Description;
+                video.Tags = model.Tags;
+                video.VideoAccess = model.VideoAccess;
+
+                if (model.PreviewFile != null)
+                    await _localDataManager.SaveVideoFiles(video.Id, model.PreviewFile!);
+
+                _db.Videos.Update(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException srvErr)
+            {
+                return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
+            }
+            catch
+            {
+                return Results.Problem("Error", statusCode: 400);
+            }
+        }
+
+        [HttpDelete, Authorize]
+        public async Task<IResult> Delete([FromQuery] int id, [FromQuery] int channelId)
+        {
+            try
+            {
+                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                    throw new ServerException("Канал вам не пренадлежит", 403);
+
+                Video? video = await _db.Videos.FirstOrDefaultAsync(v => v.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не существует", 404);
+
+                if (video.OwnerId != channelId)
+                    throw new ServerException("Видео вам не пренадлежит", 403);
+
+                var vdata = _localDataManager.GetVideoData(video.Id);
+
+                
+
+                Directory.Delete($"{LocalDataManager.VideosPath}/{id}", true);
+
+                _db.Videos.Remove(video);
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException srvErr)
+            {
+                return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
+            }
+            catch
+            {
+                return Results.Problem("Error", statusCode: 400);
+            }
+        }
+
+        [HttpGet("/data/videos/{id:int}/video.mp4")] 
+        public async Task<IResult> StreamVideo([FromRoute] int id)
+        {
+            try
+            {
+                string path = $"./Data/videos/{id}/video.mp4";
+
+                if (!System.IO.File.Exists(path))
+                    throw new ServerException("Файла больше не существует!", 404);
+
+                HttpContext.Response.Headers.Append("Accept-Ranges", "bytes");
+
+                byte[] fileBytes;
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Delete))
+                {
+                    fileBytes = new byte[stream.Length];
+                    await stream.ReadAsync(fileBytes, 0, fileBytes.Length);
+                }
+
+                return Results.File(fileBytes, "video/mp4");
+            }
+            catch (ServerException srvErr)
+            {
+                return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Problem(err.Message, statusCode: 400);
             }
         }
 

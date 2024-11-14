@@ -8,7 +8,7 @@ class VideoStore {
     makeAutoObservable(this);
   }
 
-  setChannel = (value?: VideoModel) => {
+  setVideo = (value?: VideoModel) => {
     this.value = value;
   };
 }

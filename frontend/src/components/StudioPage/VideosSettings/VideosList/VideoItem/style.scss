@@ -1,0 +1,33 @@
+.vlist-vitem {
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background-color: #171717;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: #252525;
+  }
+
+  &__preview {
+    width: 320px;
+    height: 180px;
+
+    background-position: center;
+    background-size: cover;
+
+    &-duration {
+      padding: 2px;
+      padding-left: 4px;
+      padding-right: 4px;
+
+      border-radius: 4px;
+
+      margin: 8px;
+
+      background-color: #00000070;
+    }
+  }
+}

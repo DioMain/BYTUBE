@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import VideosList from "./VideosList";
 import { useState } from "react";
 import VideoCreate from "./VideoCreate";
+import VideoOverview from "./VideoOverview";
 
 const VideosSettings: React.FC = () => {
   const [page, setPage] = useState(0);
@@ -13,16 +14,12 @@ const VideosSettings: React.FC = () => {
         return <VideosList setPage={setPage} />;
       case 1:
         return <VideoCreate setPage={setPage} />;
-      case 1:
-        return <VideoCreate setPage={setPage} />;
+      case 2:
+        return <VideoOverview setPage={setPage} />;
     }
   };
 
-  return (
-    <Stack className="studiovideowrapper" spacing={3}>
-      {getPage()}
-    </Stack>
-  );
+  return <Stack spacing={3}>{getPage()}</Stack>;
 };
 
 export default VideosSettings;

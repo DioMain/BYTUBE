@@ -3,7 +3,7 @@
 
 $tagitem_time: 0.2s;
 
-.studio-videocreate {
+.studio-videoedit {
   &-preview {
     background-color: #101010;
 
@@ -56,7 +56,7 @@ $tagitem_time: 0.2s;
         padding-left: 8px;
       }
 
-      .studio-videocreate-tags__item-remove {
+      .studio-videoedit-tags__item-remove {
         z-index: -1;
 
         border: solid 2px #313131;
@@ -70,7 +70,7 @@ $tagitem_time: 0.2s;
       }
 
       &:hover {
-        .studio-videocreate-tags__item-remove {
+        .studio-videoedit-tags__item-remove {
           animation: tagitem_in $tagitem_time ease-out both;
         }
       }

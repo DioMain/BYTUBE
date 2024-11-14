@@ -6,6 +6,8 @@ import CommentsOverview from "./CommentsOverview";
 import { VSEProps } from "../types";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+import "./style.scss";
+
 const VideoOverview: React.FC<VSEProps> = ({ setPage }) => {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -22,12 +24,12 @@ const VideoOverview: React.FC<VSEProps> = ({ setPage }) => {
   };
 
   return (
-    <Stack spacing={2}>
-      <Stack direction={"row"} justifyContent={"center"}>
+    <Stack spacing={2} className="studio-voverview">
+      <Stack direction={"row"} justifyContent={"center"} className="studio-voverview__tabs">
         <Tabs value={tabIndex} onChange={(evt, val) => setTabIndex(val)}>
-          <Tab title="Обзор"></Tab>
-          <Tab title="Редактирование"></Tab>
-          <Tab title="Комметарии"></Tab>
+          <Tab label="Обзор"></Tab>
+          <Tab label="Редактирование"></Tab>
+          <Tab label="Комметарии"></Tab>
         </Tabs>
       </Stack>
       <Stack direction={"row"}>
