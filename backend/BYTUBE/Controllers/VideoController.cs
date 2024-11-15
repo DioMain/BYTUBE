@@ -6,7 +6,6 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.PortableExecutable;
 
 namespace BYTUBE.Controllers
 {
@@ -43,10 +42,7 @@ namespace BYTUBE.Controllers
                 if (videoData.VideoAccess == Video.Access.Private)
                 {
                     if (!HasUser || channel.UserId != UserId)
-                    {
                         throw new ServerException("Видео вам не доступно", 403);
-
-                    }
                 }
 
                 if (videoData.VideoStatus == Video.Status.Blocked)
@@ -241,10 +237,6 @@ namespace BYTUBE.Controllers
                 if (video.OwnerId != channelId)
                     throw new ServerException("Видео вам не пренадлежит", 403);
 
-                var vdata = _localDataManager.GetVideoData(video.Id);
-
-                
-
                 Directory.Delete($"{LocalDataManager.VideosPath}/{id}", true);
 
                 _db.Videos.Remove(video);
@@ -272,16 +264,41 @@ namespace BYTUBE.Controllers
                 if (!System.IO.File.Exists(path))
                     throw new ServerException("Файла больше не существует!", 404);
 
-                HttpContext.Response.Headers.Append("Accept-Ranges", "bytes");
+                Video video = await _db.Videos.Include(i => i.Owner).FirstAsync(i => i.Id == id);
 
-                byte[] fileBytes;
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Delete))
+                if (video.VideoAccess == Video.Access.Private)
                 {
-                    fileBytes = new byte[stream.Length];
-                    await stream.ReadAsync(fileBytes, 0, fileBytes.Length);
+                    if ((HasUser && UserId != video.Owner.UserId) || !HasUser)
+                        throw new ServerException("Видео файл не доступен!", 403);
                 }
 
-                return Results.File(fileBytes, "video/mp4");
+                if (video.VideoStatus == Video.Status.Blocked)
+                    throw new ServerException("Видео файл не доступен!", 403);
+
+                HttpContext.Response.Headers.Append("Accept-Ranges", "bytes");
+
+                var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete);
+                var fileLength = fileStream.Length;
+
+                if (Request.Headers.ContainsKey("Range"))
+                {
+                    var rangeHeader = Request.Headers["Range"].ToString();
+                    var range = rangeHeader.Replace("bytes=", "").Split('-');
+                    var start = long.Parse(range[0]);
+                    var end = range.Length > 1 && !string.IsNullOrEmpty(range[1])
+                        ? long.Parse(range[1])
+                        : fileLength - 1;
+
+                    var chunkSize = end - start + 1;
+                    fileStream.Seek(start, SeekOrigin.Begin);
+
+                    return Results.File(
+                        fileStream,
+                        "video/mp4",
+                        enableRangeProcessing: true);
+                }
+
+                return Results.File(fileStream, "video/mp4");
             }
             catch (ServerException srvErr)
             {

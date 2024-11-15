@@ -88,9 +88,15 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
     setLoading(true);
 
     axios
+      .create({
+        timeout: 0,
+      })
       .post(QueriesUrls.VIDEO_COMMON, formData, {
         params: {
           channelId: channel.value?.id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
@@ -99,12 +105,14 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
       .catch((err: AxiosError) => {
         if (err.code === "401") {
           window.location.assign(QueriesUrls.MAIN_PAGE);
+        } else if (err.code === "ERR_NETWORK") {
+          setError(`Не удаеться отправить запрос: ${err.message}`);
         } else {
           let srvErr = new ServerError(err.response?.data);
-
           setError(srvErr.getFirstError());
-          setLoading(false);
         }
+
+        setLoading(false);
       });
   }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, nolimit]);
 
@@ -237,6 +245,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
             onClick={confirm}
             color="success"
             loading={loading}
+            startIcon={<UploadFile />}
             loadingPosition="start"
           >
             Подтвердить

@@ -129,34 +129,47 @@ namespace BYTUBE.Services
         }
 
         /// <exception cref="ServerException"></exception>
-        public async Task SaveChannelFiles(int id, IFormFile iconFile, IFormFile bannerFile)
+        public async Task SaveChannelFiles(int id, IFormFile? iconFile, IFormFile? bannerFile, bool alreadyExists = false)
         {
             try
             {
                 if (!Directory.Exists($"{ChannelsPath}/{id}"))
                     Directory.CreateDirectory($"{ChannelsPath}/{id}");
 
-                string iconEx = iconFile.FileName.Split('.').Last();
-                string bannerEx = bannerFile.FileName.Split('.').Last();
+                var info = new ChannelData();
 
-                string iconPath = $"{ChannelsPath}/{id}/icon.{iconEx}";
-                string bannerPath = $"{ChannelsPath}/{id}/banner.{bannerEx}";
-
-                using (var stream = new FileStream(iconPath, FileMode.Create))
+                if (alreadyExists)
                 {
-                    await iconFile.CopyToAsync(stream)!;
+                    info = GetChannelData(id);
                 }
 
-                using (var stream = new FileStream(bannerPath, FileMode.Create))
+                if (iconFile != null)
                 {
-                    await bannerFile.CopyToAsync(stream)!;
+                    string iconEx = iconFile.FileName.Split('.').Last();
+                    string iconPath = $"{ChannelsPath}/{id}/icon.{iconEx}";
+
+                    using (var stream = new FileStream(iconPath, FileMode.Create))
+                    {
+                        await iconFile.CopyToAsync(stream)!;
+                    }
+
+                    info.IconExtention = iconEx;
                 }
 
-                SetChannelData(id, new ChannelData()
+                if (bannerFile != null)
                 {
-                    IconExtention = iconEx!,
-                    BannerExtention = bannerEx!,
-                });
+                    string bannerEx = bannerFile.FileName.Split('.').Last();
+                    string bannerPath = $"{ChannelsPath}/{id}/banner.{bannerEx}";
+
+                    using (var stream = new FileStream(bannerPath, FileMode.Create))
+                    {
+                        await bannerFile.CopyToAsync(stream)!;
+                    }
+
+                    info.BannerExtention = bannerEx;
+                }
+
+                SetChannelData(id, info);
             }
             catch
             {

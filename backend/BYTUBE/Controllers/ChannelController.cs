@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace BYTUBE.Controllers
 {
@@ -99,6 +100,78 @@ namespace BYTUBE.Controllers
                 await _localDataManager.SaveChannelFiles(cur.Id, model.IconFile!, model.BannerFile!);
 
                 return Results.Ok();
+            }
+            catch (Exception err)
+            {
+                return Results.Problem(err.Message);
+            }
+        }
+
+        [HttpPut, Authorize]
+        public async Task<IResult> Put([FromForm] EditChannelModel model, [FromQuery] int id)
+        {
+            try
+            {
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+
+                if (channel == null)
+                    throw new ServerException("Канал не найден!", 404);
+
+                if (channel.UserId != UserId)
+                    throw new ServerException("Канал вам не пренадлежит!", 403);
+
+                channel.Name = model.Name;
+                channel.Description = model.Description;
+
+                _db.Channels.Update(channel);
+
+                await _db.SaveChangesAsync();
+
+                await _localDataManager.SaveChannelFiles(id, model.IconFile, model.BannerFile);
+
+                return Results.Ok();
+            }
+
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Problem(err.Message);
+            }
+        }
+
+        [HttpDelete, Authorize]
+        public async Task<IResult> Delete([FromQuery] int id)
+        {
+            try
+            {
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+
+                if (channel == null)
+                    throw new ServerException("Канал не найден!", 404);
+
+                if (channel.UserId != UserId)
+                    throw new ServerException("Канал вам не пренадлежит!", 403);
+
+                foreach (var video in _db.Videos.Where(i => i.OwnerId == channel.Id))
+                {
+                    Directory.Delete($"{LocalDataManager.VideosPath}/{video.Id}", true);
+
+                    _db.Videos.Remove(video);
+                }
+
+                _db.Channels.Remove(channel);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
             }
             catch (Exception err)
             {
