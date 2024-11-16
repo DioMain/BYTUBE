@@ -1,8 +1,8 @@
 import { Alert, Button, IconButton, MenuItem, Select, Stack } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
+import { UploadFile, Add, Close } from "@mui/icons-material";
 import GetFileUrl from "@helpers/GetFileUrl";
 import VideoPlayer from "@components/VideoPlayer";
-import { UploadFile, Add, Close } from "@mui/icons-material";
 import Button0 from "@components/CustomUI/Button0";
 import IsRightImageFormat from "@helpers/IsRightImageFormat";
 import axios, { AxiosError } from "axios";
@@ -58,7 +58,7 @@ const VideoEdit: React.FC = () => {
       return;
     }
 
-    if (previewInput.current?.files?.item(0) != undefined) {
+    if (previewInput.current?.files?.item(0) !== undefined) {
       if (!IsRightImageFormat(previewInput.current)) {
         setError("Превью не указано или не имеет верный формат!");
         return;

@@ -233,7 +233,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
           <FormControlLabel
             checked={nolimit}
             onChange={(evt, checked) => setNolimit(checked)}
-            label="Это видео предназначено для лиц не достигших 18 лет?"
+            label="Это видео могут смотреть люди не достигшие 18 лет?"
             labelPlacement="end"
             control={<Checkbox color="primary" />}
           />

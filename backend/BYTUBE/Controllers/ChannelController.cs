@@ -3,10 +3,8 @@ using BYTUBE.Exceptions;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
 
 namespace BYTUBE.Controllers
 {
@@ -127,7 +125,7 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                await _localDataManager.SaveChannelFiles(id, model.IconFile, model.BannerFile);
+                await _localDataManager.SaveChannelFiles(id, model.IconFile, model.BannerFile, true);
 
                 return Results.Ok();
             }
@@ -161,6 +159,8 @@ namespace BYTUBE.Controllers
 
                     _db.Videos.Remove(video);
                 }
+
+                Directory.Delete($"{LocalDataManager.ChannelsPath}/{id}", true);
 
                 _db.Channels.Remove(channel);
 

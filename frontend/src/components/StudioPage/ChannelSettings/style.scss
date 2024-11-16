@@ -2,6 +2,20 @@
 
 $innerPadding: 64px;
 
+@mixin upload {
+  padding: 8px;
+
+  border-radius: 8px;
+
+  outline: solid 1px rgb(120, 120, 120);
+  background-color: rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    outline: solid 2px rgb(139, 139, 139);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
 .settings {
   &-banner {
     padding: 8px;
@@ -14,13 +28,16 @@ $innerPadding: 64px;
     background-position: center;
     background-size: cover;
 
-    &__btn,
     &__name {
       padding: 8px;
 
       border-radius: 12px;
 
       background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &__btn {
+      @include upload;
     }
 
     &__name {
@@ -40,11 +57,7 @@ $innerPadding: 64px;
     }
 
     &__btn {
-      padding: 4px;
-
-      border-radius: 8px;
-
-      background-color: rgba(0, 0, 0, 0.25);
+      @include upload;
     }
 
     &__namefield {
