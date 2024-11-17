@@ -18,7 +18,7 @@ namespace BYTUBE.Controllers
         private readonly VideoMediaService _videoMediaService;
 
         private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private bool HasUser => HttpContext.User.Claims.Count() > 0;
+        private bool IsAutorize => HttpContext.User.Claims.Any();
 
         public VideoController(PostgresDbContext db, LocalDataManager localDataManager, VideoMediaService videoMediaService)
         {
@@ -41,7 +41,7 @@ namespace BYTUBE.Controllers
 
                 if (videoData.VideoAccess == Video.Access.Private)
                 {
-                    if (!HasUser || channel.UserId != UserId)
+                    if (!IsAutorize || channel.UserId != UserId)
                         throw new ServerException("Видео вам не доступно", 403);
                 }
 
@@ -64,7 +64,7 @@ namespace BYTUBE.Controllers
                     PreviewUrl = $"/data/videos/{id}/preview.{videoLocalData.PreviewExtention}",
                     VideoAccess = videoData.VideoAccess,
                     VideoStatus = videoData.VideoStatus,
-                    
+
                     Channel = new ChannelModel()
                     {
                         Id = channel.Id,
@@ -186,7 +186,7 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                 if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
                     throw new ServerException("Канал вам не пренадлежит", 403);
 
                 Video? video = await _db.Videos.FirstOrDefaultAsync(v => v.Id == id);
@@ -254,7 +254,7 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpGet("/data/videos/{id:int}/video.mp4")] 
+        [HttpGet("/data/videos/{id:int}/video.mp4")]
         public async Task<IResult> StreamVideo([FromRoute] int id)
         {
             try
@@ -268,7 +268,7 @@ namespace BYTUBE.Controllers
 
                 if (video.VideoAccess == Video.Access.Private)
                 {
-                    if ((HasUser && UserId != video.Owner.UserId) || !HasUser)
+                    if ((IsAutorize && UserId != video.Owner.UserId) || !IsAutorize)
                         throw new ServerException("Видео файл не доступен!", 403);
                 }
 
@@ -338,7 +338,7 @@ namespace BYTUBE.Controllers
                         PreviewUrl = $"/data/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
                         Channel = new ChannelModel()
                         {
-                            Id = channel.Id,    
+                            Id = channel.Id,
                             Name = channel.Name,
                             Subscribes = channel.Subscribes.Count,
                             IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
@@ -357,5 +357,132 @@ namespace BYTUBE.Controllers
                 return Results.Problem(statusCode: 400);
             }
         }
+
+        [HttpGet("mark")]
+        public async Task<IResult> GetMark([FromQuery] int id)
+        {
+            try
+            {
+                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не найдено", 404);
+
+
+                VideoMarkModel model = new VideoMarkModel
+                {
+                    LikesCount = video.Likes.Count,
+                    DislikesCount = video.Dislikes.Count
+                };
+
+                if (IsAutorize)
+                {
+                    model.UserIsLikeIt = video.Likes.Any(i => i == UserId);
+                    model.UserIsDislikeIt = video.Dislikes.Any(i => i == UserId);
+                }
+
+                return Results.Json(model);
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPost("like"), Authorize]
+        public async Task<IResult> LikeVideo([FromQuery] int id)
+        {
+            try
+            {
+                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не найдено", 404);
+
+                var user = await _db.Users.FirstAsync(usr => usr.Id == UserId);
+
+                if (!video.Likes.Any(i => i == UserId))
+                {
+                    video.Likes.Add(UserId);
+
+                    user.LikedVideo.Add(video.Id);
+
+                    if (video.Dislikes.Any(x => x == UserId))
+                        video.Dislikes.Remove(UserId);
+                }
+                else
+                {
+                    video.Likes.Remove(UserId);
+                    user.LikedVideo.Remove(video.Id);
+                }
+
+                _db.Videos.Update(video);
+                _db.Users.Update(user);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPost("dislike"), Authorize]
+        public async Task<IResult> DislikeVideo([FromQuery] int id)
+        {
+            try
+            {
+                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не найдено", 404);
+
+                if (!video.Dislikes.Any(i => i == UserId))
+                {
+                    video.Dislikes.Add(UserId);
+
+                    if (video.Likes.Any(x => x == UserId))
+                        video.Likes.Remove(UserId);
+                }
+                else
+                    video.Dislikes.Remove(UserId);
+
+                _db.Videos.Update(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPost("view")]
+        public async Task<IResult> AddView([FromQuery] int id)
+        {
+            try
+            {
+                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Video not found", 404);
+
+                video.Views++;
+
+                _db.Videos.Update(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        } 
     }
 }

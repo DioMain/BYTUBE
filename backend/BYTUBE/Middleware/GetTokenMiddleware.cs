@@ -1,4 +1,5 @@
-﻿using BYTUBE.Services;
+﻿using BYTUBE.Entity.Models;
+using BYTUBE.Services;
 using System.Security.Claims;
 
 namespace BYTUBE.Middleware
@@ -33,7 +34,11 @@ namespace BYTUBE.Middleware
 
             if (access == null || string.IsNullOrEmpty(access) || accessJwtClaims == null)
             {
-                access = JwtManager.GenerateJwtToken(_jwtManager.AccessToken, claims[0].Value);
+                access = JwtManager.GenerateJwtToken(_jwtManager.AccessToken, new User()
+                {
+                    Id = int.Parse(claims[0].Value),
+                    Role = Enum.Parse<User.RoleType>(claims[1].Value)
+                });
 
                 httpContext.Response.Cookies.Append("AccessToken", access);
             }

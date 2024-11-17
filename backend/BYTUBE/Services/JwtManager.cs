@@ -1,4 +1,5 @@
-﻿using BYTUBE.Models;
+﻿using BYTUBE.Entity.Models;
+using BYTUBE.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,13 +27,14 @@ namespace BYTUBE.Services
             };
         }
 
-        public static string GenerateJwtToken(JwtSettings settings, string userId)
+        public static string GenerateJwtToken(JwtSettings settings, User user)
         {
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SecretKey));
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Typ, user.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

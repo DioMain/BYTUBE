@@ -1,4 +1,5 @@
 enum StatusBase {
+  Initial,
   Loading,
   Success,
   Failed,
