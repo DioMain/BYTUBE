@@ -32,49 +32,55 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Video? videoData = await _db.Videos.FirstOrDefaultAsync(i => i.Id == id);
+                Video? video = await _db.Videos.FirstOrDefaultAsync(i => i.Id == id);
 
-                if (videoData == null)
+                if (video == null)
                     throw new ServerException("Видео не найдено", 404);
 
-                Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == videoData.OwnerId);
+                Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == video.OwnerId);
 
-                if (videoData.VideoAccess == Video.Access.Private)
+                if (video.VideoAccess == Video.Access.Private)
                 {
                     if (!IsAutorize || channel.UserId != UserId)
                         throw new ServerException("Видео вам не доступно", 403);
                 }
 
-                if (videoData.VideoStatus == Video.Status.Blocked)
+                if (video.VideoStatus == Video.Status.Blocked)
                     throw new ServerException("Видео более не доспутно", 403);
 
                 var videoLocalData = _localDataManager.GetVideoData(id);
                 var channelLocalData = _localDataManager.GetChannelData(channel.Id);
 
-                VideoFullModel videoModel = new VideoFullModel()
+                VideoFullModel model = new VideoFullModel()
                 {
-                    Id = videoData.Id,
-                    Title = videoData.Title,
-                    Description = videoData.Description ?? "",
-                    Duration = videoData.Duration,
-                    Created = videoData.Created,
-                    Views = videoData.Views,
-                    Tags = videoData.Tags,
+                    Id = video.Id,
+                    Title = video.Title,
+                    Description = video.Description ?? "",
+                    Duration = video.Duration,
+                    Created = video.Created,
+                    Views = video.Views,
+                    Tags = video.Tags,
                     VideoUrl = $"/data/videos/{id}/video.{videoLocalData.VideoExtention}",
                     PreviewUrl = $"/data/videos/{id}/preview.{videoLocalData.PreviewExtention}",
-                    VideoAccess = videoData.VideoAccess,
-                    VideoStatus = videoData.VideoStatus,
+                    VideoAccess = video.VideoAccess,
+                    VideoStatus = video.VideoStatus,
 
                     Channel = new ChannelModel()
                     {
                         Id = channel.Id,
                         Name = channel.Name,
+                        IsSubscripted = false,
                         Subscribes = channel.Subscribes.Count,
                         IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
                 };
 
-                return Results.Json(videoModel);
+                if (IsAutorize)
+                {
+                    model.Channel.IsSubscripted = _db.Subscriptions.Any(sub => sub.UserId == UserId && sub.ChannelId == model.Channel.Id);
+                }
+
+                return Results.Json(model);
             }
             catch (ServerException srverr)
             {

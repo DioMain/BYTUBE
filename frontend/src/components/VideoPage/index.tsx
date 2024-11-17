@@ -1,20 +1,26 @@
-import { LinearProgress, IconButton, Stack, Alert } from "@mui/material";
+import { LinearProgress, IconButton, Stack, Alert, Tooltip } from "@mui/material";
 import useVideo from "@hooks/useVideo";
 import VideoPlayer from "@components/VideoPlayer";
 import StatusBase from "@type/StatusBase";
 import VideoElement from "./VideoElement";
 import useVideos from "@hooks/useVideos";
-import MoreIcon from "@mui/icons-material/MoreHoriz";
-import ChannelView from "./ChannelView";
-import "./style.scss";
+import FlagIcon from "@mui/icons-material/Flag";
+import ChannelPanel from "./ChannePanel";
 import GetUrlParams from "@helpers/GetUrlParams";
 import MarkVideo from "./MarkVideo";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+
+import "./style.scss";
 
 const VideoPage: React.FC = () => {
   const vid = GetUrlParams().get("vid") as number;
 
   const video = useVideo(vid);
   const otherVideos = useVideos(0, 10);
+
+  const reportHandle = () => {};
+
+  const addToPlaylistHandle = () => {};
 
   switch (video.status) {
     case StatusBase.Loading:
@@ -29,8 +35,22 @@ const VideoPage: React.FC = () => {
 
             <h1 className="videopage-vtitle">{video.data?.title}</h1>
             <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
-              <ChannelView channel={video.data?.channel!} imgSize="48px" />
-              <Stack direction={"row"}>
+              <ChannelPanel channel={video.data?.channel!} />
+              <Stack direction={"row"} spacing={2}>
+                <Stack justifyContent={"center"}>
+                  <Tooltip title="Добавить в плейлист">
+                    <IconButton onClick={addToPlaylistHandle}>
+                      <PlaylistAddIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+                <Stack justifyContent={"center"}>
+                  <Tooltip title="Пожаловатся">
+                    <IconButton onClick={reportHandle}>
+                      <FlagIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
                 <MarkVideo id={video.data?.id!} />
               </Stack>
             </Stack>
