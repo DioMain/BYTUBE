@@ -15,6 +15,7 @@ namespace BYTUBE.Controllers
         private readonly PostgresDbContext _db;
         private readonly LocalDataManager _localDataManager;
 
+        private bool IsAutorize => HttpContext.User.Claims.Any();
         private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
 
         public ChannelController(PostgresDbContext db, LocalDataManager localDataManager)

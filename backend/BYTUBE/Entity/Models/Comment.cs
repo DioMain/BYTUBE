@@ -11,9 +11,11 @@ namespace BYTUBE.Entity.Models
         [Required]
         public string Message { get; set; } = string.Empty;
 
+        public int? ParentId { get; set; }
+        [ForeignKey(nameof(ParentId))]
+        public Comment? Parent { get; set; }
 
-        public int? ParrentId { get; set; }
-        [ForeignKey(nameof(ParrentId))]
+        public List<Comment> Childrens { get; set; } = [];
 
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
