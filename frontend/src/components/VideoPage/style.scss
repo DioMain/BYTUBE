@@ -18,7 +18,7 @@
   }
 
   &-othervideos {
-    width: 40%;
+    width: 35%;
   }
 
   &-vtitle {
@@ -29,7 +29,7 @@
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .videopage {
     flex-direction: column;
 

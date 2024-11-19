@@ -10,10 +10,11 @@ const QueriesUrls = {
   GET_USER_CHANNELS_LIST: "/api/user/channelslist",
 
   VIDEO_COMMON: "/api/video",
-  GET_VIDEOS: "/api/video/range",
+  GET_VIDEOS: "/api/video/select",
   GET_VIDEO_MARKS: "/api/video/mark",
   VIDEO_LIKE: "/api/video/like",
   VIDEO_DISLIKE: "/api/video/dislike",
+  VIDEO_ADD_VIEW: "/api/video/view",
 
   CHANNEL_COMMON: "/api/channel",
   GET_CHANNEL_VIDEOS: "/api/video/channel",

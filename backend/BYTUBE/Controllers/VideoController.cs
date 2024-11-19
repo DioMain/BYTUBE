@@ -1,11 +1,13 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Models;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.VideoModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace BYTUBE.Controllers
 {
@@ -200,6 +202,63 @@ namespace BYTUBE.Controllers
             catch
             {
                 return Results.Problem(statusCode: 400);
+            }
+        }
+
+        [HttpGet("select")]
+        public async Task<IResult> Select([FromQuery] VideoSelectOptions Options)
+        {
+            try
+            {   
+                var videos = await _db.Videos
+                    .Where(video => video.VideoAccess == Video.Access.All)
+                    .Include(i => i.Owner)
+                    .ToListAsync();
+
+                if (Options.Ignore != null)
+                {
+                    videos = videos.Where(video => Options.Ignore.Split(',').Any(i => int.Parse(i) != video.Id)).ToList();
+                }
+
+                if (Options.NamePattern != null)
+                {
+                    videos = videos.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{Options.NamePattern}(\w)*")).ToList();
+                }
+
+                videos = videos.Skip(Options.Skip).Take(Options.Take).ToList();
+
+                return Results.Json(videos.Select(video =>
+                {
+                    var videoData = _localDataManager.GetVideoData(video.Id);
+                    var channelData = _localDataManager.GetChannelData(video.Owner!.Id);
+
+                    var subsCount = _db.Subscriptions.Where(i => i.ChannelId == video.Owner!.Id).Count();
+
+                    return new VideoModel()
+                    {
+                        Id = video.Id,
+                        Title = video.Title,
+                        Duration = video.Duration,
+                        Created = video.Created,
+                        VideoAccess = video.VideoAccess,
+                        VideoStatus = video.VideoStatus,
+                        Views = video.Views,
+                        PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
+
+                        Channel = new ChannelModel()
+                        {
+                            Id = video.Owner.Id,
+                            Name = video.Owner.Name,
+                            IsSubscripted = false,
+                            Subscribes = subsCount,
+                            IconUrl = $"/data/channels/{video.Owner.Id}/icon.{channelData.IconExtention}"
+                        }
+                    };
+                }));
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
             }
         }
 

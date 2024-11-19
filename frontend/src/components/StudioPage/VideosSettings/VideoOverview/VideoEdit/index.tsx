@@ -58,12 +58,13 @@ const VideoEdit: React.FC = () => {
       return;
     }
 
-    if (previewInput.current?.files?.item(0) !== undefined) {
+    if (previewInput.current?.files?.item(0) !== null) {
       if (!IsRightImageFormat(previewInput.current)) {
         setError("Превью не указано или не имеет верный формат!");
         return;
       }
     }
+
     let formData = new FormData();
 
     formData.append("Title", nameInput.current?.value!);
