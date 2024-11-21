@@ -46,7 +46,18 @@ const VideoPage: React.FC = () => {
           <Stack className="videopage-main">
             <VideoPlayer url={video.data?.videoUrl!} className="videopage__player" width={`auto`} />
             <h1 className="videopage-vtitle">{video.data?.title}</h1>
-            <div>{video.data?.views} просмотров</div>
+            <Stack spacing={3} direction={"row"}>
+              <div className="videopage-views">{video.data?.views} просмотров</div>
+              <Stack direction={"row"} spacing={1}>
+                {video.data?.tags?.map((item, index) => {
+                  return (
+                    <div key={`vp-tag-${index}`} className="videopage-tag">
+                      #{item}
+                    </div>
+                  );
+                })}
+              </Stack>
+            </Stack>
             <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
               <ChannelPanel channel={video.data?.channel!} />
               <Stack direction={"row"} spacing={2}>

@@ -574,54 +574,5 @@ namespace BYTUBE.Controllers
                 return Results.Json(err.GetModel(), statusCode: err.Code);
             }
         }
-
-
-        [HttpGet("range"), Obsolete]
-        public async Task<IResult> GetRange([FromQuery] int skip = 0, [FromQuery] int take = 30)
-        {
-            try
-            {
-                Video[] videoDatas = [.. await _db.Videos.Skip(skip).Take(take).OrderBy(i => i.Id)
-                    .Include(i => i.Owner)
-                    .Include(i => i.Owner.Subscribes).ToArrayAsync()];
-
-                VideoModel[] models = videoDatas.Select(videoData =>
-                {
-                    Channel channel = videoData.Owner;
-
-                    var videoLocalData = _localDataManager.GetVideoData(videoData.Id);
-                    var channelLocalData = _localDataManager.GetChannelData(channel.Id);
-
-                    return new VideoModel()
-                    {
-                        Id = videoData.Id,
-                        Title = videoData.Title,
-                        Duration = videoData.Duration,
-                        Created = videoData.Created,
-                        Views = videoData.Views,
-                        VideoAccess = videoData.VideoAccess,
-                        VideoStatus = videoData.VideoStatus,
-                        PreviewUrl = $"/data/videos/{videoData.Id}/preview.{videoLocalData.PreviewExtention}",
-                        Channel = new ChannelModel()
-                        {
-                            Id = channel.Id,
-                            Name = channel.Name,
-                            Subscribes = channel.Subscribes.Count,
-                            IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
-                        }
-                    };
-                }).ToArray();
-
-                return Results.Json(models);
-            }
-            catch (ServerException srverr)
-            {
-                return Results.Json(srverr.GetModel(), statusCode: srverr.Code);
-            }
-            catch
-            {
-                return Results.Problem(statusCode: 400);
-            }
-        }
     }
 }

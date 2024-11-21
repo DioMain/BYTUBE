@@ -12,8 +12,6 @@ function useOnSeeElement(target: HTMLElement | null, onSee: () => void) {
       (entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log("See");
-
             onSee();
           }
         });
