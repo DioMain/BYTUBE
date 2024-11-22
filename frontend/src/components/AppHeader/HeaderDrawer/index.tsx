@@ -1,7 +1,7 @@
 import { Divider, Drawer } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useStores } from "appStoreContext";
-import Button0 from "../Button0";
+import Button0 from "./HeaderDrawerButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -13,9 +13,9 @@ import axios, { AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import ChannelModel from "@type/models/ChannelModel";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { Role } from "@type/models/UserModel";
 
 import "./style.scss";
-import { Role } from "@type/models/UserModel";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
