@@ -26,27 +26,25 @@ const AppHeader: React.FC = observer(() => {
   return (
     <>
       <div className="header">
-        <Stack direction={"row"} spacing={"8px"}>
-          <div className="header__sidebarbtn">
+        <Stack direction={"row"} spacing={"8px"} justifyContent={"center"}>
+          <Stack justifyContent={"center"}>
             <IconButton onClick={() => setDrawerOpen(true)}>
               <MenuIcon />
             </IconButton>
-          </div>
+          </Stack>
           <Logo />
         </Stack>
         <div className="header-searchbar">
-          <Stack direction={"row"}>
-            <div className="header-searchbar__input">
+          <div className="header-searchbar__r">
+            <Stack className="header-searchbar__input" justifyContent={"center"}>
               <input type="text" id="headerSearchBar" placeholder="Поиск" />
-            </div>
-            <div className="header-searchbar__sbtn">
-              <IconButton>
-                <SearchIcon />
-              </IconButton>
-            </div>
-          </Stack>
+            </Stack>
+            <Stack className="header-searchbar__sbtn" justifyContent={"center"}>
+              <SearchIcon />
+            </Stack>
+          </div>
         </div>
-        <Stack justifyContent={"center"} className="header-accaunt">
+        <Stack justifyContent={"center"} className="header-accaunt" direction={"row"}>
           <Stack direction={"row"} spacing={"8px"}>
             <Stack justifyContent={"center"}>
               {user.status === AuthState.Authed ? (

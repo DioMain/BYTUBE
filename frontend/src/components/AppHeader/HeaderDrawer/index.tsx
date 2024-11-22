@@ -12,8 +12,10 @@ import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import axios, { AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import ChannelModel from "@type/models/ChannelModel";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 import "./style.scss";
+import { Role } from "@type/models/UserModel";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
@@ -70,6 +72,7 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
               <Button0 text="Главная" prefix={<HomeIcon />} />
               <Button0 text="Подписки" prefix={<SubscriptionsIcon />} />
               <Divider />
+              <h5>Каналы</h5>
               {channelsList.map((item, index) => {
                 return (
                   <Button0
@@ -87,6 +90,15 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
               })}
               <Button0 text="Создать канал" prefix={<AddBoxIcon />} onClick={onClickChannelCreation} />
               <Divider />
+              <h5>Плейлисты</h5>
+              <Button0 text="Создать плейлист" prefix={<AddBoxIcon />} />
+              <Divider />
+              {user.value?.role === Role.Admin && (
+                <>
+                  <Button0 text="Панель аминистратора" prefix={<AdminPanelSettingsIcon />} />
+                  <Divider />
+                </>
+              )}
               <Button0 text="Выйти" prefix={<MenuIcon />} onClick={handleSignout} />
             </>
           )}
