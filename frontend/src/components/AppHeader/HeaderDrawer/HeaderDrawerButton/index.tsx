@@ -11,7 +11,7 @@ interface ButtonProps extends PropsBase {
   text: string;
 }
 
-const Button0: React.FC<ButtonProps> = ({ prefix, postfix, text, style, className, onClick }) => {
+const HeaderDrawerButton: React.FC<ButtonProps> = ({ prefix, postfix, text, style, className, onClick }) => {
   return (
     <div className={`${className} ahbutton0`} style={style} onClick={onClick}>
       <div className="ahbutton0-start">
@@ -23,4 +23,4 @@ const Button0: React.FC<ButtonProps> = ({ prefix, postfix, text, style, classNam
   );
 };
 
-export default Button0;
+export default HeaderDrawerButton;

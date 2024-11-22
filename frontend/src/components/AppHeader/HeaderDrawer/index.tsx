@@ -1,7 +1,7 @@
 import { Divider, Drawer } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useStores } from "appStoreContext";
-import Button0 from "./HeaderDrawerButton";
+import HeaderDrawerButton from "./HeaderDrawerButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,22 +16,36 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Role } from "@type/models/UserModel";
 
 import "./style.scss";
+import { PlaylistPlay } from "@mui/icons-material";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
   closeCallback?: () => void;
   onClickChannelCreation?: () => void;
+  onClickPlaylistCreation?: () => void;
+  onClickPlaylistOpenView?: (playlistId: number) => void;
 }
 
-const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChannelCreation }) => {
+const HeaderDrawer: React.FC<HDProps> = ({
+  isOpened,
+  closeCallback,
+  onClickChannelCreation,
+  onClickPlaylistCreation,
+  onClickPlaylistOpenView,
+}) => {
   const { user } = useStores();
 
   const [channelsList, setChannelsList] = useState<ChannelModel[]>([]);
+  const [playlistList, setPlaylistList] = useState<ChannelModel[]>([]);
 
   useEffect(() => {
     if (user.status === AuthState.Authed) {
       axios.get(QueriesUrls.GET_USER_CHANNELS_LIST).then((res: AxiosResponse) => {
         setChannelsList(res.data);
+      });
+
+      axios.get(QueriesUrls.GET_USER_PLAYLISTS).then((res: AxiosResponse) => {
+        setPlaylistList(res.data);
       });
     }
   }, [user.value]);
@@ -44,6 +58,10 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
 
   const handleClickChannel = (channelId: number) => {
     window.location.assign(`/Studio?channelid=${channelId}`);
+  };
+
+  const handleClickPlaylist = (channelId: number) => {
+    if (onClickPlaylistOpenView) onClickPlaylistOpenView(channelId);
   };
 
   return (
@@ -65,17 +83,21 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
           <Divider />
           {user.status === AuthState.NotAuthed ? (
             <>
-              <Button0 text="Войти" prefix={<MenuIcon />} onClick={() => window.location.assign("/Auth/Signin")} />
+              <HeaderDrawerButton
+                text="Войти"
+                prefix={<MenuIcon />}
+                onClick={() => window.location.assign("/Auth/Signin")}
+              />
             </>
           ) : (
             <>
-              <Button0 text="Главная" prefix={<HomeIcon />} />
-              <Button0 text="Подписки" prefix={<SubscriptionsIcon />} />
+              <HeaderDrawerButton text="Главная" prefix={<HomeIcon />} />
+              <HeaderDrawerButton text="Подписки" prefix={<SubscriptionsIcon />} />
               <Divider />
               <h5>Каналы</h5>
               {channelsList.map((item, index) => {
                 return (
-                  <Button0
+                  <HeaderDrawerButton
                     text={`${item.name}`}
                     prefix={
                       <div
@@ -88,18 +110,28 @@ const HeaderDrawer: React.FC<HDProps> = ({ isOpened, closeCallback, onClickChann
                   />
                 );
               })}
-              <Button0 text="Создать канал" prefix={<AddBoxIcon />} onClick={onClickChannelCreation} />
+              <HeaderDrawerButton text="Создать канал" prefix={<AddBoxIcon />} onClick={onClickChannelCreation} />
               <Divider />
               <h5>Плейлисты</h5>
-              <Button0 text="Создать плейлист" prefix={<AddBoxIcon />} />
+              {playlistList.map((item, index) => {
+                return (
+                  <HeaderDrawerButton
+                    key={`pl-i-${index}`}
+                    onClick={() => handleClickPlaylist(item.id)}
+                    text={item.name}
+                    prefix={<PlaylistPlay />}
+                  />
+                );
+              })}
+              <HeaderDrawerButton text="Создать плейлист" prefix={<AddBoxIcon />} onClick={onClickPlaylistCreation} />
               <Divider />
               {user.value?.role === Role.Admin && (
                 <>
-                  <Button0 text="Панель аминистратора" prefix={<AdminPanelSettingsIcon />} />
+                  <HeaderDrawerButton text="Панель аминистратора" prefix={<AdminPanelSettingsIcon />} />
                   <Divider />
                 </>
               )}
-              <Button0 text="Выйти" prefix={<MenuIcon />} onClick={handleSignout} />
+              <HeaderDrawerButton text="Выйти" prefix={<MenuIcon />} onClick={handleSignout} />
             </>
           )}
         </div>

@@ -19,6 +19,9 @@ const QueriesUrls = {
   CHANNEL_COMMON: "/api/channel",
   GET_CHANNEL_VIDEOS: "/api/video/channel",
   CHECK_CHENNEL_IS_OWN: "/api/channel/check",
+
+  PLAYLIST_COMMON: "/api/playlist",
+  GET_USER_PLAYLISTS: "/api/playlist/user",
 };
 
 export default QueriesUrls;

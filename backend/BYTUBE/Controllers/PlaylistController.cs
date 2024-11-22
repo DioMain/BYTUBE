@@ -23,14 +23,23 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] int id, [FromQuery] bool withChildren = false)
+        public async Task<IResult> Get([FromQuery] int id)
         {
             try
             {
                 Playlist? playlist = await _db.Playlists.Include(i => i.PlaylistItems).FirstOrDefaultAsync(i => i.Id == id);
 
                 if (playlist == null)
-                    throw new ServerException("Комментарий не найден", 404);
+                    throw new ServerException("Плейлист не найден", 404);
+
+                if (playlist.Access == Playlist.AccessType.Private)
+                {
+                    if (!IsAutorize)
+                        throw new ServerException("Плейлист не доступен", 401);
+                    else if (UserId != playlist.UserId)
+                        throw new ServerException("Плейлист вам не доступен", 403);
+                }
+                    
 
                 return Results.Json(new PlaylistModel()
                 {
@@ -44,6 +53,38 @@ namespace BYTUBE.Controllers
                         VideoId = item.VideoId,
                     }).ToList()
                 });
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpGet("user"), Authorize]
+        public async Task<IResult> GetByUser()
+        {
+            try
+            {
+                Playlist[] playlist = await _db.Playlists
+                    .Include(i => i.PlaylistItems)
+                    .Where(i => i.UserId == UserId)
+                    .ToArrayAsync();
+
+                return Results.Json(playlist.Select(playlist =>
+                {
+                    return new PlaylistModel()
+                    {
+                        Id = playlist.Id,
+                        Name = playlist.Name,
+                        Access = playlist.Access,
+                        UserId = playlist.UserId,
+                        PlaylistItems = playlist.PlaylistItems.Select(item => new PlaylistModel.PlaylistItemModel()
+                        {
+                            PlaylistId = item.Id,
+                            VideoId = item.VideoId,
+                        }).ToList()
+                    };
+                }));
             }
             catch (ServerException err)
             {
