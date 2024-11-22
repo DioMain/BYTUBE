@@ -10,13 +10,15 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import OtherVideos from "./OtherVideos";
 
 import "./style.scss";
-import PlaylistViewer from "./PlaylistViewer/PlaylistViewer";
+import PlaylistViewer from "./PlaylistViewer";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import AuthState from "@type/AuthState";
 import AddToPlaylistModal from "@components/AddToPlaylistModal";
+import PlaylistModel from "@type/models/PlaylistModel";
+import VideoModel from "@type/models/VideoModel";
 
 const VideoPage: React.FC = () => {
   const id = GetUrlParams().get("id") as number;
@@ -25,6 +27,7 @@ const VideoPage: React.FC = () => {
   const video = useVideo(id);
 
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
+  const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
   const { user } = useStores();
 
@@ -35,6 +38,18 @@ const VideoPage: React.FC = () => {
           id: video.data?.id,
         },
       });
+
+      if (playlistId !== undefined) {
+        axios
+          .get(QueriesUrls.PLAYLIST_COMMON, {
+            params: {
+              id: playlistId,
+            },
+          })
+          .then((res: AxiosResponse) => {
+            setPlaylist(res.data);
+          });
+      }
     }
   }, [video.status]);
 
@@ -92,8 +107,18 @@ const VideoPage: React.FC = () => {
               <Stack className="videopage-comments"></Stack>
             </Stack>
             <Stack className="videopage-othervideos" spacing={2}>
-              {playlistId !== undefined && <PlaylistViewer playlistId={playlistId} />}
-              <OtherVideos videoId={video.data?.id!} />
+              {playlistId === undefined ? (
+                <OtherVideos videoId={video.data?.id!} />
+              ) : (
+                <>
+                  {playlist !== null && (
+                    <>
+                      <PlaylistViewer playlist={playlist} />
+                      <OtherVideos videoId={video.data?.id!} />
+                    </>
+                  )}
+                </>
+              )}
             </Stack>
           </div>
 

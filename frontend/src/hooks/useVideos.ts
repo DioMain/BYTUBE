@@ -43,7 +43,7 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
           setStatus(StatusBase.Failed);
         });
     }
-  }, [options.take, options.skip, status]);
+  }, [status]);
 
   return { data, status, fail, doRequest };
 }

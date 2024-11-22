@@ -11,7 +11,7 @@ interface AHPLM_Props {
   playlist: PlaylistModel | null;
 }
 
-const PlaylistListModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => {
+const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => {
   const [videos, setVideos] = useState<VideoModel[]>([]);
 
   useEffect(() => {
@@ -62,7 +62,15 @@ const PlaylistListModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened })
             {videos.length !== 0 ? (
               <Stack spacing={1}>
                 {videos.map((item, index) => {
-                  return <div>{item.title}</div>;
+                  return (
+                    <div
+                      onClick={() =>
+                        window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${item.id}&playlistId=${playlist.id}`)
+                      }
+                    >
+                      {item.title}
+                    </div>
+                  );
                 })}
               </Stack>
             ) : (
@@ -82,4 +90,4 @@ const PlaylistListModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened })
   );
 };
 
-export default PlaylistListModal;
+export default PlaylistModal;

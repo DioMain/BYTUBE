@@ -1,5 +1,6 @@
 const QueriesUrls = {
   MAIN_PAGE: "/App/Main",
+  VIDEO_PAGE: "/App/Video",
 
   AUTH: "/api/user/auth",
   REGISTER: "/api/auth/register",

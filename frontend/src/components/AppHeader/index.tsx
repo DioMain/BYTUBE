@@ -12,7 +12,7 @@ import { Stack } from "@mui/material";
 import Logo from "@components/Logo";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
-import PlaylistListModal from "./PlaylistListModal";
+import PlaylistListModal from "./PlaylistModal";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);

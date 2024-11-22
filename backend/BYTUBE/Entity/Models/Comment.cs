@@ -11,11 +11,8 @@ namespace BYTUBE.Entity.Models
         [Required]
         public string Message { get; set; } = string.Empty;
 
-        public int? ParentId { get; set; }
-        [ForeignKey(nameof(ParentId))]
-        public Comment? Parent { get; set; }
-
-        public List<Comment> Childrens { get; set; } = [];
+        [Column(TypeName = "jsonb")]
+        public List<int> Likes { get; set; } = [];
 
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]

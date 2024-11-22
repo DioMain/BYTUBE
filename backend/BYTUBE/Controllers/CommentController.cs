@@ -30,7 +30,7 @@ namespace BYTUBE.Controllers
 
                 if (withChildren)
                 {
-                    comment = await _db.Comments.Include(c => c.Childrens).FirstOrDefaultAsync(i => i.Id == id);
+                    comment = await _db.Comments.FirstOrDefaultAsync(i => i.Id == id);
                 }
                 else
                 {
@@ -46,15 +46,7 @@ namespace BYTUBE.Controllers
                     Message = comment.Message,
                     UserId = comment.UserId,
                     VideoId = comment.VideoId,
-                    ParentId = comment.ParentId,
-                    Childrens = comment.Childrens.Select(subcomment => new CommentModel()
-                    {
-                        Id = subcomment.Id,
-                        Message = subcomment.Message,
-                        VideoId = subcomment.VideoId,
-                        UserId = subcomment.UserId,
-                        ParentId = subcomment.ParentId
-                    }).ToList()
+                    Likes = comment.Likes,
                 });
             }
             catch (ServerException err)
@@ -78,8 +70,8 @@ namespace BYTUBE.Controllers
                     Id = comment.Id,
                     Message = comment.Message,
                     VideoId = comment.VideoId,
-                    ParentId = comment.ParentId,
                     UserId = comment.UserId,
+                    Likes = comment.Likes,
                 }));
             }
             catch (ServerException err)
@@ -98,7 +90,7 @@ namespace BYTUBE.Controllers
                     Message = model.Message,
                     VideoId = model.VideoId,
                     UserId = UserId,
-                    ParentId = model.ParentId,
+                    Likes = []
                 });
 
                 await _db.SaveChangesAsync();

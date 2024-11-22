@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BYTUBE.Migrations
 {
     /// <inheritdoc />
-    public partial class InitState : Migration
+    public partial class initState : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -136,7 +136,7 @@ namespace BYTUBE.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Message = table.Column<string>(type: "text", nullable: false),
-                    ParrentId = table.Column<int>(type: "integer", nullable: true),
+                    Likes = table.Column<List<int>>(type: "jsonb", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     VideoId = table.Column<int>(type: "integer", nullable: false)
                 },

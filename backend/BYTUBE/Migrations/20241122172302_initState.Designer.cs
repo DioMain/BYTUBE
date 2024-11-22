@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BYTUBE.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20241118065308_mesPar1")]
-    partial class mesPar1
+    [Migration("20241122172302_initState")]
+    partial class initState
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,12 +61,13 @@ namespace BYTUBE.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<List<int>>("Likes")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -75,8 +76,6 @@ namespace BYTUBE.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
@@ -284,10 +283,6 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Comment", b =>
                 {
-                    b.HasOne("BYTUBE.Entity.Models.Comment", "Parent")
-                        .WithMany("Childrens")
-                        .HasForeignKey("ParentId");
-
                     b.HasOne("BYTUBE.Entity.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
@@ -299,8 +294,6 @@ namespace BYTUBE.Migrations
                         .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Parent");
 
                     b.Navigation("User");
 
@@ -383,11 +376,6 @@ namespace BYTUBE.Migrations
                     b.Navigation("Subscribes");
 
                     b.Navigation("Videos");
-                });
-
-            modelBuilder.Entity("BYTUBE.Entity.Models.Comment", b =>
-                {
-                    b.Navigation("Childrens");
                 });
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Playlist", b =>

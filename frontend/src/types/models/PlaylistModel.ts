@@ -1,3 +1,5 @@
+import VideoModel from "./VideoModel";
+
 interface PlaylistItemModel {
   playlistId: number;
   videoId: number;
@@ -17,6 +19,8 @@ interface PlaylistModel {
   userId: number;
 
   playlistItems: PlaylistItemModel[];
+
+  videos?: VideoModel[];
 }
 
 export { PlaylistItemModel, PlaylistAccess };
