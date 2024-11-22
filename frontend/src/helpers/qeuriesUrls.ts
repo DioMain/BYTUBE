@@ -11,6 +11,7 @@ const QueriesUrls = {
 
   VIDEO_COMMON: "/api/video",
   GET_VIDEOS: "/api/video/select",
+  GET_PLAYLIST_VIDEOS: "/api/video/playlist",
   GET_VIDEO_MARKS: "/api/video/mark",
   VIDEO_LIKE: "/api/video/like",
   VIDEO_DISLIKE: "/api/video/dislike",

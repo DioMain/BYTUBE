@@ -11,13 +11,15 @@ import CreateChannelModal from "./CreateChannelModal";
 import { Stack } from "@mui/material";
 import Logo from "@components/Logo";
 import CreatePlaylistModal from "./CreatePlaylistModal";
+import PlaylistModel from "@type/models/PlaylistModel";
+import PlaylistListModal from "./PlaylistListModal";
 
 const AppHeader: React.FC = observer(() => {
   const [drawerOpened, setDrawerOpen] = useState(false);
   const [channelCreationOpened, setChannelCreationOpened] = useState(false);
   const [playlistCreationOpened, setPlaylistCreationOpened] = useState(false);
   const [playlistViewOpened, setPlaylistViewOpened] = useState(false);
-  const [playlistId, setPlaylistId] = useState(-1);
+  const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
   const { user } = useStores();
 
@@ -32,12 +34,12 @@ const AppHeader: React.FC = observer(() => {
   }, [setPlaylistCreationOpened, setDrawerOpen]);
 
   const handleOpenPlaylistView = useCallback(
-    (playlistId: number) => {
-      setPlaylistId(playlistId);
+    (playlist: PlaylistModel) => {
+      setPlaylist(playlist);
       setPlaylistViewOpened(true);
       setDrawerOpen(false);
     },
-    [setPlaylistViewOpened, setDrawerOpen, setPlaylistId]
+    [setPlaylistViewOpened, setDrawerOpen, setPlaylist]
   );
 
   const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";
@@ -96,6 +98,15 @@ const AppHeader: React.FC = observer(() => {
       <CreateChannelModal isOpened={channelCreationOpened} closeCallback={() => setChannelCreationOpened(false)} />
 
       <CreatePlaylistModal opened={playlistCreationOpened} onClose={() => setPlaylistCreationOpened(false)} />
+
+      <PlaylistListModal
+        opened={playlistViewOpened}
+        playlist={playlist}
+        onClose={() => {
+          setPlaylistViewOpened(false);
+          setPlaylist(null);
+        }}
+      />
     </>
   );
 });

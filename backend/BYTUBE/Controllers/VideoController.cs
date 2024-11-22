@@ -159,10 +159,13 @@ namespace BYTUBE.Controllers
                         throw new ServerException("Не авторизован!", 401);
                 }
 
-                Video[] videos = await _db.Videos
-                            .Where(video => playlist.PlaylistItems.Any(item => video.Id == item.VideoId))
+                var videos = await _db.Videos
                             .Include(video => video.Owner)
-                            .ToArrayAsync();
+                            .ToListAsync();
+
+                videos = videos
+                            .Where(video => playlist.PlaylistItems.Any(item => video.Id == item.VideoId))
+                            .ToList();
 
                 List<VideoModel> models = [];
 
@@ -199,9 +202,9 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
             }
-            catch
+            catch (Exception err)
             {
-                return Results.Problem(statusCode: 400);
+                return Results.Problem(detail: err.Message, statusCode: 400);
             }
         }
 

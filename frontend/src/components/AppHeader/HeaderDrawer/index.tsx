@@ -1,4 +1,4 @@
-import { Divider, Drawer } from "@mui/material";
+import { Divider, Drawer, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useStores } from "appStoreContext";
 import HeaderDrawerButton from "./HeaderDrawerButton";
@@ -14,16 +14,17 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import ChannelModel from "@type/models/ChannelModel";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Role } from "@type/models/UserModel";
+import PlaylistModel, { PlaylistAccess } from "@type/models/PlaylistModel";
+import { Favorite, Lock, PlaylistPlay } from "@mui/icons-material";
 
 import "./style.scss";
-import { PlaylistPlay } from "@mui/icons-material";
 
 interface HDProps extends PropsBase {
   isOpened: boolean;
   closeCallback?: () => void;
   onClickChannelCreation?: () => void;
   onClickPlaylistCreation?: () => void;
-  onClickPlaylistOpenView?: (playlistId: number) => void;
+  onClickPlaylistOpenView?: (playlist: PlaylistModel) => void;
 }
 
 const HeaderDrawer: React.FC<HDProps> = ({
@@ -36,7 +37,7 @@ const HeaderDrawer: React.FC<HDProps> = ({
   const { user } = useStores();
 
   const [channelsList, setChannelsList] = useState<ChannelModel[]>([]);
-  const [playlistList, setPlaylistList] = useState<ChannelModel[]>([]);
+  const [playlistList, setPlaylistList] = useState<PlaylistModel[]>([]);
 
   useEffect(() => {
     if (user.status === AuthState.Authed) {
@@ -60,8 +61,8 @@ const HeaderDrawer: React.FC<HDProps> = ({
     window.location.assign(`/Studio?channelid=${channelId}`);
   };
 
-  const handleClickPlaylist = (channelId: number) => {
-    if (onClickPlaylistOpenView) onClickPlaylistOpenView(channelId);
+  const handleClickPlaylist = (playlist: PlaylistModel) => {
+    if (onClickPlaylistOpenView) onClickPlaylistOpenView(playlist);
   };
 
   return (
@@ -93,6 +94,7 @@ const HeaderDrawer: React.FC<HDProps> = ({
             <>
               <HeaderDrawerButton text="Главная" prefix={<HomeIcon />} />
               <HeaderDrawerButton text="Подписки" prefix={<SubscriptionsIcon />} />
+              <HeaderDrawerButton text="Понравившиеся" prefix={<Favorite />} />
               <Divider />
               <h5>Каналы</h5>
               {channelsList.map((item, index) => {
@@ -117,9 +119,10 @@ const HeaderDrawer: React.FC<HDProps> = ({
                 return (
                   <HeaderDrawerButton
                     key={`pl-i-${index}`}
-                    onClick={() => handleClickPlaylist(item.id)}
+                    onClick={() => handleClickPlaylist(item)}
                     text={item.name}
                     prefix={<PlaylistPlay />}
+                    postfix={item.access === PlaylistAccess.Private && <Lock fontSize="small" />}
                   />
                 );
               })}

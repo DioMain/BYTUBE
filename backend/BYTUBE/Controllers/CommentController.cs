@@ -121,7 +121,7 @@ namespace BYTUBE.Controllers
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId == UserId)
+                if (comment.UserId != UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -148,7 +148,7 @@ namespace BYTUBE.Controllers
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId == UserId)
+                if (comment.UserId != UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);

@@ -1,4 +1,4 @@
-interface PlalistItemModel {
+interface PlaylistItemModel {
   playlistId: number;
   videoId: number;
 }
@@ -16,9 +16,9 @@ interface PlaylistModel {
 
   userId: number;
 
-  playlistItems: PlalistItemModel[];
+  playlistItems: PlaylistItemModel[];
 }
 
-export { PlalistItemModel, PlaylistAccess };
+export { PlaylistItemModel, PlaylistAccess };
 
 export default PlaylistModel;

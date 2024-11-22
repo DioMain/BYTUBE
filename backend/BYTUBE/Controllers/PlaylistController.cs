@@ -2,7 +2,6 @@
 using BYTUBE.Exceptions;
 using BYTUBE.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -186,7 +185,7 @@ namespace BYTUBE.Controllers
                 if (playlist == null)
                     throw new ServerException("Плейлист не найден!", 404);
 
-                if (playlist.UserId == UserId)
+                if (playlist.UserId != UserId)
                     throw new ServerException("Плейлист вам не пренадлежит", 403);
 
                 playlist.Name = model.Name;
@@ -214,13 +213,8 @@ namespace BYTUBE.Controllers
                 if (playlist == null)
                     throw new ServerException("Плейлист не найден!", 404);
 
-                if (playlist.UserId == UserId)
+                if (playlist.UserId != UserId)
                     throw new ServerException("Плейлист вам не пренадлежит", 403);
-
-                foreach (var item in playlist.PlaylistItems)
-                {
-                    _db.PlaylistItems.Remove(item);
-                }
 
                 _db.Playlists.Remove(playlist);
 
