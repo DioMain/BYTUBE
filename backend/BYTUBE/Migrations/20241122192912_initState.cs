@@ -137,6 +137,7 @@ namespace BYTUBE.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Message = table.Column<string>(type: "text", nullable: false),
                     Likes = table.Column<List<int>>(type: "jsonb", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     VideoId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -164,7 +165,8 @@ namespace BYTUBE.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PlaylistId = table.Column<int>(type: "integer", nullable: false),
-                    VideoId = table.Column<int>(type: "integer", nullable: false)
+                    VideoId = table.Column<int>(type: "integer", nullable: false),
+                    Order = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,6 +193,7 @@ namespace BYTUBE.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     VideoId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

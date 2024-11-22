@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BYTUBE.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20241122172302_initState")]
+    [Migration("20241122192912_initState")]
     partial class initState
     {
         /// <inheritdoc />
@@ -60,6 +60,9 @@ namespace BYTUBE.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<List<int>>("Likes")
                         .IsRequired()
@@ -117,6 +120,9 @@ namespace BYTUBE.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PlaylistId")
                         .HasColumnType("integer");
 
@@ -139,6 +145,9 @@ namespace BYTUBE.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
