@@ -1,7 +1,7 @@
 ﻿using BYTUBE.Entity.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace BYTUBE.Models.ReportModels
+namespace BYTUBE.Models
 {
     public class ReportModel
     {
@@ -13,5 +13,7 @@ namespace BYTUBE.Models.ReportModels
         public Report.ReportType Type { get; set; }
 
         public int VideoId { get; set; }
+
+        public DateTime? Created { get; set; }
     }
 }

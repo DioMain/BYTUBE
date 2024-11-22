@@ -47,6 +47,7 @@ namespace BYTUBE.Controllers
                     UserId = comment.UserId,
                     VideoId = comment.VideoId,
                     Likes = comment.Likes,
+                    Created = comment.Created,
                 });
             }
             catch (ServerException err)
@@ -72,6 +73,7 @@ namespace BYTUBE.Controllers
                     VideoId = comment.VideoId,
                     UserId = comment.UserId,
                     Likes = comment.Likes,
+                    Created = comment.Created,
                 }));
             }
             catch (ServerException err)

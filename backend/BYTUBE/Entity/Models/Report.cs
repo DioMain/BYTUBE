@@ -22,6 +22,9 @@ namespace BYTUBE.Entity.Models
         [Column(TypeName = "int"), Required]
         public ReportType Type { get; set; }
 
+        [Required]
+        public DateTime Created { get; set; } = DateTime.Now.ToUniversalTime();
+
         public int VideoId { get; set; }
 
         [ForeignKey(nameof(VideoId))]

@@ -1,6 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
-using BYTUBE.Models.ReportModels;
+using BYTUBE.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +38,7 @@ namespace BYTUBE.Controllers
                     Description = report.Description,
                     Type = report.Type,
                     VideoId = report.VideoId,
+                    Created = report.Created,
                 });
             }
             catch (ServerException err)
@@ -106,6 +107,7 @@ namespace BYTUBE.Controllers
                     Description = report.Description,
                     Type = report.Type,
                     VideoId = report.VideoId,
+                    Created = report.Created,
                 }));
             }
             catch (ServerException err)

@@ -14,6 +14,9 @@ namespace BYTUBE.Entity.Models
         [Column(TypeName = "jsonb")]
         public List<int> Likes { get; set; } = [];
 
+        [Required]
+        public DateTime Created { get; set; } = DateTime.Now.ToUniversalTime();
+
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }

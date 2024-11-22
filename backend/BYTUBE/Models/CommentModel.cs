@@ -10,6 +10,8 @@
 
         public int VideoId { get; set; }
 
+        public DateTime? Created { get; set; }
+
         public List<int>? Likes { get; set; }
     }
 }
