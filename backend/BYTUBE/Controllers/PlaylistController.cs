@@ -163,7 +163,7 @@ namespace BYTUBE.Controllers
                 if (playlistItem == null)
                     throw new ServerException("Видео и так не в плейлисте", 404);
 
-                _db.Playlists.Remove(playlist);
+                _db.PlaylistItems.Remove(playlistItem);
 
                 await _db.SaveChangesAsync();
 

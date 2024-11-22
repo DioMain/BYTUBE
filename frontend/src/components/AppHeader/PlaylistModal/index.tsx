@@ -4,6 +4,7 @@ import PlaylistModel from "@type/models/PlaylistModel";
 import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import VideoItem from "./VideoItem";
 
 interface AHPLM_Props {
   opened: boolean;
@@ -40,6 +41,19 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
       });
   };
 
+  const removeHandle = (vid: number) => {
+    axios
+      .delete(QueriesUrls.REMOVE_ELEMENT_FROM_PLAYLIST, {
+        params: {
+          id: playlist?.id,
+          vid: vid,
+        },
+      })
+      .then(() => {
+        setVideos(videos.filter((item) => item.id !== vid));
+      });
+  };
+
   return (
     <Modal open={opened} onClose={onClose} className="createplaylist">
       <Box
@@ -51,7 +65,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
           padding: "12px",
           borderRadius: "8px",
           transform: "translate(-50%, -50%)",
-          width: "400px",
+          width: "450px",
         }}
       >
         {playlist === null ? (
@@ -60,16 +74,16 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
           <Stack spacing={3}>
             <h3 style={{ textAlign: "center" }}>{playlist.name}</h3>
             {videos.length !== 0 ? (
-              <Stack spacing={1}>
+              <Stack spacing={1} overflow={"auto"} style={{ maxHeight: "500px" }}>
                 {videos.map((item, index) => {
                   return (
-                    <div
+                    <VideoItem
+                      video={item}
                       onClick={() =>
                         window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${item.id}&playlistId=${playlist.id}`)
                       }
-                    >
-                      {item.title}
-                    </div>
+                      onDelete={() => removeHandle(item.id)}
+                    />
                   );
                 })}
               </Stack>
@@ -80,7 +94,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
             )}
             <Stack direction={"row"}>
               <Button variant="contained" color="error" onClick={deleteHandle}>
-                Удалить
+                Удалить плейлист
               </Button>
             </Stack>
           </Stack>
