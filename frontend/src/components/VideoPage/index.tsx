@@ -1,5 +1,4 @@
 import { LinearProgress, IconButton, Stack, Alert, Tooltip } from "@mui/material";
-import useVideo from "@hooks/useVideo";
 import VideoPlayer from "@components/VideoPlayer";
 import StatusBase from "@type/StatusBase";
 import FlagIcon from "@mui/icons-material/Flag";
@@ -8,34 +7,35 @@ import GetUrlParams from "@helpers/GetUrlParams";
 import MarkVideo from "./MarkVideo";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import OtherVideos from "./OtherVideos";
-
-import "./style.scss";
 import PlaylistViewer from "./PlaylistViewer";
 import { useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import AuthState from "@type/AuthState";
 import AddToPlaylistModal from "@components/AddToPlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
-import VideoModel from "@type/models/VideoModel";
+import useVideoGlobal from "@hooks/useVideoGlobal";
+import { observer } from "mobx-react-lite";
 
-const VideoPage: React.FC = () => {
+import "./style.scss";
+
+const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
   const playlistId = GetUrlParams().get("playlistId") as number | undefined;
 
-  const video = useVideo(id);
+  const videoResponce = useVideoGlobal(id);
 
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
-  const { user } = useStores();
+  const { user, video } = useStores();
 
   useEffect(() => {
-    if (video.status === StatusBase.Success) {
+    if (videoResponce.status === StatusBase.Success) {
       axios.post(QueriesUrls.VIDEO_ADD_VIEW, null, {
         params: {
-          id: video.data?.id,
+          id: video.value?.id,
         },
       });
 
@@ -48,10 +48,13 @@ const VideoPage: React.FC = () => {
           })
           .then((res: AxiosResponse) => {
             setPlaylist(res.data);
+          })
+          .catch((err: AxiosError) => {
+            window.location.assign(QueriesUrls.MAIN_PAGE);
           });
       }
     }
-  }, [video.status]);
+  }, [videoResponce.status]);
 
   const reportHandle = () => {};
 
@@ -59,22 +62,40 @@ const VideoPage: React.FC = () => {
     setAddToPlaylistOpened(true);
   };
 
-  switch (video.status) {
+  const onEndVideoHandler = () => {
+    console.log("aaa");
+
+    if (playlist !== null) {
+      const curIndex = playlist.playlistItems.findIndex((item) => item.videoId === video.value!.id);
+      console.log(curIndex);
+      if (curIndex < playlist.playlistItems.length - 1)
+        window.location.assign(
+          `${QueriesUrls.VIDEO_PAGE}?id=${playlist.playlistItems[curIndex + 1].videoId}&playlistId=${playlist.id}`
+        );
+    }
+  };
+
+  switch (videoResponce.status) {
     case StatusBase.Loading:
       return <LinearProgress />;
     case StatusBase.Failed:
-      return <Alert severity="error">{video.fail}</Alert>;
+      return <Alert severity="error">{videoResponce.fail}</Alert>;
     default:
       return (
         <>
           <div className="videopage">
             <Stack className="videopage-main">
-              <VideoPlayer url={video.data?.videoUrl!} className="videopage__player" width={`auto`} />
-              <h1 className="videopage-vtitle">{video.data?.title}</h1>
+              <VideoPlayer
+                url={video.value?.videoUrl!}
+                className="videopage__player"
+                width={`auto`}
+                onVideoEnded={onEndVideoHandler}
+              />
+              <h1 className="videopage-vtitle">{video.value?.title}</h1>
               <Stack spacing={3} direction={"row"}>
-                <div className="videopage-views">{video.data?.views} просмотров</div>
+                <div className="videopage-views">{video.value?.views} просмотров</div>
                 <Stack direction={"row"} spacing={1}>
-                  {video.data?.tags?.map((item, index) => {
+                  {video.value?.tags?.map((item, index) => {
                     return (
                       <div key={`vp-tag-${index}`} className="videopage-tag">
                         #{item}
@@ -84,7 +105,7 @@ const VideoPage: React.FC = () => {
                 </Stack>
               </Stack>
               <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
-                <ChannelPanel channel={video.data?.channel!} />
+                <ChannelPanel channel={video.value?.channel!} />
                 <Stack direction={"row"} spacing={2}>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Добавить в плейлист">
@@ -100,21 +121,21 @@ const VideoPage: React.FC = () => {
                       </IconButton>
                     </Tooltip>
                   </Stack>
-                  <MarkVideo id={video.data?.id!} />
+                  <MarkVideo id={video.value?.id!} />
                 </Stack>
               </Stack>
-              <Stack className="videopage-description">{video.data?.description}</Stack>
+              <Stack className="videopage-description">{video.value?.description}</Stack>
               <Stack className="videopage-comments"></Stack>
             </Stack>
             <Stack className="videopage-othervideos" spacing={2}>
               {playlistId === undefined ? (
-                <OtherVideos videoId={video.data?.id!} />
+                <OtherVideos videoId={video.value?.id!} />
               ) : (
                 <>
                   {playlist !== null && (
                     <>
                       <PlaylistViewer playlist={playlist} />
-                      <OtherVideos videoId={video.data?.id!} />
+                      <OtherVideos videoId={video.value?.id!} />
                     </>
                   )}
                 </>
@@ -123,13 +144,13 @@ const VideoPage: React.FC = () => {
           </div>
 
           <AddToPlaylistModal
-            video={video.data!}
+            video={video.value!}
             opened={addToPlaylistOpened}
             onClose={() => setAddToPlaylistOpened(false)}
           />
         </>
       );
   }
-};
+});
 
 export default VideoPage;

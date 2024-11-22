@@ -3,6 +3,7 @@ import VideoModel from "./VideoModel";
 interface PlaylistItemModel {
   playlistId: number;
   videoId: number;
+  order: number;
 }
 
 enum PlaylistAccess {

@@ -46,10 +46,11 @@ namespace BYTUBE.Controllers
                     Name = playlist.Name,
                     Access = playlist.Access,
                     UserId = playlist.UserId,
-                    PlaylistItems = playlist.PlaylistItems.Select(item => new PlaylistModel.PlaylistItemModel()
+                    PlaylistItems = playlist.PlaylistItems.OrderBy(i => i.Order).Select(item => new PlaylistModel.PlaylistItemModel()
                     {
                         PlaylistId = item.Id,
                         VideoId = item.VideoId,
+                        Order = item.Order
                     }).ToList()
                 });
             }
@@ -77,10 +78,11 @@ namespace BYTUBE.Controllers
                         Name = playlist.Name,
                         Access = playlist.Access,
                         UserId = playlist.UserId,
-                        PlaylistItems = playlist.PlaylistItems.Select(item => new PlaylistModel.PlaylistItemModel()
+                        PlaylistItems = playlist.PlaylistItems.OrderBy(i => i.Order).Select(item => new PlaylistModel.PlaylistItemModel()
                         {
                             PlaylistId = item.Id,
                             VideoId = item.VideoId,
+                            Order = item.Order
                         }).ToList()
                     };
                 }));
@@ -127,10 +129,19 @@ namespace BYTUBE.Controllers
                 if (playlist.UserId != UserId)
                     throw new ServerException("Плейлист вам не принадлежит", 403);
 
+                var playlistItems = await _db.PlaylistItems
+                    .Where(PlaylistItem => PlaylistItem.PlaylistId == id).ToArrayAsync();
+
+                int order = 0;
+
+                if (playlistItems.Length > 0)
+                    order = playlistItems.Select(PlaylistItem => PlaylistItem.Order).Max() + 1;
+
                 _db.PlaylistItems.Add(new PlaylistItem()
                 {
                     PlaylistId = playlist.Id,
                     VideoId = video.Id,
+                    Order = order,
                 });
 
                 await _db.SaveChangesAsync();

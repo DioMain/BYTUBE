@@ -11,6 +11,8 @@ namespace BYTUBE.Models
             public int PlaylistId { get; set; }
 
             public int VideoId { get; set; }
+
+            public int? Order {  get; set; }
         }
 
 

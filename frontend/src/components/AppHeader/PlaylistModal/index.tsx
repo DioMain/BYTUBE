@@ -5,6 +5,7 @@ import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import VideoItem from "./VideoItem";
+import SortVideosByOrder from "@helpers/SortVideosByOrder";
 
 interface AHPLM_Props {
   opened: boolean;
@@ -25,7 +26,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
         },
       })
       .then((res: AxiosResponse) => {
-        setVideos(res.data);
+        setVideos(SortVideosByOrder(playlist.playlistItems, res.data));
       });
   }, [playlist]);
 
@@ -37,7 +38,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
         },
       })
       .then(() => {
-        window.location.reload();
+        window.location.assign(QueriesUrls.MAIN_PAGE);
       });
   };
 
@@ -78,6 +79,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
                 {videos.map((item, index) => {
                   return (
                     <VideoItem
+                      key={`plm-vi-${index}`}
                       video={item}
                       onClick={() =>
                         window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${item.id}&playlistId=${playlist.id}`)

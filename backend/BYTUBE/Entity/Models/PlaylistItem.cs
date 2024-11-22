@@ -15,5 +15,8 @@ namespace BYTUBE.Entity.Models
         public int VideoId { get; set; }
         [ForeignKey(nameof(VideoId))]
         public Video? Video { get; set; }
+
+        [Required]
+        public int Order {  get; set; }
     }
 }
