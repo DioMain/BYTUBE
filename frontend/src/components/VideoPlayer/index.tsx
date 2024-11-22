@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import "./style.scss";
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, width }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, width, onVideoEnded }) => {
   const videoElement = useRef<ReactPlayer>(null);
   const playerContainer = useRef<HTMLDivElement>(null);
 
@@ -32,6 +32,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, w
           height={"auto"}
           onProgress={undefined}
           controls
+          onEnded={onVideoEnded}
         />
       </div>
       <div className="player-controls">

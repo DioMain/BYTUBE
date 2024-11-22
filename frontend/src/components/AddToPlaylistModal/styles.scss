@@ -1,0 +1,22 @@
+.addtoplaylist {
+  &__item {
+    background-color: rgb(73, 73, 73);
+
+    border-radius: 12px;
+
+    padding: 6px;
+
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(99, 99, 99);
+    }
+
+    &:disabled {
+      background-color: rgb(36, 36, 36);
+      cursor: default;
+    }
+
+    border-width: 0;
+  }
+}

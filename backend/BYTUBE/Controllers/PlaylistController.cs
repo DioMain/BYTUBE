@@ -113,7 +113,7 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpPost("addvideo"), Authorize]
+        [HttpPost("add"), Authorize]
         public async Task<IResult> AddVideoToPlaylist([FromQuery] int id, [FromQuery] int vid)
         {
             try
@@ -143,7 +143,7 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpDelete("removevideo"), Authorize]
+        [HttpDelete("remove"), Authorize]
         public async Task<IResult> RemoveVideoFromPlaylist([FromQuery] int id, [FromQuery] int vid)
         {
             try

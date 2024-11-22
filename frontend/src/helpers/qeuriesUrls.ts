@@ -23,6 +23,8 @@ const QueriesUrls = {
 
   PLAYLIST_COMMON: "/api/playlist",
   GET_USER_PLAYLISTS: "/api/playlist/user",
+  ADD_ELEMENT_TO_PLAYLIST: "/api/playlist/add",
+  REMOVE_ELEMENT_FROM_PLAYLIST: "/api/playlist/remove",
 };
 
 export default QueriesUrls;
