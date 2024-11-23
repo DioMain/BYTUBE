@@ -17,6 +17,7 @@ import AddToPlaylistModal from "@components/AddToPlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
 import useVideoGlobal from "@hooks/useVideoGlobal";
 import { observer } from "mobx-react-lite";
+import CommentsViewer from "@components/CommentsViewer";
 
 import "./style.scss";
 
@@ -63,8 +64,6 @@ const VideoPage: React.FC = observer(() => {
   };
 
   const onEndVideoHandler = () => {
-    console.log("aaa");
-
     if (playlist !== null) {
       const curIndex = playlist.playlistItems.findIndex((item) => item.videoId === video.value!.id);
       console.log(curIndex);
@@ -125,7 +124,9 @@ const VideoPage: React.FC = observer(() => {
                 </Stack>
               </Stack>
               <Stack className="videopage-description">{video.value?.description}</Stack>
-              <Stack className="videopage-comments"></Stack>
+              <Stack className="videopage-comments">
+                <CommentsViewer video={video.value!} />
+              </Stack>
             </Stack>
             <Stack className="videopage-othervideos" spacing={2}>
               {playlistId === undefined ? (

@@ -17,14 +17,13 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Search" />
             <Route path="Video" Component={VideoPage} />
             <Route path="Channel" />
-            <Route path="Playlist" />
           </Route>
           <Route path="/Auth/" Component={AuthPage}>
             <Route path="Signin" Component={Signin} />
             <Route path="Register" Component={Register} />
           </Route>
-          <Route path="/Accaunt" />
           <Route path="/Studio" Component={StudioPage} />
+          <Route path="/Admin" />
         </Routes>
       </BrowserRouter>
     </div>
