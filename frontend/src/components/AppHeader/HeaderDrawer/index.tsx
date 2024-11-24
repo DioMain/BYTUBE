@@ -16,7 +16,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { Role } from "@type/models/UserModel";
 import PlaylistModel, { PlaylistAccess } from "@type/models/PlaylistModel";
 import { Favorite, Lock, PlaylistPlay } from "@mui/icons-material";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./style.scss";
 import { HeaderDrawerProps } from "./types";
 import { MainPageFilter } from "@stores/SearchDataStore";
@@ -85,7 +85,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
               <>
                 <HeaderDrawerButton
                   text="Войти"
-                  prefix={<MenuIcon />}
+                  prefix={<AccountCircleIcon />}
                   onClick={() => window.location.assign("/Auth/Signin")}
                 />
               </>

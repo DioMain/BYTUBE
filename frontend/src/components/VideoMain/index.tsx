@@ -33,7 +33,11 @@ const VideoMain: React.FC = observer(() => {
         })}
       </div>
       {status === StatusBase.Loading && <LinearProgress />}
-      {ended && <Alert severity="info">Больше видео не обнаружено!</Alert>}
+      {ended && (
+        <Alert severity="info" variant="outlined">
+          Больше видео не обнаружено!
+        </Alert>
+      )}
       {!ended && <div ref={observeElement}></div>}
     </Stack>
   );
