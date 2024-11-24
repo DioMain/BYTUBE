@@ -1,6 +1,7 @@
 const QueriesUrls = {
   MAIN_PAGE: "/App/Main",
   VIDEO_PAGE: "/App/Video",
+  CHANNEL_PAGE: "/App/Channel",
 
   AUTH: "/api/user/auth",
   REGISTER: "/api/auth/register",
@@ -21,6 +22,8 @@ const QueriesUrls = {
   CHANNEL_COMMON: "/api/channel",
   GET_CHANNEL_VIDEOS: "/api/video/channel",
   CHECK_CHENNEL_IS_OWN: "/api/channel/check",
+  GET_USER_SUB_CHANNELS: "/api/channel/user",
+  SUB_USER: "/api/channel/subscribe",
 
   PLAYLIST_COMMON: "/api/playlist",
   GET_USER_PLAYLISTS: "/api/playlist/user",

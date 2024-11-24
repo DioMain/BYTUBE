@@ -1,23 +1,16 @@
 import QueriesUrls from "@helpers/QeuriesUrls";
+import SelectOptions from "@type/SelectOptions";
 import StatusBase from "@type/StatusBase";
 import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useEffect, useState } from "react";
-
-interface SelectOptions {
-  ignore?: number[];
-  namePattern?: string;
-
-  take: number;
-  skip: number;
-}
 
 function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => void) {
   const [data, setData] = useState<VideoModel[]>([]);
   const [status, setStatus] = useState(StatusBase.Loading);
   const [fail, setFail] = useState("");
 
-  const doRequest = useCallback(() => {
+  const refresh = useCallback(() => {
     if (status !== StatusBase.Loading) setStatus(StatusBase.Loading);
   }, [status, setStatus]);
 
@@ -30,6 +23,9 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
             take: options.take,
             ignore: options.ignore?.join(","),
             namePattern: options.namePattern,
+            orderBy: options.orderBy,
+            subscribes: options.subscribes,
+            favorite: options.favorite,
           },
         })
         .then((responce: AxiosResponse) => {
@@ -45,7 +41,7 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
     }
   }, [status]);
 
-  return { data, status, fail, doRequest };
+  return { data, status, fail, refresh };
 }
 
 export { SelectOptions };

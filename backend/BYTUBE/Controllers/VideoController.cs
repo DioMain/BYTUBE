@@ -7,6 +7,7 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace BYTUBE.Controllers
@@ -216,6 +217,7 @@ namespace BYTUBE.Controllers
                 var videos = await _db.Videos
                     .Where(video => video.VideoAccess == Video.Access.All)
                     .Include(i => i.Owner)
+                    .Include(i => i.Owner!.Subscribes)
                     .ToListAsync();
 
                 if (Options.Ignore != null)
@@ -226,6 +228,34 @@ namespace BYTUBE.Controllers
                 if (Options.NamePattern != null)
                 {
                     videos = videos.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{Options.NamePattern}(\w)*")).ToList();
+                }
+
+                if (IsAutorize)
+                {
+                    var user = await _db.Users.FirstAsync(i => i.Id == UserId);
+
+                    if (Options.Subscribes)
+                    {
+                        videos = videos.Where(i => i.Owner!.Subscribes.Any(i => i.UserId == UserId)).ToList();
+                    }
+
+                    if (Options.Favorite)
+                    {
+                        videos = videos.Where(video => user.LikedVideo.Any(i => i == video.Id)).ToList();
+                    }
+                }
+
+                switch (Options.OrderBy)
+                {
+                    case VideoSelectOrderBy.Creation:
+                        videos = videos.OrderBy(i => i.Created).ToList();
+                        break;
+                    case VideoSelectOrderBy.CreationDesc:
+                        videos = videos.OrderByDescending(i => i.Created).ToList();
+                        break;
+                    case VideoSelectOrderBy.None:
+                    default:
+                        break;
                 }
 
                 videos = videos.Skip(Options.Skip).Take(Options.Take).ToList();

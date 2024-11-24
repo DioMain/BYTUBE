@@ -99,6 +99,7 @@ const VideoPage: React.FC = observer(() => {
                 className="videopage__player"
                 width={`auto`}
                 onVideoEnded={onEndVideoHandler}
+                autoplay
               />
               <h1 className="videopage-vtitle">{video.value?.title}</h1>
               <Stack spacing={3} direction={"row"}>

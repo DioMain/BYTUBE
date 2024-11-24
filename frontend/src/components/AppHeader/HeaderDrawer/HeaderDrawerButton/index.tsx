@@ -9,11 +9,13 @@ interface ButtonProps extends PropsBase {
   onClick?: MouseEventHandler<HTMLDivElement>;
 
   text: string;
+
+  selected?: boolean;
 }
 
-const HeaderDrawerButton: React.FC<ButtonProps> = ({ prefix, postfix, text, style, className, onClick }) => {
+const HeaderDrawerButton: React.FC<ButtonProps> = ({ prefix, postfix, text, style, className, onClick, selected }) => {
   return (
-    <div className={`${className} ahbutton0`} style={style} onClick={onClick}>
+    <div className={`${className} ahbutton0 ${selected ? "ahbutton0-selected" : ""}`} style={style} onClick={onClick}>
       <div className="ahbutton0-start">
         <div className="ahbutton0__prefix">{prefix}</div>
         <div className="ahbutton0__text">{text}</div>

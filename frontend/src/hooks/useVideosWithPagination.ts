@@ -1,7 +1,7 @@
 import StatusBase from "@type/StatusBase";
 import useOnSeeElement from "./useOnScrollEnd";
 import useVideos, { SelectOptions } from "./useVideos";
-import { RefObject, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import VideoModel from "@type/models/VideoModel";
 
 function useVideosWithPagination(observeDivElement: RefObject<HTMLDivElement | null>, initOptions: SelectOptions) {
@@ -24,13 +24,25 @@ function useVideosWithPagination(observeDivElement: RefObject<HTMLDivElement | n
 
       isWaitResponce.current = true;
 
-      selectResult.doRequest();
+      selectResult.refresh();
     }
   });
 
+  const refresh = useCallback(() => {
+    if (selectResult.status !== StatusBase.Success) return;
+
+    setData([]);
+    setEnded(false);
+
+    isWaitResponce.current = false;
+    selectOptions.current = initOptions;
+
+    selectResult.refresh();
+  }, [initOptions, selectOptions.current]);
+
   const status = selectResult.status;
 
-  return { data, ended, status };
+  return { data, ended, status, refresh };
 }
 
 export default useVideosWithPagination;

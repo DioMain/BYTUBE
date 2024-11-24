@@ -137,6 +137,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         {comments.map((item, index) => {
           return (
             <CommentItem
+              key={`comment-i-${index}`}
               comment={item}
               onDelete={handleDeleteComment}
               onUpdate={handleUpdateComment}

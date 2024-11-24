@@ -1,16 +1,29 @@
 import { Alert, LinearProgress, Stack } from "@mui/material";
 import VideoElement from "./VideoElement";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 import StatusBase from "@type/StatusBase";
+import { useStores } from "appStoreContext";
+import { MainPageFilter } from "@stores/SearchDataStore";
+import { SelectOrderBy } from "@type/SelectOptions";
+import { observer } from "mobx-react-lite";
 
-const VideoMain: React.FC = () => {
+const VideoMain: React.FC = observer(() => {
   const observeElement = useRef<HTMLDivElement>(null);
 
-  const { data, ended, status } = useVideosWithPagination(observeElement, {
+  const { searchData } = useStores();
+
+  const { data, ended, status, refresh } = useVideosWithPagination(observeElement, {
     skip: 0,
     take: 12,
+    favorite: searchData.mainPageFilter === MainPageFilter.Favorite,
+    subscribes: searchData.mainPageFilter === MainPageFilter.Subs,
+    orderBy: searchData.mainPageFilter === MainPageFilter.Subs ? SelectOrderBy.CreationDesc : SelectOrderBy.None,
   });
+
+  useEffect(() => {
+    refresh();
+  }, [searchData.mainPageFilter]);
 
   return (
     <Stack spacing={4} style={{ padding: "16px" }}>
@@ -24,6 +37,6 @@ const VideoMain: React.FC = () => {
       {!ended && <div ref={observeElement}></div>}
     </Stack>
   );
-};
+});
 
 export default VideoMain;
