@@ -2,7 +2,7 @@ import ChannelModel from "@type/models/ChannelModel";
 import { makeAutoObservable } from "mobx";
 
 class ChannelStore {
-  value?: ChannelModel;
+  value?: ChannelModel = undefined;
 
   constructor() {
     makeAutoObservable(this);

@@ -31,7 +31,7 @@ namespace BYTUBE.Controllers
             {
                 Channel? channel = await _db.Channels
                     .Include(i => i.Subscribes)
-                    .FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
+                    .FirstOrDefaultAsync(i => i.Id == id);
 
                 if (channel == null)
                     throw new ServerException("Не найден подходящий канал", 404);

@@ -170,7 +170,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
                         ></div>
                       }
                       key={`subs-item${index}`}
-                      onClick={() => handleClickChannel(item.id)}
+                      onClick={() => window.location.assign(`${QueriesUrls.CHANNEL_PAGE}?id=${item.id}`)}
                     />
                   );
                 })}

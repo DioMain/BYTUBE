@@ -100,7 +100,11 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Video[] videos = await _db.Videos.Where(item => item.OwnerId == channelId).Include(video => video.Owner).ToArrayAsync();
+                Video[] videos = await _db.Videos
+                    .Where(item => item.OwnerId == channelId)
+                    .OrderByDescending(i => i.Created)
+                    .Include(video => video.Owner)
+                    .ToArrayAsync();
 
                 List<VideoModel> models = [];
 

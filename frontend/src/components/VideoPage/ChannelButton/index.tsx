@@ -5,7 +5,7 @@ import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
 
 import "./style.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 

@@ -1,6 +1,7 @@
 import VideoModel from "@type/models/VideoModel";
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
 import "./styles.scss";
+import QueriesUrls from "@helpers/QeuriesUrls";
 
 const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
   const createdTime = getCreatedTimeText(video.created);
@@ -25,7 +26,12 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
         </div>
         <div className="videoelement-info-col1">
           <div className="videoelement-info-col1-title">{video.title}</div>
-          <div className="videoelement-info-col1__channelname">{video.channel?.name}</div>
+          <div
+            className="videoelement-info-col1__channelname"
+            onClick={() => window.location.assign(`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`)}
+          >
+            {video.channel?.name}
+          </div>
           <div className="videoelement-info-col1-viewsandcreated">{`${video.views} просмотров - ${createdTime}`}</div>
         </div>
       </div>

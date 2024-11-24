@@ -1,0 +1,49 @@
+@import "@styles/mixins.scss";
+
+.channelpage {
+  padding-top: 16px;
+  padding-right: 64px;
+  padding-left: 64px;
+
+  &__header {
+    background-position: center;
+    background-size: cover;
+
+    height: 200px;
+
+    border: solid grey 1px;
+    border-radius: 8px;
+  }
+
+  &__icon {
+    @include Avatar(164px);
+  }
+
+  &-description {
+    color: gray;
+  }
+
+  &__subbutton {
+    border-radius: 16px;
+    color: white;
+    border: none;
+
+    background-color: rgb(40, 40, 40);
+
+    padding: 8px;
+
+    width: max-content;
+
+    cursor: pointer;
+
+    &:hover {
+      outline: none;
+
+      background-color: rgb(60, 60, 60);
+    }
+
+    &:disabled {
+      background-color: rgb(30, 30, 30);
+    }
+  }
+}
