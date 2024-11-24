@@ -1,4 +1,13 @@
-import { LinearProgress, IconButton, Stack, Alert, Tooltip } from "@mui/material";
+import {
+  LinearProgress,
+  IconButton,
+  Stack,
+  Alert,
+  Tooltip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import VideoPlayer from "@components/VideoPlayer";
 import StatusBase from "@type/StatusBase";
 import FlagIcon from "@mui/icons-material/Flag";
@@ -20,6 +29,7 @@ import { observer } from "mobx-react-lite";
 import CommentsViewer from "@components/CommentsViewer";
 
 import "./style.scss";
+import { Expand, ExpandMore } from "@mui/icons-material";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -125,7 +135,12 @@ const VideoPage: React.FC = observer(() => {
               </Stack>
               <Stack className="videopage-description">{video.value?.description}</Stack>
               <Stack className="videopage-comments">
-                <CommentsViewer video={video.value!} />
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMore />}>Комментарии</AccordionSummary>
+                  <AccordionDetails>
+                    <CommentsViewer video={video.value!} />
+                  </AccordionDetails>
+                </Accordion>
               </Stack>
             </Stack>
             <Stack className="videopage-othervideos" spacing={2}>

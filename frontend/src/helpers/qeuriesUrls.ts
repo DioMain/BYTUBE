@@ -26,6 +26,10 @@ const QueriesUrls = {
   GET_USER_PLAYLISTS: "/api/playlist/user",
   ADD_ELEMENT_TO_PLAYLIST: "/api/playlist/add",
   REMOVE_ELEMENT_FROM_PLAYLIST: "/api/playlist/remove",
+
+  COMMENT_COMMON: "/api/comment",
+  COMMENT_LIKE: "/api/comment/like",
+  GET_VIDEO_COMMENTS: "/api/comment/video",
 };
 
 export default QueriesUrls;

@@ -1,6 +1,8 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
 using BYTUBE.Models;
+using BYTUBE.Models.UserModels;
+using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,33 +14,35 @@ namespace BYTUBE.Controllers
     public class CommentController : ControllerBase
     {
         private readonly PostgresDbContext _db;
+        private readonly LocalDataManager _localData;
 
         private bool IsAutorize => HttpContext.User.Claims.Any();
         private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
 
-        public CommentController(PostgresDbContext db)
+        public CommentController(PostgresDbContext db, LocalDataManager localData)
         {
             _db = db;
+            _localData = localData;
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] int id, [FromQuery] bool withChildren = false)
+        public async Task<IResult> Get([FromQuery] int id)
         {
             try
             {
-                Comment? comment = null;
+                Comment? comment = await _db.Comments.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == id);
 
-                if (withChildren)
-                {
-                    comment = await _db.Comments.FirstOrDefaultAsync(i => i.Id == id);
-                }
-                else
-                {
-                    comment = await _db.Comments.FirstOrDefaultAsync(i => i.Id == id);
-                }
 
-                if (comment == null)
+                if (comment == null || comment.User == null)
                     throw new ServerException("Комментарий не найден", 404);
+
+                var usrData = _localData.GetUserData(comment.User.Id);
+
+                bool userIsLikeIt = false;
+
+                if (IsAutorize)
+                    userIsLikeIt = comment.Likes.Contains(UserId);
 
                 return Results.Json(new CommentModel()
                 {
@@ -46,8 +50,15 @@ namespace BYTUBE.Controllers
                     Message = comment.Message,
                     UserId = comment.UserId,
                     VideoId = comment.VideoId,
-                    Likes = comment.Likes,
+                    LikesCount = comment.Likes.Count,
+                    UserIsLikeIt = userIsLikeIt,
                     Created = comment.Created,
+                    User = new UserPublicModel()
+                    {
+                        IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
+                        Name = comment.User.Name,
+                        Id = id,
+                    }
                 });
             }
             catch (ServerException err)
@@ -61,19 +72,37 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Video? video = await _db.Videos.Include(v => v.Comments).FirstOrDefaultAsync(i => i.Id == vid);
+                Comment[] comments = await _db.Comments
+                    .Include(i => i.User)
+                    .Where(i => i.VideoId == vid)
+                    .OrderBy(i => i.Created)
+                    .ToArrayAsync();
 
-                if (video == null)
-                    throw new ServerException("Видео не найдено", 404);
-
-                return Results.Json(video.Comments.Select(comment => new CommentModel()
+                return Results.Json(comments.Select(comment =>
                 {
-                    Id = comment.Id,
-                    Message = comment.Message,
-                    VideoId = comment.VideoId,
-                    UserId = comment.UserId,
-                    Likes = comment.Likes,
-                    Created = comment.Created,
+                    var usrData = _localData.GetUserData(comment.User.Id);
+
+                    bool userIsLikeIt = false;
+
+                    if (IsAutorize)
+                        userIsLikeIt = comment.Likes.Contains(UserId);
+
+                    return new CommentModel()
+                    {
+                        Id = comment.Id,
+                        Message = comment.Message,
+                        VideoId = comment.VideoId,
+                        UserId = comment.UserId,
+                        LikesCount = comment.Likes.Count,
+                        UserIsLikeIt = userIsLikeIt,
+                        Created = comment.Created,
+                        User = new UserPublicModel()
+                        {
+                            IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
+                            Name = comment.User.Name,
+                            Id = comment.UserId,
+                        }
+                    };
                 }));
             }
             catch (ServerException err)
@@ -92,8 +121,36 @@ namespace BYTUBE.Controllers
                     Message = model.Message,
                     VideoId = model.VideoId,
                     UserId = UserId,
-                    Likes = []
+                    Likes = [],
+                    Created = DateTime.Now.ToUniversalTime(),
                 });
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPost("like"), Authorize]
+        public async Task<IResult> LikeComment([FromQuery] int id)
+        {
+            try
+            {
+                var comment = await _db.Comments.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+                if (comment == null)
+                    throw new ServerException("Комментарий не найден!", 404);
+
+                if (!comment.Likes.Contains(UserId))
+                    comment.Likes.Add(UserId);
+                else
+                    comment.Likes.Remove(UserId);
+
+                _db.Comments.Update(comment);
 
                 await _db.SaveChangesAsync();
 
@@ -115,7 +172,7 @@ namespace BYTUBE.Controllers
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId)
+                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -142,7 +199,7 @@ namespace BYTUBE.Controllers
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId)
+                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);

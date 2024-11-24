@@ -1,4 +1,6 @@
-﻿namespace BYTUBE.Models
+﻿using BYTUBE.Models.UserModels;
+
+namespace BYTUBE.Models
 {
     public class CommentModel
     {
@@ -12,6 +14,9 @@
 
         public DateTime? Created { get; set; }
 
-        public List<int>? Likes { get; set; }
+        public int? LikesCount { get; set; }
+        public bool? UserIsLikeIt { get; set; }
+
+        public UserPublicModel? User {  get; set; }
     }
 }

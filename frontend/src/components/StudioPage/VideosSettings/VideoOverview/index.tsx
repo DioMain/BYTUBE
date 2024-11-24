@@ -32,7 +32,7 @@ const VideoOverview: React.FC<VSEProps> = ({ setPage }) => {
           <Tab label="Комметарии"></Tab>
         </Tabs>
       </Stack>
-      <Stack direction={"row"}>
+      <Stack direction={"row"} style={{ marginLeft: "48px" }}>
         <IconButton onClick={() => setPage(0)}>
           <ArrowBackIcon />
         </IconButton>
