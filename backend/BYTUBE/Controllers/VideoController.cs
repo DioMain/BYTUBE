@@ -79,7 +79,7 @@ namespace BYTUBE.Controllers
 
                 if (IsAutorize)
                 {
-                    model.Channel.IsSubscripted = _db.Subscriptions.Any(sub => sub.UserId == UserId && sub.ChannelId == model.Channel.Id);
+                    model.Channel.IsSubscripted = channel.Subscribes.Any(i => i.UserId == UserId);
                 }
 
                 return Results.Json(model);

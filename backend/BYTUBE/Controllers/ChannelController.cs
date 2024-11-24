@@ -29,12 +29,19 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
+                Channel? channel = await _db.Channels
+                    .Include(i => i.Subscribes)
+                    .FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
 
                 if (channel == null)
                     throw new ServerException("Не найден подходящий канал", 404);
 
                 var localData = _localDataManager.GetChannelData(id);
+
+                bool isSubscribed = false;
+
+                if (IsAutorize)
+                    isSubscribed = channel.Subscribes.Any(i => i.UserId == UserId);
 
                 return Results.Json(new ChannelFullModel()
                 {
@@ -42,6 +49,7 @@ namespace BYTUBE.Controllers
                     Name = channel.Name,
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
+                    IsSubscripted = isSubscribed,
                     IconUrl = $"/data/channels/{id}/icon.{localData.IconExtention}",
                     BannerUrl = $"/data/channels/{id}/banner.{localData.BannerExtention}",
                 });
@@ -177,6 +185,93 @@ namespace BYTUBE.Controllers
             catch (Exception err)
             {
                 return Results.Problem(err.Message);
+            }
+        }
+
+        [HttpGet("user"), Authorize]
+        public async Task<IResult> GetUserChannels()
+        {
+            try
+            {
+                Channel[] channels = await _db.Channels
+                    .Include(i => i.Subscribes)
+                    .Where(i => i.Subscribes.Any(subs => subs.UserId == UserId))
+                    .ToArrayAsync();
+
+                return Results.Json(channels.Select(channel =>
+                {
+                    var localData = _localDataManager.GetChannelData(channel.Id);
+
+                    return new ChannelModel()
+                    {
+                        Id = channel.Id,
+                        Name = channel.Name,
+                        Subscribes = channel.Subscribes.Count,
+                        IsSubscripted = true,
+                        IconUrl = $"/data/channels/{channel.Id}/icon.{localData.IconExtention}",
+                    };
+                }));
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPost("subscribe"), Authorize]
+        public async Task<IResult> Subscribe([FromQuery] int id)
+        {
+            try
+            {
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+
+                if (channel == null)
+                    throw new ServerException("Канал не найден", 404);
+
+                if (await _db.Subscriptions.AnyAsync(i => i.UserId == UserId && i.ChannelId == id))
+                    throw new ServerException("Уже подписан");
+
+                await _db.Subscriptions.AddAsync(new Subscribe()
+                {
+                    UserId = UserId,
+                    ChannelId = channel.Id,
+                });
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpDelete("subscribe"), Authorize]
+        public async Task<IResult> Unsubscribe([FromQuery] int id)
+        {
+            try
+            {
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+
+                if (channel == null)
+                    throw new ServerException("Канал не найден", 404);
+
+                Subscribe? subscribe = await _db.Subscriptions
+                    .FirstOrDefaultAsync(i => i.UserId == UserId && i.ChannelId == id);
+
+                if (subscribe == null)
+                    throw new ServerException("Не подписан");
+
+                _db.Subscriptions.Remove(subscribe);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
             }
         }
     }

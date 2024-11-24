@@ -2,6 +2,7 @@ import App from "@components/App";
 import AuthPage from "@components/AuthPage";
 import Register from "@components/AuthPage/Register";
 import Signin from "@components/AuthPage/Signin";
+import ChannelPage from "@components/ChannelPage";
 import StudioPage from "@components/StudioPage";
 import VideoMain from "@components/VideoMain";
 import VideoPage from "@components/VideoPage";
@@ -16,7 +17,7 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Main" Component={VideoMain} />
             <Route path="Search" />
             <Route path="Video" Component={VideoPage} />
-            <Route path="Channel" />
+            <Route path="Channel" Component={ChannelPage} />
           </Route>
           <Route path="/Auth/" Component={AuthPage}>
             <Route path="Signin" Component={Signin} />
