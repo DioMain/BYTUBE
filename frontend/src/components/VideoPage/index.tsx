@@ -11,7 +11,7 @@ import {
 import VideoPlayer from "@components/VideoPlayer";
 import StatusBase from "@type/StatusBase";
 import FlagIcon from "@mui/icons-material/Flag";
-import ChannelPanel from "./ChannePanel";
+import ChannelButton from "./ChannelButton";
 import GetUrlParams from "@helpers/GetUrlParams";
 import MarkVideo from "./MarkVideo";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
@@ -115,7 +115,7 @@ const VideoPage: React.FC = observer(() => {
                 </Stack>
               </Stack>
               <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
-                <ChannelPanel channel={video.value?.channel!} />
+                <ChannelButton channel={video.value?.channel!} />
                 <Stack direction={"row"} spacing={2}>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Добавить в плейлист">

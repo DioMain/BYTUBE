@@ -34,7 +34,7 @@ function useVideosWithPagination(observeDivElement: RefObject<HTMLDivElement | n
     setData([]);
     setEnded(false);
 
-    isWaitResponce.current = false;
+    isWaitResponce.current = true;
     selectOptions.current = initOptions;
 
     selectResult.refresh();
