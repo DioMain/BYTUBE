@@ -1,0 +1,9 @@
+.studio-voverview {
+  &__tabs {
+    background-color: rgb(26, 26, 26);
+
+    .MuiTabs-flexContainer {
+      justify-content: center;
+    }
+  }
+}

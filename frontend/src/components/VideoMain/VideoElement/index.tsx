@@ -10,7 +10,7 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
       <div
         className="videoelement-image"
         style={{ backgroundImage: `url("${video.previewUrl}")` }}
-        onClick={() => window.location.assign(`/App/Video?vid=${video.id}`)}
+        onClick={() => window.location.assign(`/App/Video?id=${video.id}`)}
       >
         <div className="videoelement-image-row">
           <div className="videoelement-image-duration">{video.duration}</div>

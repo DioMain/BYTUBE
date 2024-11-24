@@ -10,7 +10,7 @@
     display: flex;
 
     gap: 8px;
-  } 
+  }
 
   &-content {
     display: flex;
@@ -21,12 +21,14 @@
 
     flex-direction: column;
 
+    overflow: auto;
+
     &-channel-item-icon {
       background-size: cover;
       background-position: center;
-  
+
       border-radius: 999px;
-  
+
       width: 26px;
       height: 26px;
     }

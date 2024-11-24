@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import ServerError from "@type/ServerError";
@@ -7,7 +7,7 @@ import "./style.scss";
 
 const Signin: React.FC = () => {
   const [state, setState] = useState(0);
-  const [userImgUrl, setUserImgUrl] = useState("/users/template/icon.png");
+  const [userImgUrl, setUserImgUrl] = useState("/data/users/template/icon.png");
   const [error, SetError] = useState("");
 
   const email = useRef("");
@@ -63,9 +63,9 @@ const Signin: React.FC = () => {
       <div className="signin-col">
         <h1 className="signin-h1">Вход</h1>
         <div className="signin-content">
-          <div className="signin-usericon">
-            <img src={userImgUrl} />
-          </div>
+          <Stack className="signin-usericon" direction={"row"} justifyContent={"center"}>
+            <div style={{ backgroundImage: `url("${userImgUrl}")` }}></div>
+          </Stack>
           {state === 0 ? (
             <TextField id="authEmail" label="Почта" type="email" />
           ) : (

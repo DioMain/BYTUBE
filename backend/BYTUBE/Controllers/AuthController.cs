@@ -4,6 +4,7 @@ using BYTUBE.Models;
 using System.IO;
 using Npgsql;
 using BYTUBE.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BYTUBE.Controllers
 {
@@ -25,11 +26,11 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("signin")]
-        public IResult signinJwt([FromBody] SigninModel model)
+        public async Task<IResult> signinJwt([FromBody] SigninModel model)
         {
             try
             {
-                var user = _db.Users.First(i => i.Email == model.Email);
+                var user = await _db.Users.FirstAsync(i => i.Email == model.Email);
 
                 if (!_passwordHasher.Verify(model.Password, user.Password))
                 {
@@ -38,15 +39,25 @@ namespace BYTUBE.Controllers
 
                 HttpContext.Response.Cookies.Append(
                     "AccessToken",
-                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, user.Id.ToString()),
+                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, user),
                     _jwtManager.JwtCookieOptions
                 );
 
+                string token = JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, user);
+
                 HttpContext.Response.Cookies.Append(
                     "RefreshToken",
-                    JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, user.Id.ToString()),
+                    token,
                     _jwtManager.JwtCookieOptions
                 );
+
+                //user.Token = token;
+
+                //_db.Users.Update(user);
+
+                //await _db.SaveChangesAsync();
+
+                return Results.Ok();
             }
             catch (ServerException apperr)
             {
@@ -56,8 +67,6 @@ namespace BYTUBE.Controllers
             {
                 return Results.Problem(err.Message, statusCode: 400);
             }
-
-            return Results.Ok();
         }
 
         [HttpGet("signout")]
@@ -83,37 +92,7 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                string imgEx = model.ImageFile?.FileName.Split('.').Last();
-
-                string userImgPath = $"./wwwroot/users/{usr.Entity.Id}/icon.{imgEx}";
-                string uploadImgPath = $"./Uploads/img.{imgEx}";
-
-                Directory.CreateDirectory($"./wwwroot/users/{usr.Entity.Id}");
-
-                if (model.ImageFile != null)
-                {
-                    using (var stream = new FileStream(uploadImgPath, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
-                    {
-                        IconExtention = imgEx!
-                    });
-
-                    System.IO.File.Copy(uploadImgPath, userImgPath);
-                    System.IO.File.Delete(uploadImgPath);
-                }
-                else
-                {
-                    _localDataManager.SetUserData(usr.Entity.Id, new LocalDataManager.UserData()
-                    {
-                        IconExtention = "png"
-                    });
-
-                    System.IO.File.Copy("./wwwroot/users/template/icon.png", userImgPath);
-                }
+                await _localDataManager.SaveUserFiles(usr.Entity.Id, model.ImageFile);
             }
             catch
             {

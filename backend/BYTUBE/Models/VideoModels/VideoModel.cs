@@ -1,4 +1,5 @@
-﻿using BYTUBE.Models.ChannelModels;
+﻿using BYTUBE.Entity.Models;
+using BYTUBE.Models.ChannelModels;
 
 namespace BYTUBE.Models.VideoModels
 {
@@ -10,6 +11,9 @@ namespace BYTUBE.Models.VideoModels
         public int Views { get; set; }
 
         public DateTime Created { get; set; }
+
+        public Video.Status VideoStatus { get; set; }
+        public Video.Access VideoAccess { get; set; }
 
         public string Duration { get; set; }
 

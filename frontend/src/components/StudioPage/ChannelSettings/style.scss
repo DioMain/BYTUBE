@@ -1,0 +1,73 @@
+@import "@styles/inputs";
+
+$innerPadding: 64px;
+
+@mixin upload {
+  padding: 8px;
+
+  border-radius: 8px;
+
+  outline: solid 1px rgb(120, 120, 120);
+  background-color: rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    outline: solid 2px rgb(139, 139, 139);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.settings {
+  &-banner {
+    padding: 8px;
+    padding-top: 16px;
+    padding-left: $innerPadding;
+    padding-right: $innerPadding;
+
+    height: 200px;
+
+    background-position: center;
+    background-size: cover;
+
+    &__name {
+      padding: 8px;
+
+      border-radius: 12px;
+
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    &__btn {
+      @include upload;
+    }
+
+    &__name {
+      font-size: 24px;
+      font-weight: 500;
+    }
+  }
+
+  &-content {
+    padding-left: $innerPadding;
+    padding-right: $innerPadding;
+
+    &-icon {
+      @include Avatar(128px);
+
+      border: solid 2px white;
+    }
+
+    &__btn {
+      @include upload;
+    }
+
+    &__namefield {
+      @include TextField;
+
+      width: 25%;
+    }
+
+    &__descriptionfield {
+      @include Textarea;
+    }
+  }
+}

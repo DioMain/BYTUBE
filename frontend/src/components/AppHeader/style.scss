@@ -10,36 +10,37 @@
 
   position: sticky;
 
-  &__sidebarbtn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
   &-searchbar {
     display: flex;
-
     flex-direction: column;
 
     justify-content: center;
 
-    width: 35%;
+    width: 40%;
+
+    &__r {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      width: 100%;
+    }
 
     &__input {
-
       border: solid 1px grey;
       border-radius: 32px 0 0 32px;
-      
+
       padding: 8px;
       padding-left: 16px;
 
       width: 100%;
-
       input {
         width: 100%;
 
         background-color: transparent;
         border: none;
+
+        color: white;
 
         &:focus {
           outline: none;
@@ -51,7 +52,16 @@
       border: solid 1px grey;
       border-radius: 0 32px 32px 0;
 
+      padding-left: 6px;
+      padding-right: 6px;
+
       border-left: none;
+
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgb(70, 70, 70);
+      }
     }
   }
 
@@ -60,12 +70,11 @@
       cursor: pointer;
 
       &:hover {
-        text-decoration: underline;  
+        text-decoration: underline;
       }
     }
 
     &__usericon {
-      
       border-radius: 32px;
 
       width: 48px;
@@ -73,6 +82,22 @@
 
       background-position: center;
       background-size: cover;
+    }
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .header {
+    flex-direction: column;
+
+    gap: 8px;
+
+    &-searchbar {
+      width: 100%;
+
+      &__input {
+        width: 75%;
+      }
     }
   }
 }

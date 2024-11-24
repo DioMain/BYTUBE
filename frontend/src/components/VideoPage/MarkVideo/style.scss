@@ -1,0 +1,16 @@
+.markvideo {
+  &-bar {
+    &__green,
+    &__red {
+      height: 4px;
+    }
+
+    &__green {
+      background-color: green;
+    }
+
+    &__red {
+      background-color: red;
+    }
+  }
+}

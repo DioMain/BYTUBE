@@ -53,7 +53,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: [
       {
-        context: ["/api", "/videos", "/channels", "/users"],
+        context: ["/api", "/videos", "/channels", "/users", "/data"],
         target: "http://localhost:8081",
       },
     ],

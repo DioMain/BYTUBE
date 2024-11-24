@@ -1,0 +1,44 @@
+.ahbutton0 {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  &-start {
+    display: flex;
+
+    justify-content: start;
+
+    & > div {
+      display: flex;
+
+      justify-content: center;
+
+      flex-direction: column;
+    }
+  }
+
+  &__postfix {
+    display: flex;
+
+    justify-content: center;
+
+    flex-direction: column;
+  }
+
+  &__text {
+    margin-left: 16px;
+  }
+
+  &:hover {
+    background-color: rgb(80, 80, 80);
+  }
+}
+
+.ahbutton0-selected {
+  background-color: rgb(60, 60, 60);
+}

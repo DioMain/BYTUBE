@@ -2,7 +2,9 @@ using BYTUBE.Middleware;
 using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Npgsql;
 
 internal class Program
@@ -14,10 +16,12 @@ internal class Program
         var accessToken = builder.Configuration.GetSection("AccessToken").Get<JwtSettings>();
         var refreshToken = builder.Configuration.GetSection("RefreshToken").Get<JwtSettings>();
         var salt = builder.Configuration["Salt"];
+        var ffmpegPath = builder.Configuration["FFMpegPath"];
 
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
         builder.Services.AddSingleton(new LocalDataManager());
+        builder.Services.AddSingleton(new VideoMediaService(ffmpegPath!));
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -41,6 +45,16 @@ internal class Program
 
         builder.Services.AddControllers();
 
+        builder.Services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = long.MaxValue;
+        });
+
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.Limits.MaxRequestBodySize = long.MaxValue;
+        });
+
         // DataSource
 
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -51,6 +65,8 @@ internal class Program
         var dataSource = dataSourceBuilder.Build();
         builder.Services.AddSingleton(dataSource);
 
+        builder.Services.AddSwaggerGen();
+
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
             options.UseNpgsql(dataSource);
@@ -59,9 +75,6 @@ internal class Program
         // DataSource
 
         var app = builder.Build();
-
-        if (!Directory.Exists("./Uploads"))
-            Directory.CreateDirectory("./Uploads");
 
         // Configure the HTTP request pipeline.
 
@@ -72,11 +85,27 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseStaticFiles();
+        Console.WriteLine(Directory.GetCurrentDirectory());
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+            RequestPath = ""
+        });
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Data")),
+            RequestPath = "/data"
+        });
 
         app.UseSession();
 
         app.MapControllers();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.Run();
     }

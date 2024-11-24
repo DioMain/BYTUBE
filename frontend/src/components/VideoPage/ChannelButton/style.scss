@@ -1,0 +1,29 @@
+@import "@styles/mixins";
+
+.vp-channelview {
+  padding: 8px;
+
+  background-color: rgb(40, 40, 40);
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(50, 50, 50);
+
+    .vp-channelview-info h4 {
+      text-decoration: underline;
+    }
+  }
+
+  &__image {
+    @include Avatar(48px);
+  }
+
+  &-info {
+    div {
+      font-size: 12px;
+    }
+  }
+}

@@ -1,0 +1,135 @@
+@import "@styles/Inputs.scss";
+@import "@styles/animations.scss";
+
+$tagitem_time: 0.2s;
+
+.studio-videoedit {
+  &-preview {
+    background-color: #101010;
+
+    border: solid 2px #202020;
+
+    padding-top: 32px;
+    padding-bottom: 32px;
+
+    &__notwork {
+      border: solid #303030;
+
+      padding: 8px;
+    }
+  }
+
+  &-inputvideo {
+    input[type="file"] {
+      display: none;
+    }
+  }
+
+  &-namefield input {
+    width: 30%;
+
+    @include TextField;
+  }
+
+  &-descfield textarea {
+    @include Textarea;
+  }
+
+  &-tags {
+    input {
+      @include TextField;
+    }
+
+    &__item {
+      cursor: pointer;
+      z-index: 1;
+
+      &-value {
+        min-width: 36px;
+
+        padding: 4px;
+        min-height: 24px;
+        border: solid 2px #313131;
+        background-color: #1c1c1c;
+        border-radius: 8px 0px 8px 0px;
+
+        padding-left: 8px;
+      }
+
+      .studio-videoedit-tags__item-remove {
+        z-index: -1;
+
+        border: solid 2px #313131;
+        border-radius: 0px 8px 8px 0px;
+        position: relative;
+
+        margin: 0;
+
+        transform: translateX(-50px);
+        animation: tagitem_out $tagitem_time ease-out both;
+      }
+
+      &:hover {
+        .studio-videoedit-tags__item-remove {
+          animation: tagitem_in $tagitem_time ease-out both;
+        }
+      }
+    }
+  }
+
+  &-previewimg {
+    border: solid 2px #303030;
+    background-color: #101010;
+
+    padding: 8px;
+
+    &__image {
+      border: solid 2px #303030;
+      border-radius: 8px;
+
+      width: 320px;
+      height: 180px;
+
+      background-position: center;
+      background-size: cover;
+
+      &-no > div {
+        border: solid 2px #303030;
+        padding: 4px;
+      }
+    }
+
+    &__input {
+      margin-right: 64px;
+
+      input[type="file"] {
+        display: none;
+      }
+    }
+  }
+
+  &-error {
+    color: red;
+
+    font-weight: 400;
+  }
+}
+
+@keyframes tagitem_in {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(-5px);
+  }
+}
+
+@keyframes tagitem_out {
+  from {
+    transform: translateX(-5px);
+  }
+  to {
+    transform: translateX(-30px);
+    display: none;
+  }
+}

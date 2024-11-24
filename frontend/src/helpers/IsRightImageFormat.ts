@@ -1,13 +1,12 @@
-const imageTypes = ["png", "jpg", "jpeg"];
+const allowedMimes = ["image/png", "image/jpg", "image/jpeg"];
 
 function IsRightImageFormat(input: HTMLInputElement | null): boolean {
   try {
-    let names = input?.files?.item(0)?.name.split(".")!;
-
+    let type = input?.files![0].type;
     let have = false;
 
-    for (const element of imageTypes) {
-      if (names[names.length - 1] === element) have = true;
+    for (const element of allowedMimes) {
+      if (type === element) have = true;
     }
 
     return have;

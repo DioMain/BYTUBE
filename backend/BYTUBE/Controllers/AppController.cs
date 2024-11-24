@@ -38,5 +38,11 @@ namespace BYTUBE.Controllers
         {
             return GetView();
         }
+
+        [HttpGet, Route("/Studio")]
+        public IResult GetPage4()
+        {
+            return GetView();
+        }
     }
 }

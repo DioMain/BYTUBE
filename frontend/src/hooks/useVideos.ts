@@ -1,34 +1,49 @@
 import QueriesUrls from "@helpers/QeuriesUrls";
+import SelectOptions from "@type/SelectOptions";
 import StatusBase from "@type/StatusBase";
 import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-function useVideos(skip: number, take: number) {
+function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => void) {
   const [data, setData] = useState<VideoModel[]>([]);
   const [status, setStatus] = useState(StatusBase.Loading);
   const [fail, setFail] = useState("");
 
-  useEffect(() => {
-    axios
-      .get(QueriesUrls.GET_VIDEOS, {
-        params: {
-          skip: skip,
-          take: take,
-        },
-      })
-      .then((responce: AxiosResponse) => {
-        setData(responce.data);
-        setStatus(StatusBase.Success);
-      })
-      .catch((error: AxiosError) => {
-        console.error(error.message);
-        setFail(error.message);
-        setStatus(StatusBase.Failed);
-      });
-  }, [skip, take]);
+  const refresh = useCallback(() => {
+    if (status !== StatusBase.Loading) setStatus(StatusBase.Loading);
+  }, [status, setStatus]);
 
-  return { data, status, fail };
+  useEffect(() => {
+    if (status === StatusBase.Loading) {
+      axios
+        .get(QueriesUrls.GET_VIDEOS, {
+          params: {
+            skip: options.skip,
+            take: options.take,
+            ignore: options.ignore?.join(","),
+            namePattern: options.namePattern,
+            orderBy: options.orderBy,
+            subscribes: options.subscribes,
+            favorite: options.favorite,
+          },
+        })
+        .then((responce: AxiosResponse) => {
+          setData(responce.data);
+          setStatus(StatusBase.Success);
+
+          if (onLoaded !== undefined) onLoaded(responce.data);
+        })
+        .catch((error: AxiosError) => {
+          setFail(error.message);
+          setStatus(StatusBase.Failed);
+        });
+    }
+  }, [status]);
+
+  return { data, status, fail, refresh };
 }
+
+export { SelectOptions };
 
 export default useVideos;

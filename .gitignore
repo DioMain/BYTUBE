@@ -405,3 +405,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/backend/BYTUBE/ffmpeg/ffmpeg.exe
+/backend/BYTUBE/ffmpeg/ffplay.exe
+/backend/BYTUBE/ffmpeg/ffprobe.exe

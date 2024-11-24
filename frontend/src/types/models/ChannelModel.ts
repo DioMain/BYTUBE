@@ -6,8 +6,10 @@ interface ChannelModel {
 
   subscribes: number;
 
+  isSubscripted: boolean;
+
   iconUrl: string;
-  headerUrl?: string;
+  bannerUrl?: string;
 }
 
 export default ChannelModel;

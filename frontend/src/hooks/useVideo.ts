@@ -11,7 +11,7 @@ function useVideo(id: number) {
 
   useEffect(() => {
     axios
-      .get(QueriesUrls.GET_VIDEO, {
+      .get(QueriesUrls.VIDEO_COMMON, {
         params: {
           id: id,
         },
