@@ -213,64 +213,74 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("select")]
-        public async Task<IResult> Select([FromQuery] VideoSelectOptions Options)
+        public async Task<IResult> Select([FromQuery] SelectOptions options)
         {
             try
-            {   
-                var videos = await _db.Videos
-                    .Where(video => video.VideoAccess == Video.Access.All)
-                    .Include(i => i.Owner)
-                    .Include(i => i.Owner!.Subscribes)
-                    .ToListAsync();
+            {
+                var tagPattern = @"#\w+";
+                var tags = Regex.Matches(options.SearchPattern, tagPattern)
+                                .Cast<Match>()
+                                .Select(m => m.Value)
+                                .ToList();
 
-                if (Options.Ignore != null)
+                var query = _db.Videos
+                    .Where(video => video.VideoAccess == Video.Access.All) 
+                    .Include(video => video.Owner)                         
+                    .Include(video => video.Owner!.Subscribes)             
+                    .Include(video => video.Reports)                       
+                    .AsQueryable();
+
+                if (tags.Any())
                 {
-                    videos = videos.Where(video => Options.Ignore.Split(',').Any(i => int.Parse(i) != video.Id)).ToList();
+                    query = query.Where(video => tags.Any(tag => video.Tags.Contains(tag)));
                 }
 
-                if (Options.NamePattern != null)
+                if (!string.IsNullOrEmpty(options.Ignore))
                 {
-                    videos = videos.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{Options.NamePattern}(\w)*")).ToList();
+                    var ignoredIds = options.Ignore.Split(',').Select(int.Parse);
+                    query = query.Where(video => !ignoredIds.Contains(video.Id));
+                }
+
+                if (!string.IsNullOrEmpty(options.SearchPattern))
+                {
+                    query = query.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{options.SearchPattern}(\w)*"));
                 }
 
                 if (IsAutorize)
                 {
                     var user = await _db.Users.FirstAsync(i => i.Id == UserId);
 
-                    if (Options.Subscribes)
+                    if (options.Subscribes)
                     {
-                        videos = videos.Where(i => i.Owner!.Subscribes.Any(i => i.UserId == UserId)).ToList();
+                        query = query.Where(video => video.Owner!.Subscribes.Any(sub => sub.UserId == UserId));
                     }
 
-                    if (Options.Favorite)
+                    if (options.Favorite)
                     {
-                        videos = videos.Where(video => user.LikedVideo.Any(i => i == video.Id)).ToList();
+                        var likedVideoIds = user.LikedVideo;
+                        query = query.Where(video => likedVideoIds.Contains(video.Id));
                     }
                 }
 
-                switch (Options.OrderBy)
+                query = options.OrderBy switch
                 {
-                    case VideoSelectOrderBy.Creation:
-                        videos = videos.OrderBy(i => i.Created).ToList();
-                        break;
-                    case VideoSelectOrderBy.CreationDesc:
-                        videos = videos.OrderByDescending(i => i.Created).ToList();
-                        break;
-                    case VideoSelectOrderBy.None:
-                    default:
-                        break;
-                }
+                    SelectOrderBy.Creation => query.OrderBy(video => video.Created),
+                    SelectOrderBy.CreationDesc => query.OrderByDescending(video => video.Created),
+                    SelectOrderBy.Reports => query.OrderBy(video => video.Reports.Count),
+                    SelectOrderBy.ReportsDesc => query.OrderByDescending(video => video.Reports.Count),
+                    _ => query
+                };
 
-                videos = videos.Skip(Options.Skip).Take(Options.Take).ToList();
+                query = query.Skip(options.Skip).Take(options.Take);
 
-                return Results.Json(videos.Select(video =>
+                var videos = await query.ToListAsync();
+
+                var result = videos.Select(video =>
                 {
                     var videoData = _localDataManager.GetVideoData(video.Id);
                     var channelData = _localDataManager.GetChannelData(video.Owner!.Id);
 
-                    var subsCount = _db.Subscriptions.Where(i => i.ChannelId == video.Owner!.Id).Count();
-
-                    return new VideoModel()
+                    return new VideoModel
                     {
                         Id = video.Id,
                         Title = video.Title,
@@ -279,18 +289,21 @@ namespace BYTUBE.Controllers
                         VideoAccess = video.VideoAccess,
                         VideoStatus = video.VideoStatus,
                         Views = video.Views,
+                        ReportsCount = video.Reports.Count,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
 
-                        Channel = new ChannelModel()
+                        Channel = new ChannelModel
                         {
                             Id = video.Owner.Id,
                             Name = video.Owner.Name,
                             IsSubscripted = false,
-                            Subscribes = subsCount,
+                            Subscribes = video.Owner.Subscribes.Count,
                             IconUrl = $"/data/channels/{video.Owner.Id}/icon.{channelData.IconExtention}"
                         }
                     };
-                }));
+                });
+
+                return Results.Json(result);
             }
             catch (ServerException err)
             {

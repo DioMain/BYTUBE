@@ -64,7 +64,7 @@ const ReportModal: React.FC<RM_Props> = ({ opened, onClose }) => {
       >
         <Stack spacing={2} className="reportmodal">
           <h3 className="reportmodal-title">Укажите причину жалобы</h3>
-          <RadioGroup defaultValue={radioValue} onChange={(evt, val) => setRadioValue(Number.parseInt(val))}>
+          <RadioGroup value={radioValue} onChange={(evt, val) => setRadioValue(Number.parseInt(val))}>
             {reportTypes.map((item, index) => {
               return <FormControlLabel label={item} value={index} key={`rm-rg-i-${index}`} control={<Radio />} />;
             })}

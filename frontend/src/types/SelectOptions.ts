@@ -15,6 +15,8 @@ enum SelectOrderBy {
   None,
   Creation,
   CreationDesc,
+  Reports,
+  ReportsDesc,
 }
 
 export default SelectOptions;

@@ -1,9 +1,9 @@
 ﻿namespace BYTUBE.Models
 {
-    public class VideoSelectOptions
+    public class SelectOptions
     {
-        public string? Ignore { get; set; }
-        public string? NamePattern { get; set; }
+        public string Ignore { get; set; } = string.Empty;
+        public string SearchPattern { get; set; } = string.Empty;
 
         public int Take { get; set; } = 6;
         public int Skip { get; set; } = 0;
@@ -11,11 +11,11 @@
         public bool Favorite { get; set; } = false;
         public bool Subscribes { get; set; } = false;
 
-        public VideoSelectOrderBy OrderBy { get; set; } = VideoSelectOrderBy.None;
+        public SelectOrderBy OrderBy { get; set; } = SelectOrderBy.None;
     }
 
-    public enum VideoSelectOrderBy
+    public enum SelectOrderBy
     {
-        None, Creation, CreationDesc
+        None, Creation, CreationDesc, Reports, ReportsDesc
     }
 }

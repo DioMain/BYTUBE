@@ -9,6 +9,7 @@ namespace BYTUBE.Models.VideoModels
         public string Title { get; set; }
 
         public int Views { get; set; }
+        public int? ReportsCount { get; set; }
 
         public DateTime Created { get; set; }
 

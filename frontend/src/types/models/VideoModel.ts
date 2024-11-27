@@ -23,6 +23,7 @@ interface VideoModel {
   videoStatus: Status;
 
   views: number;
+  reportsCount?: number;
 
   tags?: string[];
 

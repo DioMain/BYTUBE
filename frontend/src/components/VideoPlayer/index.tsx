@@ -6,7 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import "./style.scss";
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, width, onVideoEnded, autoplay }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  className = "",
+  style,
+  url,
+  width,
+  onVideoEnded,
+  autoplay = false,
+}) => {
   const videoElement = useRef<ReactPlayer>(null);
   const playerContainer = useRef<HTMLDivElement>(null);
 
@@ -31,7 +38,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, w
           width={width === "auto" ? `${autoWidth}px` : width}
           height={"auto"}
           onProgress={undefined}
-          auto
           controls
           onEnded={onVideoEnded}
         />
