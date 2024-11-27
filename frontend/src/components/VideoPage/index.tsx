@@ -30,6 +30,7 @@ import CommentsViewer from "@components/CommentsViewer";
 
 import "./style.scss";
 import { Expand, ExpandMore } from "@mui/icons-material";
+import ReportModal from "./ReportModal";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -38,6 +39,7 @@ const VideoPage: React.FC = observer(() => {
   const videoResponce = useVideoGlobal(id);
 
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
+  const [reportModalOpened, setReportModalOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
   const { user, video } = useStores();
@@ -67,7 +69,9 @@ const VideoPage: React.FC = observer(() => {
     }
   }, [videoResponce.status]);
 
-  const reportHandle = () => {};
+  const reportHandle = () => {
+    setReportModalOpened(true);
+  };
 
   const addToPlaylistHandle = () => {
     setAddToPlaylistOpened(true);
@@ -99,7 +103,7 @@ const VideoPage: React.FC = observer(() => {
                 className="videopage__player"
                 width={`auto`}
                 onVideoEnded={onEndVideoHandler}
-                autoplay
+                //autoplay
               />
               <h1 className="videopage-vtitle">{video.value?.title}</h1>
               <Stack spacing={3} direction={"row"}>
@@ -126,7 +130,7 @@ const VideoPage: React.FC = observer(() => {
                   </Stack>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Пожаловатся">
-                      <IconButton onClick={reportHandle} disabled={user.status !== AuthState.Authed}>
+                      <IconButton onClick={reportHandle}>
                         <FlagIcon />
                       </IconButton>
                     </Tooltip>
@@ -165,6 +169,8 @@ const VideoPage: React.FC = observer(() => {
             opened={addToPlaylistOpened}
             onClose={() => setAddToPlaylistOpened(false)}
           />
+
+          <ReportModal opened={reportModalOpened} onClose={() => setReportModalOpened(false)} />
         </>
       );
   }

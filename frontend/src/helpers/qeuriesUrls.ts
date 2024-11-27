@@ -33,6 +33,9 @@ const QueriesUrls = {
   COMMENT_COMMON: "/api/comment",
   COMMENT_LIKE: "/api/comment/like",
   GET_VIDEO_COMMENTS: "/api/comment/video",
+
+  REPORT_COMMON: "/api/report",
+  GET_VIDEO_REPORTS: "/api/report/video",
 };
 
 export default QueriesUrls;

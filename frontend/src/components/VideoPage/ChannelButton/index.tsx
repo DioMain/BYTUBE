@@ -3,11 +3,13 @@ import PropsBase from "@type/PropsBase";
 import { IconButton, Stack, Tooltip } from "@mui/material";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
-
-import "./style.scss";
 import { useState } from "react";
 import axios from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
+import { useStores } from "appStoreContext";
+
+import "./style.scss";
+import AuthState from "@type/AuthState";
 
 interface CVProps extends PropsBase {
   channel: ChannelModel;
@@ -15,6 +17,8 @@ interface CVProps extends PropsBase {
 
 const ChannelButton: React.FC<CVProps> = ({ channel }) => {
   const [subscribed, setSubsribed] = useState(channel.isSubscripted);
+
+  const { user } = useStores();
 
   const handleSubscribe = () => {
     axios
@@ -72,6 +76,7 @@ const ChannelButton: React.FC<CVProps> = ({ channel }) => {
 
                 handleSubscribe();
               }}
+              disabled={user.status !== AuthState.Authed}
             >
               <TurnedInNotIcon />
             </IconButton>
