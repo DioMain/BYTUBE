@@ -6,14 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import "./style.scss";
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  className = "",
-  style,
-  url,
-  width,
-  onVideoEnded,
-  autoplay = false,
-}) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ className = "", style, url, width, onVideoEnded, autoplay }) => {
   const videoElement = useRef<ReactPlayer>(null);
   const playerContainer = useRef<HTMLDivElement>(null);
 

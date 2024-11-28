@@ -1,0 +1,30 @@
+@import "@styles/mixins";
+
+.admin {
+  background-color: rgb(10, 10, 10);
+  min-height: 700px;
+
+  &-header {
+    padding: 8px;
+
+    background-color: rgb(31, 31, 31);
+
+    &-usericon {
+      @include Avatar(48px);
+    }
+
+    &-name {
+      @include boldFont(14px);
+    }
+  }
+
+  &-videolist,
+  &-header {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+
+  &-videolist {
+    padding-top: 16px;
+  }
+}

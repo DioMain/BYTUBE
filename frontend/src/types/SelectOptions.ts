@@ -9,6 +9,8 @@ class SelectOptions {
   subscribes?: boolean = false;
 
   orderBy?: SelectOrderBy = SelectOrderBy.None;
+
+  asAdmin?: boolean = false;
 }
 
 enum SelectOrderBy {

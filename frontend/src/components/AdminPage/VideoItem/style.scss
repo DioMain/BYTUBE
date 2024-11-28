@@ -1,0 +1,48 @@
+.admin-videoitem {
+  border-radius: 8px;
+  background-color: rgb(35, 35, 35);
+
+  padding: 8px;
+
+  &:hover,
+  &-selected {
+    background-color: rgb(50, 50, 50);
+  }
+
+  &-duration {
+    padding: 2px;
+
+    background-color: rgba(0, 0, 0, 0.25);
+
+    border-radius: 6px;
+  }
+
+  &-channel {
+    color: rgb(175, 175, 175);
+    font-size: 12px;
+
+    width: max-content;
+
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__preview {
+    padding: 8px;
+
+    width: 160px;
+    height: 90px;
+
+    border-radius: 8px;
+
+    background-position: center;
+    background-size: cover;
+  }
+
+  &-reportscounter {
+    font-size: 12px;
+  }
+}

@@ -21,6 +21,7 @@ namespace BYTUBE.Controllers
 
         private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
         private bool IsAutorize => HttpContext.User.Claims.Any();
+        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
 
         public VideoController(PostgresDbContext db, LocalDataManager localDataManager, VideoMediaService videoMediaService)
         {
@@ -224,11 +225,15 @@ namespace BYTUBE.Controllers
                                 .ToList();
 
                 var query = _db.Videos
-                    .Where(video => video.VideoAccess == Video.Access.All) 
                     .Include(video => video.Owner)                         
                     .Include(video => video.Owner!.Subscribes)             
                     .Include(video => video.Reports)                       
                     .AsQueryable();
+
+                if (!(options.AsAdmin && IsAutorize && Role == Entity.Models.User.RoleType.Admin))
+                {
+                    query = query.Where(video => video.VideoAccess == Video.Access.All);
+                }
 
                 if (tags.Any())
                 {

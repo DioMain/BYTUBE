@@ -177,7 +177,11 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
                 <Divider />
                 {user.value?.role === Role.Admin && (
                   <>
-                    <HeaderDrawerButton text="Панель аминистратора" prefix={<AdminPanelSettingsIcon />} />
+                    <HeaderDrawerButton
+                      text="Панель аминистратора"
+                      onClick={() => window.location.assign("/Admin")}
+                      prefix={<AdminPanelSettingsIcon />}
+                    />
                     <Divider />
                   </>
                 )}

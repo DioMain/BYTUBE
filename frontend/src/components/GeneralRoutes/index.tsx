@@ -1,3 +1,4 @@
+import AdminPage from "@components/AdminPage";
 import App from "@components/App";
 import AuthPage from "@components/AuthPage";
 import Register from "@components/AuthPage/Register";
@@ -24,7 +25,7 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Register" Component={Register} />
           </Route>
           <Route path="/Studio" Component={StudioPage} />
-          <Route path="/Admin" />
+          <Route path="/Admin" Component={AdminPage} />
         </Routes>
       </BrowserRouter>
     </div>

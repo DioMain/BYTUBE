@@ -11,6 +11,8 @@
         public bool Favorite { get; set; } = false;
         public bool Subscribes { get; set; } = false;
 
+        public bool AsAdmin { get; set; } = false;
+
         public SelectOrderBy OrderBy { get; set; } = SelectOrderBy.None;
     }
 
