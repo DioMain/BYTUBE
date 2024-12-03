@@ -1,5 +1,5 @@
 import Logo from "@components/Logo";
-import { Alert, Divider, Grid2, LinearProgress, Stack } from "@mui/material";
+import { Alert, Divider, Grid2, LinearProgress, Stack, TextField, IconButton } from "@mui/material";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import "./style.scss";
@@ -9,10 +9,12 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import useAuth from "@hooks/useAuth";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 import { useRef, useState } from "react";
-import { SelectOrderBy } from "@type/SelectOptions";
+import SelectOptions, { SelectOrderBy } from "@type/SelectOptions";
 import VideoItem from "./VideoItem";
 import StatusBase from "@type/StatusBase";
 import VideoModel from "@type/models/VideoModel";
+import axios from "axios";
+import { Search } from "@mui/icons-material";
 
 const AdminPage: React.FC = observer(() => {
   const observeElement = useRef<HTMLDivElement>(null);
@@ -22,16 +24,31 @@ const AdminPage: React.FC = observer(() => {
   const { user } = useStores();
 
   const [video, setVideo] = useState<VideoModel | undefined>(undefined);
+  const [searchValue, setSearchValue] = useState("");
 
-  const { data, ended, status } = useVideosWithPagination(observeElement, {
+  const { data, ended, status, refresh } = useVideosWithPagination(observeElement, {
     skip: 0,
     take: 8,
     orderBy: SelectOrderBy.ReportsDesc,
     asAdmin: true,
+    searchPattern: searchValue,
   });
 
   const handleSelectVideo = (videoModel: VideoModel) => {
     setVideo(videoModel);
+  };
+
+  const handleDeleteVideo = (videoModel: VideoModel) => {
+    axios
+      .delete(QueriesUrls.VIDEO_DELETE_BY_ADMIN, {
+        params: {
+          id: videoModel.id,
+        },
+      })
+      .then(() => {
+        setVideo(undefined);
+        refresh();
+      });
   };
 
   if (user.status === AuthState.Loading) return <LinearProgress />;
@@ -59,6 +76,25 @@ const AdminPage: React.FC = observer(() => {
         <Grid2 container spacing={2}>
           <Grid2 size={6}>
             <Stack spacing={1}>
+              <Stack direction={"row"} spacing={1}>
+                <TextField
+                  variant="outlined"
+                  placeholder="Поиск"
+                  onChange={(evt) => {
+                    console.log(evt.target.value);
+                    setSearchValue(evt.target.value);
+                  }}
+                />
+                <Stack justifyContent={"center"}>
+                  <IconButton
+                    onClick={() => {
+                      refresh();
+                    }}
+                  >
+                    <Search />
+                  </IconButton>
+                </Stack>
+              </Stack>
               {data.map((item, index) => {
                 return (
                   <VideoItem
@@ -66,6 +102,7 @@ const AdminPage: React.FC = observer(() => {
                     video={item}
                     selected={video === item}
                     onSelect={handleSelectVideo}
+                    onDelete={handleDeleteVideo}
                   />
                 );
               })}

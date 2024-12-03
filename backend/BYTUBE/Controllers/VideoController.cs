@@ -233,12 +233,13 @@ namespace BYTUBE.Controllers
                 if (!(options.AsAdmin && IsAutorize && Role == Entity.Models.User.RoleType.Admin))
                 {
                     query = query.Where(video => video.VideoAccess == Video.Access.All);
+                    query = query.Where(video => video.VideoStatus == Video.Status.NoLimit);
                 }
 
-                if (tags.Any())
-                {
-                    query = query.Where(video => tags.Any(tag => video.Tags.Contains(tag)));
-                }
+                //if (tags.Any())
+                //{
+                //    query = query.Where(video => video.Tags.Any(tag => tags.Any(tag1 => tag1 == tag)));
+                //}
 
                 if (!string.IsNullOrEmpty(options.Ignore))
                 {
@@ -626,6 +627,71 @@ namespace BYTUBE.Controllers
             catch (ServerException err)
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpDelete("delete"), Authorize]
+        public async Task<IResult> DeleteByAdmin([FromQuery] int id)
+        {
+            try
+            {
+                if (Role != Entity.Models.User.RoleType.Admin)
+                    throw new ServerException("Вы не администратор!", 403);
+
+                var video = await _db.Videos.Include(i => i.Owner).FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не найдена!", 404);
+
+                Directory.Delete($"{LocalDataManager.VideosPath}/{id}", true);
+
+                _db.Videos.Remove(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Json(err.Message, statusCode: 500);
+            }
+        }
+
+        [HttpPut("block"), Authorize]
+        public async Task<IResult> BlockingByAdmin([FromQuery] int id)
+        {
+            try
+            {
+                if (Role != Entity.Models.User.RoleType.Admin)
+                    throw new ServerException("Вы не администратор!", 403);
+
+                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (video == null)
+                    throw new ServerException("Видео не найдена!", 404);
+
+                if (video.VideoStatus == Video.Status.NoLimit)
+                    video.VideoStatus = Video.Status.Blocked;
+                else
+                    video.VideoStatus = Video.Status.NoLimit;
+
+                _db.Videos.Update(video);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Json(err.Message, statusCode: 500);
             }
         }
     }

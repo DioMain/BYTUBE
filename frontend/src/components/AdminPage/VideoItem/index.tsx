@@ -7,6 +7,7 @@ import "./style.scss";
 import { useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import axios from "axios";
 
 interface APVI_Props {
   video: VideoModel;
@@ -26,7 +27,17 @@ const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }
     if (onDelete !== undefined) onDelete(video);
   };
 
-  const handleBlockUnblock = () => {};
+  const handleBlockUnblock = () => {
+    axios
+      .put(QueriesUrls.VIDEO_BLOCK_BY_ADMIN, null, {
+        params: {
+          id: video.id,
+        },
+      })
+      .then(() => {
+        setBlocked(!blocked);
+      });
+  };
 
   return (
     <Stack
@@ -94,7 +105,7 @@ const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }
               onClick={(evt) => {
                 if (evt.isPropagationStopped()) evt.stopPropagation();
 
-                window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${video.id}`);
+                window.open(`${QueriesUrls.VIDEO_PAGE}?id=${video.id}`);
               }}
             >
               <OpenInNewIcon />

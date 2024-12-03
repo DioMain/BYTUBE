@@ -29,6 +29,7 @@ function useVideosWithPagination(observeDivElement: RefObject<HTMLDivElement | n
   });
 
   const refresh = useCallback(() => {
+    console.log(selectResult.status);
     if (selectResult.status !== StatusBase.Success) return;
 
     setData([]);

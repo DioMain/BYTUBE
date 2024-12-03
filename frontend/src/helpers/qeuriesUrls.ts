@@ -12,6 +12,8 @@ const QueriesUrls = {
   GET_USER_CHANNELS_LIST: "/api/user/channelslist",
 
   VIDEO_COMMON: "/api/video",
+  VIDEO_DELETE_BY_ADMIN: "/api/video/delete",
+  VIDEO_BLOCK_BY_ADMIN: "/api/video/block",
   GET_VIDEOS: "/api/video/select",
   GET_PLAYLIST_VIDEOS: "/api/video/playlist",
   GET_VIDEO_MARKS: "/api/video/mark",

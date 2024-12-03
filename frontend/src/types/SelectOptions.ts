@@ -1,6 +1,6 @@
 class SelectOptions {
   ignore?: number[];
-  namePattern?: string;
+  searchPattern?: string; //SearchPattern
 
   take: number = 8;
   skip: number = 0;

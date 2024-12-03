@@ -15,22 +15,27 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
   }, [status, setStatus]);
 
   useEffect(() => {
+    console.log(status);
     if (status === StatusBase.Loading) {
+      console.log("lod");
+
       axios
         .get(QueriesUrls.GET_VIDEOS, {
           params: {
             skip: options.skip,
             take: options.take,
             ignore: options.ignore?.join(","),
-            namePattern: options.namePattern,
+            searchPattern: options.searchPattern === "" ? undefined : options.searchPattern,
             orderBy: options.orderBy,
             subscribes: options.subscribes,
             favorite: options.favorite,
+            asAdmin: options.asAdmin,
           },
         })
         .then((responce: AxiosResponse) => {
           setData(responce.data);
           setStatus(StatusBase.Success);
+          console.log("suc");
 
           if (onLoaded !== undefined) onLoaded(responce.data);
         })
