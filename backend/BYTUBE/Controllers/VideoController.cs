@@ -101,7 +101,9 @@ namespace BYTUBE.Controllers
             try
             {
                 Video[] videos = await _db.Videos
-                    .Where(item => item.OwnerId == channelId)
+                    .Where(item => item.OwnerId == channelId 
+                            && item.VideoAccess == Video.Access.All
+                            && item.VideoStatus == Video.Status.NoLimit)
                     .OrderByDescending(i => i.Created)
                     .Include(video => video.Owner)
                     .ToArrayAsync();

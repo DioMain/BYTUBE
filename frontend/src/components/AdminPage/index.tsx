@@ -1,5 +1,5 @@
 import Logo from "@components/Logo";
-import { Alert, Divider, Grid2, LinearProgress, Stack, TextField, IconButton } from "@mui/material";
+import { Alert, Divider, Grid2, LinearProgress, Stack, TextField, IconButton, Tabs, Tab } from "@mui/material";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import "./style.scss";
@@ -15,6 +15,8 @@ import StatusBase from "@type/StatusBase";
 import VideoModel from "@type/models/VideoModel";
 import axios from "axios";
 import { Search } from "@mui/icons-material";
+import CommentsViewer from "@components/CommentsViewer";
+import ReportView from "./ReportView/intex";
 
 const AdminPage: React.FC = observer(() => {
   const observeElement = useRef<HTMLDivElement>(null);
@@ -25,6 +27,7 @@ const AdminPage: React.FC = observer(() => {
 
   const [video, setVideo] = useState<VideoModel | undefined>(undefined);
   const [searchValue, setSearchValue] = useState("");
+  const [tabIndex, setTabIndex] = useState(0);
 
   const { data, ended, status, refresh } = useVideosWithPagination(observeElement, {
     skip: 0,
@@ -35,6 +38,7 @@ const AdminPage: React.FC = observer(() => {
   });
 
   const handleSelectVideo = (videoModel: VideoModel) => {
+    //window.location.href = "123";
     setVideo(videoModel);
   };
 
@@ -49,6 +53,17 @@ const AdminPage: React.FC = observer(() => {
         setVideo(undefined);
         refresh();
       });
+  };
+
+  const getTab = () => {
+    switch (tabIndex) {
+      case 0:
+        return <CommentsViewer video={video!} />;
+      case 1:
+        return <ReportView />;
+      default:
+        return <></>;
+    }
   };
 
   if (user.status === AuthState.Loading) return <LinearProgress />;
@@ -118,7 +133,13 @@ const AdminPage: React.FC = observer(() => {
           </Grid2>
           <Grid2 size={6}>
             {video !== undefined ? (
-              <Stack>{video.title}</Stack>
+              <Stack spacing={2}>
+                <Tabs value={tabIndex} onChange={(evt, index) => setTabIndex(index)}>
+                  <Tab label="Комментарии" />
+                  <Tab label="Жалобы" />
+                </Tabs>
+                {getTab()}
+              </Stack>
             ) : (
               <Alert severity="info" variant="outlined">
                 Выберете видео

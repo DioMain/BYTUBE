@@ -9,6 +9,7 @@ import AuthState from "@type/AuthState";
 import ServerError from "@type/ServerError";
 import CommentItem from "./CommentItem";
 import CommentModel from "@type/models/CommentModel";
+import useTrigger from "@hooks/useTrigger";
 
 interface CommentsViewerProps {
   video: VideoModel;
@@ -19,6 +20,8 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
   const [error, setError] = useState("");
   const [comments, setComments] = useState<CommentModel[]>([]);
+
+  const refreshTrigger = useTrigger();
 
   const inputMessageField = useRef<HTMLInputElement>(null);
 
@@ -37,7 +40,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
         setError(srvErr.getFirstError());
       });
-  }, []);
+  }, [video, refreshTrigger.handler]);
 
   const handleCreateComment = () => {
     if (user.status !== AuthState.Authed) return;
@@ -48,18 +51,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         VideoId: video.id,
       })
       .then(() => {
-        setComments([
-          ...comments,
-          {
-            message: inputMessageField.current!.value,
-            videoId: video.id,
-            created: Date.now().toString(),
-            userId: user.value!.id,
-            likesCount: 0,
-            userIsLikeIt: false,
-            user: user.value!,
-          },
-        ]);
+        refreshTrigger.trigger();
       })
       .catch((err: AxiosError) => {
         const srvError = new ServerError(err);
@@ -98,7 +90,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         },
       })
       .then(() => {
-        setComments(comments.filter((i) => i.id !== id));
+        refreshTrigger.trigger();
       })
       .catch((err: AxiosError) => {
         setError(err.message);
@@ -107,6 +99,8 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
   const handleLikeComment = (id: number) => {
     if (user.status !== AuthState.Authed) return;
+
+    console.log(video.id);
 
     axios
       .post(QueriesUrls.COMMENT_LIKE, null, {

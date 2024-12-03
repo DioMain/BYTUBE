@@ -27,6 +27,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
   const [isOwner, setIsOwner] = useState(false);
   const [message, setMessage] = useState(comment.message);
   const [likeIt, setLikeIt] = useState(comment.userIsLikeIt);
+  const [beLiked, setBeLiked] = useState(comment.userIsLikeIt);
 
   useEffect(() => {
     if (user.status === AuthState.Authed) {
@@ -82,7 +83,9 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
           <IconButton size="small" onClick={handleLike} disabled={user.status !== AuthState.Authed}>
             {likeIt ? <ThumbUpAltIcon color="primary" /> : <ThumbUpOffAltIcon />}
           </IconButton>
-          <Stack justifyContent={"center"}>{comment.likesCount}</Stack>
+          <Stack justifyContent={"center"}>
+            {comment.likesCount! + (beLiked ? (likeIt ? 0 : -1) : likeIt ? 1 : 0)}
+          </Stack>
           {isOwner && (
             <>
               <IconButton size="small" onClick={handleChoiceEditMode}>
