@@ -44,5 +44,23 @@ namespace BYTUBE.Controllers
         {
             return GetView();
         }
+
+        [HttpGet, Route("/Admin")]
+        public IResult GetPage5()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/Search")]
+        public IResult GetPage6()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/Channel")]
+        public IResult GetPage7()
+        {
+            return GetView();
+        }
     }
 }

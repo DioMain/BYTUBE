@@ -6,7 +6,12 @@ import getCreatedTimeText from "@helpers/GetCreatedTimeText";
 
 const VideoItem: React.FC<{ video: VideoModel }> = ({ video }) => {
   return (
-    <Stack className="searchpage-videoitem" direction={"row"} spacing={2}>
+    <Stack
+      className="searchpage-videoitem"
+      direction={"row"}
+      spacing={2}
+      onClick={() => window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${video.id}`)}
+    >
       <Stack
         justifyContent={"end"}
         style={{ backgroundImage: `url("${video.previewUrl}")` }}
