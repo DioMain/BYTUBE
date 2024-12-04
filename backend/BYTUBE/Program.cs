@@ -18,6 +18,8 @@ internal class Program
         var salt = builder.Configuration["Salt"];
         var ffmpegPath = builder.Configuration["FFMpegPath"];
 
+        Console.WriteLine(ffmpegPath);
+
         builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
         builder.Services.AddSingleton(new PasswordHasher(salt!));
         builder.Services.AddSingleton(new LocalDataManager());

@@ -347,8 +347,10 @@ namespace BYTUBE.Controllers
 
                 await _localDataManager.SaveVideoFiles(video.Entity.Id, model.PreviewFile!, model.VideoFile!);
 
+                Console.WriteLine("Pre ffmpeg");
                 var videoInfo = await _videoMediaService
                     .GetMediaInfo($"{LocalDataManager.VideosPath}/{video.Entity.Id}/video.{_localDataManager.GetVideoData(video.Entity.Id).VideoExtention}");
+                Console.WriteLine("Post ffmpeg");
 
                 int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
@@ -365,9 +367,9 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
             }
-            catch
+            catch (Exception err)
             {
-                return Results.Problem("Error", statusCode: 400);
+                return Results.Problem(err.Message, statusCode: 400);
             }
         }
 
