@@ -2,6 +2,7 @@ const QueriesUrls = {
   MAIN_PAGE: "/App/Main",
   VIDEO_PAGE: "/App/Video",
   CHANNEL_PAGE: "/App/Channel",
+  SEARCH_PAGE: "/App/Search",
 
   AUTH: "/api/user/auth",
   REGISTER: "/api/auth/register",

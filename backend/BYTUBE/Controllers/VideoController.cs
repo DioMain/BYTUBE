@@ -276,6 +276,7 @@ namespace BYTUBE.Controllers
                     SelectOrderBy.CreationDesc => query.OrderByDescending(video => video.Created),
                     SelectOrderBy.Reports => query.OrderBy(video => video.Reports.Count),
                     SelectOrderBy.ReportsDesc => query.OrderByDescending(video => video.Reports.Count),
+                    SelectOrderBy.Views => query.OrderByDescending(video => video.Views),
                     _ => query
                 };
 

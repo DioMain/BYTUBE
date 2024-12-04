@@ -1,7 +1,7 @@
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
@@ -13,15 +13,22 @@ import Logo from "@components/Logo";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
 import PlaylistListModal from "./PlaylistModal";
+import { skip } from "node:test";
+import QueriesUrls from "@helpers/QeuriesUrls";
+import GetUrlParams from "@helpers/GetUrlParams";
 
 const AppHeader: React.FC = observer(() => {
+  const search = GetUrlParams().get("search") ?? "";
+
+  const searchBarField = useRef<HTMLInputElement>(null);
+
   const [drawerOpened, setDrawerOpen] = useState(false);
   const [channelCreationOpened, setChannelCreationOpened] = useState(false);
   const [playlistCreationOpened, setPlaylistCreationOpened] = useState(false);
   const [playlistViewOpened, setPlaylistViewOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
-  const { user } = useStores();
+  const { user, searchData } = useStores();
 
   const handleOpenChannelCreation = useCallback(() => {
     setChannelCreationOpened(true);
@@ -42,6 +49,10 @@ const AppHeader: React.FC = observer(() => {
     [setPlaylistViewOpened, setDrawerOpen, setPlaylist]
   );
 
+  const handleSearch = () => {
+    window.location.assign(`${QueriesUrls.SEARCH_PAGE}?search=${searchBarField.current?.value}`);
+  };
+
   const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";
 
   return (
@@ -58,9 +69,9 @@ const AppHeader: React.FC = observer(() => {
         <div className="header-searchbar">
           <div className="header-searchbar__r">
             <Stack className="header-searchbar__input" justifyContent={"center"}>
-              <input type="text" id="headerSearchBar" placeholder="Поиск" />
+              <input type="text" placeholder="Поиск" ref={searchBarField} defaultValue={search} />
             </Stack>
-            <Stack className="header-searchbar__sbtn" justifyContent={"center"}>
+            <Stack className="header-searchbar__sbtn" justifyContent={"center"} onClick={handleSearch}>
               <SearchIcon />
             </Stack>
           </div>

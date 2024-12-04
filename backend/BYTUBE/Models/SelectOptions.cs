@@ -18,6 +18,6 @@
 
     public enum SelectOrderBy
     {
-        None, Creation, CreationDesc, Reports, ReportsDesc
+        None, Creation, CreationDesc, Reports, ReportsDesc, Views
     }
 }

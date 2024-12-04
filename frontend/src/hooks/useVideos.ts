@@ -17,8 +17,6 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
   useEffect(() => {
     console.log(status);
     if (status === StatusBase.Loading) {
-      console.log("lod");
-
       axios
         .get(QueriesUrls.GET_VIDEOS, {
           params: {
@@ -35,7 +33,6 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
         .then((responce: AxiosResponse) => {
           setData(responce.data);
           setStatus(StatusBase.Success);
-          console.log("suc");
 
           if (onLoaded !== undefined) onLoaded(responce.data);
         })

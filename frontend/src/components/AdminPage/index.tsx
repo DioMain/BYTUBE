@@ -17,11 +17,13 @@ import axios from "axios";
 import { Search } from "@mui/icons-material";
 import CommentsViewer from "@components/CommentsViewer";
 import ReportView from "./ReportView/intex";
+import useProtected from "@hooks/useProtected";
 
 const AdminPage: React.FC = observer(() => {
   const observeElement = useRef<HTMLDivElement>(null);
 
   useAuth();
+  useProtected();
 
   const { user } = useStores();
 
@@ -38,7 +40,6 @@ const AdminPage: React.FC = observer(() => {
   });
 
   const handleSelectVideo = (videoModel: VideoModel) => {
-    //window.location.href = "123";
     setVideo(videoModel);
   };
 

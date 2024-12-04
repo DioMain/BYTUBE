@@ -1,4 +1,4 @@
-import SelectOptions from "@type/SelectOptions";
+import SelectOptions, { SelectOrderBy } from "@type/SelectOptions";
 import { makeAutoObservable } from "mobx";
 
 enum MainPageFilter {
@@ -8,7 +8,10 @@ enum MainPageFilter {
 }
 
 class SearchDataStore {
-  selectOptions?: SelectOptions = undefined;
+  selectOptions: SelectOptions = {
+    skip: 0,
+    take: 8,
+  };
 
   mainPageFilter: MainPageFilter = MainPageFilter.Main;
 
@@ -20,12 +23,14 @@ class SearchDataStore {
     this.selectOptions = value;
   };
 
-  dropOptions = () => {
-    this.selectOptions = undefined;
-  };
-
   setMainPageFilter = (value: MainPageFilter) => {
     this.mainPageFilter = value;
+  };
+
+  setFilter = (value: SelectOrderBy) => {
+    if (this.selectOptions === undefined) return;
+
+    this.selectOptions!.orderBy = value;
   };
 }
 
