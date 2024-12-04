@@ -10,6 +10,7 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SettingsIcon from "@mui/icons-material/Settings";
+import VideoModel from "@type/models/VideoModel";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -27,11 +28,12 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
   const [isOwner, setIsOwner] = useState(false);
   const [message, setMessage] = useState(comment.message);
   const [likeIt, setLikeIt] = useState(comment.userIsLikeIt);
-  const [beLiked, setBeLiked] = useState(comment.userIsLikeIt);
+  const [beLiked] = useState(comment.userIsLikeIt);
 
   useEffect(() => {
     if (user.status === AuthState.Authed) {
-      if (user.value?.id === comment.userId || user.value?.role === Role.Admin) setIsOwner(true);
+      if (user.value?.id === comment.userId || user.value?.role === Role.Admin || comment.isVideoOwner)
+        setIsOwner(true);
     }
   }, []);
 

@@ -60,7 +60,7 @@ const AdminPage: React.FC = observer(() => {
       case 0:
         return <CommentsViewer video={video!} />;
       case 1:
-        return <ReportView />;
+        return <ReportView video={video!} />;
       default:
         return <></>;
     }

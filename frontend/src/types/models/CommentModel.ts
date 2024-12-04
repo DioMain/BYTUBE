@@ -7,6 +7,7 @@ interface CommentModel {
   videoId: number;
   likesCount?: number;
   userIsLikeIt?: boolean;
+  isVideoOwner?: boolean;
   created?: string;
 
   user?: User;

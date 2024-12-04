@@ -53,6 +53,7 @@ namespace BYTUBE.Controllers
                     LikesCount = comment.Likes.Count,
                     UserIsLikeIt = userIsLikeIt,
                     Created = comment.Created,
+                    IsVideoOwner = false,
                     User = new UserPublicModel()
                     {
                         IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
@@ -74,6 +75,8 @@ namespace BYTUBE.Controllers
             {
                 Comment[] comments = await _db.Comments
                     .Include(i => i.User)
+                    .Include(i => i.Video)
+                    .Include(i => i.Video!.Owner)
                     .Where(i => i.VideoId == vid)
                     .OrderBy(i => i.Created)
                     .ToArrayAsync();
@@ -83,9 +86,13 @@ namespace BYTUBE.Controllers
                     var usrData = _localData.GetUserData(comment.User.Id);
 
                     bool userIsLikeIt = false;
+                    bool isVideoOwner = false;
 
                     if (IsAutorize)
+                    {
                         userIsLikeIt = comment.Likes.Contains(UserId);
+                        isVideoOwner = comment.Video!.Owner!.UserId == UserId;
+                    } 
 
                     return new CommentModel()
                     {
@@ -95,6 +102,7 @@ namespace BYTUBE.Controllers
                         UserId = comment.UserId,
                         LikesCount = comment.Likes.Count,
                         UserIsLikeIt = userIsLikeIt,
+                        IsVideoOwner = isVideoOwner,
                         Created = comment.Created,
                         User = new UserPublicModel()
                         {
@@ -167,12 +175,17 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Comment? comment = await _db.Comments.FirstOrDefaultAsync(c => c.Id == id);
+                Comment? comment = await _db.Comments
+                    .Include(i => i.Video)
+                    .Include(i => i.Video!.Owner)
+                    .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
+                if (comment.UserId != UserId && 
+                    Role != Entity.Models.User.RoleType.Admin && 
+                    comment.Video!.Owner!.UserId == UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -194,12 +207,17 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Comment? comment = await _db.Comments.FirstOrDefaultAsync(c => c.Id == id);
+                Comment? comment = await _db.Comments
+                                        .Include(i => i.Video)
+                                        .Include(i => i.Video!.Owner)
+                                        .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (comment == null)
                     throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
+                if (comment.UserId != UserId 
+                    && Role != Entity.Models.User.RoleType.Admin &&
+                    comment.Video!.Owner!.UserId == UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);

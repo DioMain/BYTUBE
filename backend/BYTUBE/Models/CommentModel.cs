@@ -16,6 +16,7 @@ namespace BYTUBE.Models
 
         public int? LikesCount { get; set; }
         public bool? UserIsLikeIt { get; set; }
+        public bool? IsVideoOwner { get; set; }
 
         public UserPublicModel? User {  get; set; }
     }
