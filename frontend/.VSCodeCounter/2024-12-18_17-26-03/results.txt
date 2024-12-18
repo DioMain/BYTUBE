@@ -1,0 +1,253 @@
+Date : 2024-12-18 17:26:03
+Directory : d:\UnicLabs\BYTUBE\BYTUBE\frontend
+Total : 150 files,  90891 codes, 17577 comments, 14699 blanks, all 123167 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JavaScript         |         16 |     78,686 |     17,577 |     13,576 |    109,839 |
+| JSON               |          3 |      6,872 |          0 |          3 |      6,875 |
+| TypeScript JSX     |         46 |      3,361 |          0 |        415 |      3,776 |
+| SCSS               |         41 |      1,207 |          0 |        477 |      1,684 |
+| TypeScript         |         41 |        719 |          0 |        225 |        944 |
+| JSON with Comments |          1 |         24 |          0 |          1 |         25 |
+| HTML               |          2 |         22 |          0 |          2 |         24 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                 | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                    |        150 |     90,891 |     17,577 |     14,699 |    123,167 |
+| . (Files)                                                                                                            |          5 |      6,957 |          0 |          6 |      6,963 |
+| build                                                                                                                |         16 |     78,636 |     17,577 |     13,575 |    109,788 |
+| public                                                                                                               |          1 |         11 |          0 |          1 |         12 |
+| src                                                                                                                  |        128 |      5,287 |          0 |      1,117 |      6,404 |
+| src (Files)                                                                                                          |          3 |         54 |          0 |         14 |         68 |
+| src\components                                                                                                       |         86 |      4,474 |          0 |        863 |      5,337 |
+| src\components\AddToPlaylistModal                                                                                    |          2 |         99 |          0 |         19 |        118 |
+| src\components\AdminPage                                                                                             |          6 |        366 |          0 |         55 |        421 |
+| src\components\AdminPage (Files)                                                                                     |          2 |        167 |          0 |         21 |        188 |
+| src\components\AdminPage\ReportView                                                                                  |          2 |         55 |          0 |          7 |         62 |
+| src\components\AdminPage\VideoItem                                                                                   |          2 |        144 |          0 |         27 |        171 |
+| src\components\App                                                                                                   |          1 |         13 |          0 |          4 |         17 |
+| src\components\AppHeader                                                                                             |         14 |        901 |          0 |        167 |      1,068 |
+| src\components\AppHeader (Files)                                                                                     |          2 |        187 |          0 |         47 |        234 |
+| src\components\AppHeader\CreateChannelModal                                                                          |          2 |        163 |          0 |         28 |        191 |
+| src\components\AppHeader\CreatePlaylistModal                                                                         |          2 |         96 |          0 |         13 |        109 |
+| src\components\AppHeader\HeaderDrawer                                                                                |          5 |        280 |          0 |         52 |        332 |
+| src\components\AppHeader\HeaderDrawer (Files)                                                                        |          3 |        228 |          0 |         30 |        258 |
+| src\components\AppHeader\HeaderDrawer\HeaderDrawerButton                                                             |          2 |         52 |          0 |         22 |         74 |
+| src\components\AppHeader\PlaylistModal                                                                               |          3 |        175 |          0 |         27 |        202 |
+| src\components\AppHeader\PlaylistModal (Files)                                                                       |          1 |        101 |          0 |          9 |        110 |
+| src\components\AppHeader\PlaylistModal\VideoItem                                                                     |          2 |         74 |          0 |         18 |         92 |
+| src\components\AuthPage                                                                                              |          9 |        302 |          0 |         75 |        377 |
+| src\components\AuthPage (Files)                                                                                      |          1 |         11 |          0 |          3 |         14 |
+| src\components\AuthPage\Header                                                                                       |          2 |         15 |          0 |          5 |         20 |
+| src\components\AuthPage\Register                                                                                     |          3 |        151 |          0 |         39 |        190 |
+| src\components\AuthPage\Signin                                                                                       |          3 |        125 |          0 |         28 |        153 |
+| src\components\ChannelPage                                                                                           |          2 |        148 |          0 |         28 |        176 |
+| src\components\CommentsViewer                                                                                        |          3 |        258 |          0 |         44 |        302 |
+| src\components\CommentsViewer (Files)                                                                                |          2 |        162 |          0 |         32 |        194 |
+| src\components\CommentsViewer\CommentItem                                                                            |          1 |         96 |          0 |         12 |        108 |
+| src\components\CustomUI                                                                                              |          2 |         31 |          0 |         10 |         41 |
+| src\components\CustomUI\Button0                                                                                      |          2 |         31 |          0 |         10 |         41 |
+| src\components\GeneralRoutes                                                                                         |          1 |         34 |          0 |          3 |         37 |
+| src\components\Logo                                                                                                  |          2 |         23 |          0 |          3 |         26 |
+| src\components\SearchPage                                                                                            |          4 |        163 |          0 |         29 |        192 |
+| src\components\SearchPage (Files)                                                                                    |          2 |         94 |          0 |         14 |        108 |
+| src\components\SearchPage\VideoItem                                                                                  |          2 |         69 |          0 |         15 |         84 |
+| src\components\StudioPage                                                                                            |         19 |      1,198 |          0 |        225 |      1,423 |
+| src\components\StudioPage (Files)                                                                                    |          3 |         89 |          0 |         20 |        109 |
+| src\components\StudioPage\ChannelSettings                                                                            |          2 |        201 |          0 |         36 |        237 |
+| src\components\StudioPage\VideosSettings                                                                             |         14 |        908 |          0 |        169 |      1,077 |
+| src\components\StudioPage\VideosSettings (Files)                                                                     |          2 |         26 |          0 |          8 |         34 |
+| src\components\StudioPage\VideosSettings\VideoCreate                                                                 |          2 |        342 |          0 |         54 |        396 |
+| src\components\StudioPage\VideosSettings\VideoOverview                                                               |          6 |        403 |          0 |         74 |        477 |
+| src\components\StudioPage\VideosSettings\VideoOverview (Files)                                                       |          2 |         48 |          0 |          8 |         56 |
+| src\components\StudioPage\VideosSettings\VideoOverview\CommentsOverview                                              |          1 |         17 |          0 |          4 |         21 |
+| src\components\StudioPage\VideosSettings\VideoOverview\VideoEdit                                                     |          2 |        309 |          0 |         57 |        366 |
+| src\components\StudioPage\VideosSettings\VideoOverview\VideoStats                                                    |          1 |         29 |          0 |          5 |         34 |
+| src\components\StudioPage\VideosSettings\VideosList                                                                  |          4 |        137 |          0 |         33 |        170 |
+| src\components\StudioPage\VideosSettings\VideosList (Files)                                                          |          2 |         81 |          0 |         17 |         98 |
+| src\components\StudioPage\VideosSettings\VideosList\VideoItem                                                        |          2 |         56 |          0 |         16 |         72 |
+| src\components\VideoMain                                                                                             |          3 |        146 |          0 |         38 |        184 |
+| src\components\VideoMain (Files)                                                                                     |          1 |         40 |          0 |          7 |         47 |
+| src\components\VideoMain\VideoElement                                                                                |          2 |        106 |          0 |         31 |        137 |
+| src\components\VideoPage                                                                                             |         15 |        715 |          0 |        143 |        858 |
+| src\components\VideoPage (Files)                                                                                     |          2 |        210 |          0 |         35 |        245 |
+| src\components\VideoPage\ChannelButton                                                                               |          2 |        100 |          0 |         21 |        121 |
+| src\components\VideoPage\MarkVideo                                                                                   |          2 |         84 |          0 |         15 |         99 |
+| src\components\VideoPage\OtherVideos                                                                                 |          1 |         28 |          0 |          5 |         33 |
+| src\components\VideoPage\PlaylistViewer                                                                              |          4 |        130 |          0 |         32 |        162 |
+| src\components\VideoPage\PlaylistViewer (Files)                                                                      |          2 |         60 |          0 |         14 |         74 |
+| src\components\VideoPage\PlaylistViewer\VideoItem                                                                    |          2 |         70 |          0 |         18 |         88 |
+| src\components\VideoPage\ReportModal                                                                                 |          2 |         85 |          0 |         15 |        100 |
+| src\components\VideoPage\VideoElement                                                                                |          2 |         78 |          0 |         20 |         98 |
+| src\components\VideoPlayer                                                                                           |          3 |         77 |          0 |         20 |         97 |
+| src\helpers                                                                                                          |          7 |        134 |          0 |         38 |        172 |
+| src\hooks                                                                                                            |         10 |        277 |          0 |         70 |        347 |
+| src\stores                                                                                                           |          5 |         85 |          0 |         32 |        117 |
+| src\styles                                                                                                           |          6 |         97 |          0 |         38 |        135 |
+| src\types                                                                                                            |         11 |        166 |          0 |         62 |        228 |
+| src\types (Files)                                                                                                    |          5 |         61 |          0 |         22 |         83 |
+| src\types\models                                                                                                     |          6 |        105 |          0 |         40 |        145 |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                             | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\.prettierrc                                                                       | JSON               |          9 |          0 |          1 |         10 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\bundle.js                                                                   | JavaScript         |     76,225 |     17,459 |     13,504 |    107,188 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\index.html                                                                  | HTML               |         11 |          0 |          1 |         12 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerDailyMotion.bundle.js                                            | JavaScript         |        143 |          8 |          5 |        156 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerFacebook.bundle.js                                               | JavaScript         |        144 |          8 |          5 |        157 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerFilePlayer.bundle.js                                             | JavaScript         |        372 |          9 |          5 |        386 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerKaltura.bundle.js                                                | JavaScript         |        141 |          8 |          5 |        154 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerMixcloud.bundle.js                                               | JavaScript         |        129 |          8 |          5 |        142 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerMux.bundle.js                                                    | JavaScript         |        227 |         10 |          5 |        242 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerPreview.bundle.js                                                | JavaScript         |        138 |          8 |          5 |        151 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerSoundCloud.bundle.js                                             | JavaScript         |        146 |          8 |          5 |        159 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerStreamable.bundle.js                                             | JavaScript         |        139 |          8 |          5 |        152 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerTwitch.bundle.js                                                 | JavaScript         |        132 |          9 |          5 |        146 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerVidyard.bundle.js                                                | JavaScript         |        137 |          8 |          5 |        150 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerVimeo.bundle.js                                                  | JavaScript         |        177 |          9 |          5 |        191 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerWistia.bundle.js                                                 | JavaScript         |        152 |          9 |          5 |        166 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerYouTube.bundle.js                                                | JavaScript         |        223 |          8 |          5 |        236 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\package-lock.json                                                                 | JSON               |      6,820 |          0 |          1 |      6,821 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\package.json                                                                      | JSON               |         43 |          0 |          1 |         44 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\public\index.html                                                                 | HTML               |         11 |          0 |          1 |         12 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\appStoreContext.ts                                                            | TypeScript         |         10 |          0 |          5 |         15 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AddToPlaylistModal\index.tsx                                       | TypeScript JSX     |         83 |          0 |         12 |         95 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AddToPlaylistModal\styles.scss                                     | SCSS               |         16 |          0 |          7 |         23 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\ReportView\intex.tsx                                     | TypeScript JSX     |         55 |          0 |          6 |         61 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\ReportView\style.scss                                    | SCSS               |          0 |          0 |          1 |          1 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\VideoItem\index.tsx                                      | TypeScript JSX     |        109 |          0 |         12 |        121 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\VideoItem\style.scss                                     | SCSS               |         35 |          0 |         15 |         50 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\index.tsx                                                | TypeScript JSX     |        144 |          0 |         13 |        157 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\style.scss                                               | SCSS               |         23 |          0 |          8 |         31 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreateChannelModal\index.tsx                             | TypeScript JSX     |        132 |          0 |         15 |        147 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreateChannelModal\style.scss                            | SCSS               |         31 |          0 |         13 |         44 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreatePlaylistModal\index.tsx                            | TypeScript JSX     |         89 |          0 |         10 |         99 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreatePlaylistModal\styles.scss                          | SCSS               |          7 |          0 |          3 |         10 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\HeaderDrawerButton\index.tsx                | TypeScript JSX     |         22 |          0 |          7 |         29 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\HeaderDrawerButton\style.scss               | SCSS               |         30 |          0 |         15 |         45 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\index.tsx                                   | TypeScript JSX     |        187 |          0 |         12 |        199 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\style.scss                                  | SCSS               |         31 |          0 |         15 |         46 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\types.ts                                    | TypeScript         |         10 |          0 |          3 |         13 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\VideoItem\index.tsx                        | TypeScript JSX     |         45 |          0 |          4 |         49 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\VideoItem\style.scss                       | SCSS               |         29 |          0 |         14 |         43 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\index.tsx                                  | TypeScript JSX     |        101 |          0 |          9 |        110 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\index.tsx                                                | TypeScript JSX     |        110 |          0 |         16 |        126 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\style.scss                                               | SCSS               |         77 |          0 |         31 |        108 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\App\index.tsx                                                      | TypeScript JSX     |         13 |          0 |          4 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Header\index.tsx                                          | TypeScript JSX     |         10 |          0 |          3 |         13 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Header\style.scss                                         | SCSS               |          5 |          0 |          2 |          7 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\index.tsx                                        | TypeScript JSX     |         91 |          0 |         14 |        105 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\style.scss                                       | SCSS               |         60 |          0 |         24 |         84 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\types.ts                                         | TypeScript         |          0 |          0 |          1 |          1 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\index.tsx                                          | TypeScript JSX     |         80 |          0 |          8 |         88 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\style.scss                                         | SCSS               |         45 |          0 |         19 |         64 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\types.ts                                           | TypeScript         |          0 |          0 |          1 |          1 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\index.tsx                                                 | TypeScript JSX     |         11 |          0 |          3 |         14 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\ChannelPage\index.tsx                                              | TypeScript JSX     |        113 |          0 |         13 |        126 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\ChannelPage\styles.scss                                            | SCSS               |         35 |          0 |         15 |         50 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\CommentItem\index.tsx                               | TypeScript JSX     |         96 |          0 |         12 |        108 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\index.tsx                                           | TypeScript JSX     |        129 |          0 |         20 |        149 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\styles.scss                                         | SCSS               |         33 |          0 |         12 |         45 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CustomUI\Button0\index.tsx                                         | TypeScript JSX     |         23 |          0 |          5 |         28 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CustomUI\Button0\style.scss                                        | SCSS               |          8 |          0 |          5 |         13 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\GeneralRoutes\index.tsx                                            | TypeScript JSX     |         34 |          0 |          3 |         37 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\Logo\index.tsx                                                     | TypeScript JSX     |         20 |          0 |          3 |         23 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\Logo\styles.scss                                                   | SCSS               |          3 |          0 |          0 |          3 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\VideoItem\index.tsx                                     | TypeScript JSX     |         39 |          0 |          3 |         42 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\VideoItem\style.scss                                    | SCSS               |         30 |          0 |         12 |         42 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\index.tsx                                               | TypeScript JSX     |         73 |          0 |         10 |         83 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\style.scss                                              | SCSS               |         21 |          0 |          4 |         25 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\ChannelSettings\index.tsx                               | TypeScript JSX     |        148 |          0 |         15 |        163 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\ChannelSettings\style.scss                              | SCSS               |         53 |          0 |         21 |         74 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoCreate\index.tsx                    | TypeScript JSX     |        239 |          0 |         21 |        260 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoCreate\style.scss                   | SCSS               |        103 |          0 |         33 |        136 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\CommentsOverview\index.tsx | TypeScript JSX     |         17 |          0 |          4 |         21 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoEdit\index.tsx        | TypeScript JSX     |        206 |          0 |         24 |        230 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoEdit\style.scss       | SCSS               |        103 |          0 |         33 |        136 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoStats\index.tsx       | TypeScript JSX     |         29 |          0 |          5 |         34 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\index.tsx                  | TypeScript JSX     |         40 |          0 |          6 |         46 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\style.scss                 | SCSS               |          8 |          0 |          2 |         10 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\VideoItem\index.tsx           | TypeScript JSX     |         33 |          0 |          5 |         38 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\VideoItem\style.scss          | SCSS               |         23 |          0 |         11 |         34 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\index.tsx                     | TypeScript JSX     |         61 |          0 |          8 |         69 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\style.scss                    | SCSS               |         20 |          0 |          9 |         29 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\index.tsx                                | TypeScript JSX     |         21 |          0 |          5 |         26 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\types.ts                                 | TypeScript         |          5 |          0 |          3 |          8 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\index.tsx                                               | TypeScript JSX     |         66 |          0 |         11 |         77 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\style.scss                                              | SCSS               |         23 |          0 |          8 |         31 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\types.ts                                                | TypeScript         |          0 |          0 |          1 |          1 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\VideoElement\index.tsx                                   | TypeScript JSX     |         39 |          0 |          4 |         43 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\VideoElement\styles.scss                                 | SCSS               |         67 |          0 |         27 |         94 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\index.tsx                                                | TypeScript JSX     |         40 |          0 |          7 |         47 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ChannelButton\index.tsx                                  | TypeScript JSX     |         79 |          0 |         12 |         91 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ChannelButton\style.scss                                 | SCSS               |         21 |          0 |          9 |         30 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\MarkVideo\index.tsx                                      | TypeScript JSX     |         70 |          0 |         12 |         82 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\MarkVideo\style.scss                                     | SCSS               |         14 |          0 |          3 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\OtherVideos\index.tsx                                    | TypeScript JSX     |         28 |          0 |          5 |         33 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\VideoItem\index.tsx                       | TypeScript JSX     |         41 |          0 |          4 |         45 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\VideoItem\style.scss                      | SCSS               |         29 |          0 |         14 |         43 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\index.tsx                                 | TypeScript JSX     |         51 |          0 |          9 |         60 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\style.scss                                | SCSS               |          9 |          0 |          5 |         14 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ReportModal\index.tsx                                    | TypeScript JSX     |         74 |          0 |         11 |         85 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ReportModal\style.scss                                   | SCSS               |         11 |          0 |          4 |         15 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\VideoElement\index.tsx                                   | TypeScript JSX     |         43 |          0 |          4 |         47 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\VideoElement\style.scss                                  | SCSS               |         35 |          0 |         16 |         51 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\index.tsx                                                | TypeScript JSX     |        165 |          0 |         15 |        180 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\style.scss                                               | SCSS               |         45 |          0 |         20 |         65 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\index.tsx                                              | TypeScript JSX     |         42 |          0 |          8 |         50 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\style.scss                                             | SCSS               |         27 |          0 |          9 |         36 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\types.ts                                               | TypeScript         |          8 |          0 |          3 |         11 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetCreatedTimeText.ts                                                 | TypeScript         |         34 |          0 |          6 |         40 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetFileUrl.ts                                                         | TypeScript         |          8 |          0 |          2 |         10 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetUrlParams.ts                                                       | TypeScript         |         10 |          0 |          5 |         15 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\IsRightImageFormat.ts                                                 | TypeScript         |         14 |          0 |          5 |         19 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\IsRightVideoFormat.ts                                                 | TypeScript         |         14 |          0 |          5 |         19 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\QeuriesUrls.ts                                                        | TypeScript         |         36 |          0 |          9 |         45 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\SortVideosByOrder.ts                                                  | TypeScript         |         18 |          0 |          6 |         24 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useAuth.ts                                                              | TypeScript         |         26 |          0 |          5 |         31 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useOnScrollEnd.ts                                                       | TypeScript         |         23 |          0 |          8 |         31 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useOwnChannel.ts                                                        | TypeScript         |         29 |          0 |          6 |         35 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useProtected.ts                                                         | TypeScript         |         13 |          0 |          4 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useTrigger.ts                                                           | TypeScript         |          9 |          0 |          5 |         14 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideo.ts                                                             | TypeScript         |         29 |          0 |          5 |         34 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideoGlobal.ts                                                       | TypeScript         |         35 |          0 |          7 |         42 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideoMarks.ts                                                        | TypeScript         |         34 |          0 |          8 |         42 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideos.ts                                                            | TypeScript         |         44 |          0 |          8 |         52 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideosWithPagination.ts                                              | TypeScript         |         35 |          0 |         14 |         49 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\index.tsx                                                                     | TypeScript JSX     |         20 |          0 |          3 |         23 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\modules.d.ts                                                                  | TypeScript         |         24 |          0 |          6 |         30 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\ChannelStore.ts                                                        | TypeScript         |         12 |          0 |          5 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\SearchDataStore.ts                                                     | TypeScript         |         29 |          0 |         11 |         40 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\StoreWrapper.ts                                                        | TypeScript         |         11 |          0 |          3 |         14 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\UserStore.ts                                                           | TypeScript         |         21 |          0 |          8 |         29 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\VideoStore.ts                                                          | TypeScript         |         12 |          0 |          5 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Base.scss                                                              | SCSS               |         14 |          0 |          5 |         19 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Fonts.scss                                                             | SCSS               |          8 |          0 |          1 |          9 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Inputs.scss                                                            | SCSS               |         35 |          0 |         20 |         55 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Mixins.scss                                                            | SCSS               |         17 |          0 |          6 |         23 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Variables.scss                                                         | SCSS               |          1 |          0 |          0 |          1 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\animations.scss                                                        | SCSS               |         22 |          0 |          6 |         28 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\AuthState.ts                                                            | TypeScript         |          7 |          0 |          2 |          9 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\PropsBase.ts                                                            | TypeScript         |          7 |          0 |          2 |          9 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\SelectOptions.ts                                                        | TypeScript         |         20 |          0 |          8 |         28 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\ServerError.ts                                                          | TypeScript         |         20 |          0 |          8 |         28 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\StatusBase.ts                                                           | TypeScript         |          7 |          0 |          2 |          9 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\ChannelModel.ts                                                  | TypeScript         |         11 |          0 |          5 |         16 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\CommentModel.ts                                                  | TypeScript         |         13 |          0 |          4 |         17 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\PlaylistModel.ts                                                 | TypeScript         |         20 |          0 |         10 |         30 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\ReportModel.ts                                                   | TypeScript         |         21 |          0 |          6 |         27 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\UserModel.ts                                                     | TypeScript         |         12 |          0 |          4 |         16 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\VideoModel.ts                                                    | TypeScript         |         28 |          0 |         11 |         39 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\tsconfig.json                                                                     | JSON with Comments |         24 |          0 |          1 |         25 |
+| d:\UnicLabs\BYTUBE\BYTUBE\frontend\webpack.config.js                                                                 | JavaScript         |         61 |          0 |          2 |         63 |
+| Total                                                                                                                |                    |     90,891 |     17,577 |     14,699 |    123,167 |
++----------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

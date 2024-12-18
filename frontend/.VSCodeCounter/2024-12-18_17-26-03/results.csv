@@ -1,0 +1,152 @@
+"filename", "language", "JSON", "JSON with Comments", "TypeScript JSX", "TypeScript", "JavaScript", "SCSS", "HTML", "comment", "blank", "total"
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\.prettierrc", "JSON", 9, 0, 0, 0, 0, 0, 0, 0, 1, 10
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\bundle.js", "JavaScript", 0, 0, 0, 0, 76225, 0, 0, 17459, 13504, 107188
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\index.html", "HTML", 0, 0, 0, 0, 0, 0, 11, 0, 1, 12
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerDailyMotion.bundle.js", "JavaScript", 0, 0, 0, 0, 143, 0, 0, 8, 5, 156
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerFacebook.bundle.js", "JavaScript", 0, 0, 0, 0, 144, 0, 0, 8, 5, 157
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerFilePlayer.bundle.js", "JavaScript", 0, 0, 0, 0, 372, 0, 0, 9, 5, 386
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerKaltura.bundle.js", "JavaScript", 0, 0, 0, 0, 141, 0, 0, 8, 5, 154
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerMixcloud.bundle.js", "JavaScript", 0, 0, 0, 0, 129, 0, 0, 8, 5, 142
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerMux.bundle.js", "JavaScript", 0, 0, 0, 0, 227, 0, 0, 10, 5, 242
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerPreview.bundle.js", "JavaScript", 0, 0, 0, 0, 138, 0, 0, 8, 5, 151
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerSoundCloud.bundle.js", "JavaScript", 0, 0, 0, 0, 146, 0, 0, 8, 5, 159
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerStreamable.bundle.js", "JavaScript", 0, 0, 0, 0, 139, 0, 0, 8, 5, 152
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerTwitch.bundle.js", "JavaScript", 0, 0, 0, 0, 132, 0, 0, 9, 5, 146
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerVidyard.bundle.js", "JavaScript", 0, 0, 0, 0, 137, 0, 0, 8, 5, 150
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerVimeo.bundle.js", "JavaScript", 0, 0, 0, 0, 177, 0, 0, 9, 5, 191
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerWistia.bundle.js", "JavaScript", 0, 0, 0, 0, 152, 0, 0, 9, 5, 166
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\build\reactPlayerYouTube.bundle.js", "JavaScript", 0, 0, 0, 0, 223, 0, 0, 8, 5, 236
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\package-lock.json", "JSON", 6820, 0, 0, 0, 0, 0, 0, 0, 1, 6821
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\package.json", "JSON", 43, 0, 0, 0, 0, 0, 0, 0, 1, 44
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\public\index.html", "HTML", 0, 0, 0, 0, 0, 0, 11, 0, 1, 12
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\appStoreContext.ts", "TypeScript", 0, 0, 0, 10, 0, 0, 0, 0, 5, 15
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AddToPlaylistModal\index.tsx", "TypeScript JSX", 0, 0, 83, 0, 0, 0, 0, 0, 12, 95
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AddToPlaylistModal\styles.scss", "SCSS", 0, 0, 0, 0, 0, 16, 0, 0, 7, 23
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\ReportView\intex.tsx", "TypeScript JSX", 0, 0, 55, 0, 0, 0, 0, 0, 6, 61
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\ReportView\style.scss", "SCSS", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\VideoItem\index.tsx", "TypeScript JSX", 0, 0, 109, 0, 0, 0, 0, 0, 12, 121
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\VideoItem\style.scss", "SCSS", 0, 0, 0, 0, 0, 35, 0, 0, 15, 50
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\index.tsx", "TypeScript JSX", 0, 0, 144, 0, 0, 0, 0, 0, 13, 157
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AdminPage\style.scss", "SCSS", 0, 0, 0, 0, 0, 23, 0, 0, 8, 31
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreateChannelModal\index.tsx", "TypeScript JSX", 0, 0, 132, 0, 0, 0, 0, 0, 15, 147
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreateChannelModal\style.scss", "SCSS", 0, 0, 0, 0, 0, 31, 0, 0, 13, 44
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreatePlaylistModal\index.tsx", "TypeScript JSX", 0, 0, 89, 0, 0, 0, 0, 0, 10, 99
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\CreatePlaylistModal\styles.scss", "SCSS", 0, 0, 0, 0, 0, 7, 0, 0, 3, 10
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\HeaderDrawerButton\index.tsx", "TypeScript JSX", 0, 0, 22, 0, 0, 0, 0, 0, 7, 29
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\HeaderDrawerButton\style.scss", "SCSS", 0, 0, 0, 0, 0, 30, 0, 0, 15, 45
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\index.tsx", "TypeScript JSX", 0, 0, 187, 0, 0, 0, 0, 0, 12, 199
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\style.scss", "SCSS", 0, 0, 0, 0, 0, 31, 0, 0, 15, 46
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\HeaderDrawer\types.ts", "TypeScript", 0, 0, 0, 10, 0, 0, 0, 0, 3, 13
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\VideoItem\index.tsx", "TypeScript JSX", 0, 0, 45, 0, 0, 0, 0, 0, 4, 49
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\VideoItem\style.scss", "SCSS", 0, 0, 0, 0, 0, 29, 0, 0, 14, 43
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\PlaylistModal\index.tsx", "TypeScript JSX", 0, 0, 101, 0, 0, 0, 0, 0, 9, 110
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\index.tsx", "TypeScript JSX", 0, 0, 110, 0, 0, 0, 0, 0, 16, 126
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AppHeader\style.scss", "SCSS", 0, 0, 0, 0, 0, 77, 0, 0, 31, 108
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\App\index.tsx", "TypeScript JSX", 0, 0, 13, 0, 0, 0, 0, 0, 4, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Header\index.tsx", "TypeScript JSX", 0, 0, 10, 0, 0, 0, 0, 0, 3, 13
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Header\style.scss", "SCSS", 0, 0, 0, 0, 0, 5, 0, 0, 2, 7
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\index.tsx", "TypeScript JSX", 0, 0, 91, 0, 0, 0, 0, 0, 14, 105
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\style.scss", "SCSS", 0, 0, 0, 0, 0, 60, 0, 0, 24, 84
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Register\types.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\index.tsx", "TypeScript JSX", 0, 0, 80, 0, 0, 0, 0, 0, 8, 88
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\style.scss", "SCSS", 0, 0, 0, 0, 0, 45, 0, 0, 19, 64
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\Signin\types.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\AuthPage\index.tsx", "TypeScript JSX", 0, 0, 11, 0, 0, 0, 0, 0, 3, 14
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\ChannelPage\index.tsx", "TypeScript JSX", 0, 0, 113, 0, 0, 0, 0, 0, 13, 126
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\ChannelPage\styles.scss", "SCSS", 0, 0, 0, 0, 0, 35, 0, 0, 15, 50
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\CommentItem\index.tsx", "TypeScript JSX", 0, 0, 96, 0, 0, 0, 0, 0, 12, 108
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\index.tsx", "TypeScript JSX", 0, 0, 129, 0, 0, 0, 0, 0, 20, 149
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CommentsViewer\styles.scss", "SCSS", 0, 0, 0, 0, 0, 33, 0, 0, 12, 45
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CustomUI\Button0\index.tsx", "TypeScript JSX", 0, 0, 23, 0, 0, 0, 0, 0, 5, 28
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\CustomUI\Button0\style.scss", "SCSS", 0, 0, 0, 0, 0, 8, 0, 0, 5, 13
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\GeneralRoutes\index.tsx", "TypeScript JSX", 0, 0, 34, 0, 0, 0, 0, 0, 3, 37
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\Logo\index.tsx", "TypeScript JSX", 0, 0, 20, 0, 0, 0, 0, 0, 3, 23
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\Logo\styles.scss", "SCSS", 0, 0, 0, 0, 0, 3, 0, 0, 0, 3
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\VideoItem\index.tsx", "TypeScript JSX", 0, 0, 39, 0, 0, 0, 0, 0, 3, 42
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\VideoItem\style.scss", "SCSS", 0, 0, 0, 0, 0, 30, 0, 0, 12, 42
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\index.tsx", "TypeScript JSX", 0, 0, 73, 0, 0, 0, 0, 0, 10, 83
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\SearchPage\style.scss", "SCSS", 0, 0, 0, 0, 0, 21, 0, 0, 4, 25
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\ChannelSettings\index.tsx", "TypeScript JSX", 0, 0, 148, 0, 0, 0, 0, 0, 15, 163
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\ChannelSettings\style.scss", "SCSS", 0, 0, 0, 0, 0, 53, 0, 0, 21, 74
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoCreate\index.tsx", "TypeScript JSX", 0, 0, 239, 0, 0, 0, 0, 0, 21, 260
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoCreate\style.scss", "SCSS", 0, 0, 0, 0, 0, 103, 0, 0, 33, 136
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\CommentsOverview\index.tsx", "TypeScript JSX", 0, 0, 17, 0, 0, 0, 0, 0, 4, 21
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoEdit\index.tsx", "TypeScript JSX", 0, 0, 206, 0, 0, 0, 0, 0, 24, 230
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoEdit\style.scss", "SCSS", 0, 0, 0, 0, 0, 103, 0, 0, 33, 136
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\VideoStats\index.tsx", "TypeScript JSX", 0, 0, 29, 0, 0, 0, 0, 0, 5, 34
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\index.tsx", "TypeScript JSX", 0, 0, 40, 0, 0, 0, 0, 0, 6, 46
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideoOverview\style.scss", "SCSS", 0, 0, 0, 0, 0, 8, 0, 0, 2, 10
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\VideoItem\index.tsx", "TypeScript JSX", 0, 0, 33, 0, 0, 0, 0, 0, 5, 38
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\VideoItem\style.scss", "SCSS", 0, 0, 0, 0, 0, 23, 0, 0, 11, 34
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\index.tsx", "TypeScript JSX", 0, 0, 61, 0, 0, 0, 0, 0, 8, 69
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\VideosList\style.scss", "SCSS", 0, 0, 0, 0, 0, 20, 0, 0, 9, 29
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\index.tsx", "TypeScript JSX", 0, 0, 21, 0, 0, 0, 0, 0, 5, 26
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\VideosSettings\types.ts", "TypeScript", 0, 0, 0, 5, 0, 0, 0, 0, 3, 8
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\index.tsx", "TypeScript JSX", 0, 0, 66, 0, 0, 0, 0, 0, 11, 77
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\style.scss", "SCSS", 0, 0, 0, 0, 0, 23, 0, 0, 8, 31
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\StudioPage\types.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\VideoElement\index.tsx", "TypeScript JSX", 0, 0, 39, 0, 0, 0, 0, 0, 4, 43
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\VideoElement\styles.scss", "SCSS", 0, 0, 0, 0, 0, 67, 0, 0, 27, 94
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoMain\index.tsx", "TypeScript JSX", 0, 0, 40, 0, 0, 0, 0, 0, 7, 47
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ChannelButton\index.tsx", "TypeScript JSX", 0, 0, 79, 0, 0, 0, 0, 0, 12, 91
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ChannelButton\style.scss", "SCSS", 0, 0, 0, 0, 0, 21, 0, 0, 9, 30
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\MarkVideo\index.tsx", "TypeScript JSX", 0, 0, 70, 0, 0, 0, 0, 0, 12, 82
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\MarkVideo\style.scss", "SCSS", 0, 0, 0, 0, 0, 14, 0, 0, 3, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\OtherVideos\index.tsx", "TypeScript JSX", 0, 0, 28, 0, 0, 0, 0, 0, 5, 33
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\VideoItem\index.tsx", "TypeScript JSX", 0, 0, 41, 0, 0, 0, 0, 0, 4, 45
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\VideoItem\style.scss", "SCSS", 0, 0, 0, 0, 0, 29, 0, 0, 14, 43
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\index.tsx", "TypeScript JSX", 0, 0, 51, 0, 0, 0, 0, 0, 9, 60
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\PlaylistViewer\style.scss", "SCSS", 0, 0, 0, 0, 0, 9, 0, 0, 5, 14
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ReportModal\index.tsx", "TypeScript JSX", 0, 0, 74, 0, 0, 0, 0, 0, 11, 85
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\ReportModal\style.scss", "SCSS", 0, 0, 0, 0, 0, 11, 0, 0, 4, 15
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\VideoElement\index.tsx", "TypeScript JSX", 0, 0, 43, 0, 0, 0, 0, 0, 4, 47
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\VideoElement\style.scss", "SCSS", 0, 0, 0, 0, 0, 35, 0, 0, 16, 51
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\index.tsx", "TypeScript JSX", 0, 0, 165, 0, 0, 0, 0, 0, 15, 180
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPage\style.scss", "SCSS", 0, 0, 0, 0, 0, 45, 0, 0, 20, 65
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\index.tsx", "TypeScript JSX", 0, 0, 42, 0, 0, 0, 0, 0, 8, 50
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\style.scss", "SCSS", 0, 0, 0, 0, 0, 27, 0, 0, 9, 36
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\components\VideoPlayer\types.ts", "TypeScript", 0, 0, 0, 8, 0, 0, 0, 0, 3, 11
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetCreatedTimeText.ts", "TypeScript", 0, 0, 0, 34, 0, 0, 0, 0, 6, 40
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetFileUrl.ts", "TypeScript", 0, 0, 0, 8, 0, 0, 0, 0, 2, 10
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\GetUrlParams.ts", "TypeScript", 0, 0, 0, 10, 0, 0, 0, 0, 5, 15
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\IsRightImageFormat.ts", "TypeScript", 0, 0, 0, 14, 0, 0, 0, 0, 5, 19
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\IsRightVideoFormat.ts", "TypeScript", 0, 0, 0, 14, 0, 0, 0, 0, 5, 19
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\QeuriesUrls.ts", "TypeScript", 0, 0, 0, 36, 0, 0, 0, 0, 9, 45
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\helpers\SortVideosByOrder.ts", "TypeScript", 0, 0, 0, 18, 0, 0, 0, 0, 6, 24
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useAuth.ts", "TypeScript", 0, 0, 0, 26, 0, 0, 0, 0, 5, 31
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useOnScrollEnd.ts", "TypeScript", 0, 0, 0, 23, 0, 0, 0, 0, 8, 31
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useOwnChannel.ts", "TypeScript", 0, 0, 0, 29, 0, 0, 0, 0, 6, 35
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useProtected.ts", "TypeScript", 0, 0, 0, 13, 0, 0, 0, 0, 4, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useTrigger.ts", "TypeScript", 0, 0, 0, 9, 0, 0, 0, 0, 5, 14
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideo.ts", "TypeScript", 0, 0, 0, 29, 0, 0, 0, 0, 5, 34
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideoGlobal.ts", "TypeScript", 0, 0, 0, 35, 0, 0, 0, 0, 7, 42
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideoMarks.ts", "TypeScript", 0, 0, 0, 34, 0, 0, 0, 0, 8, 42
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideos.ts", "TypeScript", 0, 0, 0, 44, 0, 0, 0, 0, 8, 52
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\hooks\useVideosWithPagination.ts", "TypeScript", 0, 0, 0, 35, 0, 0, 0, 0, 14, 49
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\index.tsx", "TypeScript JSX", 0, 0, 20, 0, 0, 0, 0, 0, 3, 23
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\modules.d.ts", "TypeScript", 0, 0, 0, 24, 0, 0, 0, 0, 6, 30
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\ChannelStore.ts", "TypeScript", 0, 0, 0, 12, 0, 0, 0, 0, 5, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\SearchDataStore.ts", "TypeScript", 0, 0, 0, 29, 0, 0, 0, 0, 11, 40
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\StoreWrapper.ts", "TypeScript", 0, 0, 0, 11, 0, 0, 0, 0, 3, 14
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\UserStore.ts", "TypeScript", 0, 0, 0, 21, 0, 0, 0, 0, 8, 29
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\stores\VideoStore.ts", "TypeScript", 0, 0, 0, 12, 0, 0, 0, 0, 5, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Base.scss", "SCSS", 0, 0, 0, 0, 0, 14, 0, 0, 5, 19
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Fonts.scss", "SCSS", 0, 0, 0, 0, 0, 8, 0, 0, 1, 9
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Inputs.scss", "SCSS", 0, 0, 0, 0, 0, 35, 0, 0, 20, 55
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Mixins.scss", "SCSS", 0, 0, 0, 0, 0, 17, 0, 0, 6, 23
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\Variables.scss", "SCSS", 0, 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\styles\animations.scss", "SCSS", 0, 0, 0, 0, 0, 22, 0, 0, 6, 28
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\AuthState.ts", "TypeScript", 0, 0, 0, 7, 0, 0, 0, 0, 2, 9
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\PropsBase.ts", "TypeScript", 0, 0, 0, 7, 0, 0, 0, 0, 2, 9
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\SelectOptions.ts", "TypeScript", 0, 0, 0, 20, 0, 0, 0, 0, 8, 28
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\ServerError.ts", "TypeScript", 0, 0, 0, 20, 0, 0, 0, 0, 8, 28
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\StatusBase.ts", "TypeScript", 0, 0, 0, 7, 0, 0, 0, 0, 2, 9
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\ChannelModel.ts", "TypeScript", 0, 0, 0, 11, 0, 0, 0, 0, 5, 16
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\CommentModel.ts", "TypeScript", 0, 0, 0, 13, 0, 0, 0, 0, 4, 17
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\PlaylistModel.ts", "TypeScript", 0, 0, 0, 20, 0, 0, 0, 0, 10, 30
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\ReportModel.ts", "TypeScript", 0, 0, 0, 21, 0, 0, 0, 0, 6, 27
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\UserModel.ts", "TypeScript", 0, 0, 0, 12, 0, 0, 0, 0, 4, 16
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\src\types\models\VideoModel.ts", "TypeScript", 0, 0, 0, 28, 0, 0, 0, 0, 11, 39
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\tsconfig.json", "JSON with Comments", 0, 24, 0, 0, 0, 0, 0, 0, 1, 25
+"d:\UnicLabs\BYTUBE\BYTUBE\frontend\webpack.config.js", "JavaScript", 0, 0, 0, 0, 61, 0, 0, 0, 2, 63
+"Total", "-", 6872, 24, 3361, 719, 78686, 1207, 22, 17577, 14699, 123167

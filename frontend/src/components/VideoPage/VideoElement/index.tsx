@@ -24,7 +24,16 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
       <Stack justifyContent={"space-between"}>
         <h4>{video.title}</h4>
         <Stack>
-          <div className="vpvideoelement-chname">{video.channel?.name}</div>
+          <div
+            className="vpvideoelement-chname"
+            onClick={(evt) => {
+              if (!evt.isPropagationStopped()) evt.stopPropagation();
+
+              window.location.assign(`/App/Channel?id=${video.channel?.id}`);
+            }}
+          >
+            {video.channel?.name}
+          </div>
           <div className="vpvideoelement-viewscreated">
             {video.views} просмотров <CircleIcon sx={{ fontSize: "8px" }} /> {getCreatedTimeText(video.created)}
           </div>

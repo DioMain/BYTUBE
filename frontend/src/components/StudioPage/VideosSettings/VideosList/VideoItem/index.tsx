@@ -20,8 +20,11 @@ const VideoItem: React.FC<VIProps> = ({ video, onClick }) => {
           <div className="vlist-vitem__preview-duration">{video.duration}</div>
         </Stack>
       </Stack>
-      <Stack>
-        <h2>{video.title}</h2>
+      <Stack justifyContent={"space-between"}>
+        <Stack>
+          <h2>{video.title}</h2>
+          <div>Просмотров: {video.views}</div>
+        </Stack>
 
         <Stack spacing={1}>
           <div>Создан: {getCreatedTimeText(video.created)}</div>

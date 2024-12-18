@@ -29,7 +29,7 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
     axios.get(QueriesUrls.GET_USER_PLAYLISTS).then((res: AxiosResponse) => {
       setPlaylists(res.data);
     });
-  }, []);
+  }, [user.status]);
 
   const addHandle = (playlist: number) => {
     axios
