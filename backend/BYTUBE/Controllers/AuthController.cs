@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BYTUBE.Services;
 using BYTUBE.Models;
-using System.IO;
-using Npgsql;
 using BYTUBE.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,11 +49,11 @@ namespace BYTUBE.Controllers
                     _jwtManager.JwtCookieOptions
                 );
 
-                //user.Token = token;
+                user.Token = token;
 
-                //_db.Users.Update(user);
+                _db.Users.Update(user);
 
-                //await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 return Results.Ok();
             }

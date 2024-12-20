@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace BYTUBE.Middleware
@@ -8,11 +9,13 @@ namespace BYTUBE.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly JwtManager _jwtManager;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public GetTokenMiddleware(RequestDelegate next, JwtManager jwtManager)
+        public GetTokenMiddleware(RequestDelegate next, JwtManager jwtManager, IServiceScopeFactory serviceScopeFactory)
         {
             _next = next;
             _jwtManager = jwtManager;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public Task Invoke(HttpContext httpContext)
@@ -29,6 +32,18 @@ namespace BYTUBE.Middleware
                 return _next(httpContext);
 
             var claims = refreshJwtClaims.Claims.Select(i => new { i.Type, i.Value }).ToList();
+
+            int userId = int.Parse(claims[0].Value);
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var dbContect = scope.ServiceProvider.GetRequiredService<PostgresDbContext>();
+
+                var user = dbContect.Users.First(u => u.Id == userId);
+
+                if (user.Token != refresh)
+                    return _next(httpContext);
+            }
 
             ClaimsPrincipal? accessJwtClaims = JwtManager.ValidateToken(access, JwtManager.GetParameters(_jwtManager.AccessToken));
 
