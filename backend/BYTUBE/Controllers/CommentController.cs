@@ -185,7 +185,7 @@ namespace BYTUBE.Controllers
 
                 if (comment.UserId != UserId && 
                     Role != Entity.Models.User.RoleType.Admin && 
-                    comment.Video!.Owner!.UserId == UserId)
+                    comment.Video!.Owner!.UserId != UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -217,7 +217,7 @@ namespace BYTUBE.Controllers
 
                 if (comment.UserId != UserId 
                     && Role != Entity.Models.User.RoleType.Admin &&
-                    comment.Video!.Owner!.UserId == UserId)
+                    comment.Video!.Owner!.UserId != UserId)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);
