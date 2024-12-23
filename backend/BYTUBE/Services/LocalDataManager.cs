@@ -142,6 +142,14 @@ namespace BYTUBE.Services
                 {
                     info = GetChannelData(id);
                 }
+                else
+                {
+                    File.Copy($"{ChannelsPath}/template/icon.png", $"{ChannelsPath}/{id}/icon.png");
+                    File.Copy($"{ChannelsPath}/template/banner.png", $"{ChannelsPath}/{id}/banner.png");
+
+                    info.IconExtention = "png";
+                    info.BannerExtention = "png";
+                }
 
                 if (iconFile != null)
                 {
