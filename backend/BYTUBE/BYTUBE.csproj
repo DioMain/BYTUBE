@@ -173,6 +173,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\BannerTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\IconTemplate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
