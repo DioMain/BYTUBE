@@ -8,6 +8,8 @@ namespace BYTUBE.Services
 {
     public class LocalDataManager
     {
+        #region Data classes
+
         public class UserData
         {
             public string IconExtention { get; set; } = "png";
@@ -24,6 +26,8 @@ namespace BYTUBE.Services
             public string PreviewExtention { get; set; } = "png";
             public string VideoExtention { get; set; } = "mp4";
         }
+
+        #endregion
 
         public const string VideosPath = "./Data/videos";
         public const string ChannelsPath = "./Data/channels";
@@ -43,6 +47,9 @@ namespace BYTUBE.Services
             if (!Directory.Exists(UsersPath))
                 Directory.CreateDirectory(UsersPath);
         }
+
+
+        #region Video
 
         public VideoData GetVideoData(int id)
         {
@@ -119,6 +126,10 @@ namespace BYTUBE.Services
             }
         }
 
+        #endregion
+
+        #region Channel
+
         public ChannelData GetChannelData(int id)
         {
             return JsonSerializer.Deserialize<ChannelData>(File.ReadAllText(Path.Combine(ChannelsPath, $"{id}/info.json")))!;
@@ -144,8 +155,8 @@ namespace BYTUBE.Services
                 }
                 else
                 {
-                    File.Copy($"{ChannelsPath}/template/icon.png", $"{ChannelsPath}/{id}/icon.png");
-                    File.Copy($"{ChannelsPath}/template/banner.png", $"{ChannelsPath}/{id}/banner.png");
+                    File.Copy("./Assets/IconTemplate.png", $"{ChannelsPath}/{id}/icon.png");
+                    File.Copy("./Assets/BannerTemplate.png", $"{ChannelsPath}/{id}/banner.png");
 
                     info.IconExtention = "png";
                     info.BannerExtention = "png";
@@ -185,6 +196,10 @@ namespace BYTUBE.Services
             }
         }
 
+        #endregion
+
+        #region User
+
         public UserData GetUserData(int id)
         {
             return JsonSerializer.Deserialize<UserData>(File.ReadAllText(Path.Combine(UsersPath, $"{id}/info.json")))!;
@@ -204,7 +219,7 @@ namespace BYTUBE.Services
 
                 if (iconFile == null)
                 {
-                    File.Copy($"{UsersPath}/template/icon.png", $"{UsersPath}/{id}/icon.png");
+                    File.Copy("./Assets/IconTemplate.png", $"{UsersPath}/{id}/icon.png");
 
                     SetUserData(id, new UserData()
                     {
@@ -233,5 +248,7 @@ namespace BYTUBE.Services
                 throw new ServerException("Ошибка при сохранение файлов пользователя", 500);
             }
         }
+
+        #endregion
     }
 }

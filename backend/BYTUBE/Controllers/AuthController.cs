@@ -24,7 +24,7 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IResult> signinJwt([FromBody] SigninModel model)
+        public async Task<IResult> SignIn([FromBody] SigninModel model)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("signout")]
-        public IResult logoutJwt()
+        public IResult Logout()
         {
             HttpContext.Response.Cookies.Delete("AccessToken");
             HttpContext.Response.Cookies.Delete("RefreshToken");
