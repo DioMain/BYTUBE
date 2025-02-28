@@ -27,16 +27,23 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
 
   const [updateMode, setUpdateMode] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
   const [message, setMessage] = useState(comment.message);
   const [likeIt, setLikeIt] = useState(comment.userIsLikeIt);
-  const [beLiked] = useState(comment.userIsLikeIt);
+  const [beLiked, setBeLiked] = useState(comment.userIsLikeIt);
 
   useEffect(() => {
     if (user.status === AuthState.Authed) {
-      if (user.value?.id === comment.userId || user.value?.role === Role.Admin || comment.isVideoOwner)
-        setIsOwner(true);
+      if (user.value?.id === comment.userId) setIsOwner(true);
+      if (user.value?.role === Role.Admin || comment.isVideoOwner) setCanDelete(true);
     }
   }, []);
+
+  useEffect(() => {
+    setMessage(comment.message);
+    setLikeIt(comment.userIsLikeIt);
+    setBeLiked(comment.userIsLikeIt);
+  }, [comment]);
 
   const handleChoiceEditMode = () => {
     setUpdateMode(!updateMode);
@@ -94,6 +101,11 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
               <IconButton size="small" onClick={handleChoiceEditMode}>
                 <EditIcon color={updateMode ? "primary" : "action"} />
               </IconButton>
+            </>
+          )}
+
+          {(canDelete || isOwner) && (
+            <>
               <IconButton size="small" onClick={() => onDelete(comment.id!)}>
                 <DeleteIcon color="error" />
               </IconButton>

@@ -185,24 +185,19 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPut, Authorize]
-        public async Task<IResult> Put([FromBody] CommentModel model, [FromQuery] string id)
+        public async Task<IResult> Put([FromBody] CommentModel model, [FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
                 Comment? comment = await _db.Comments
                     .Include(i => i.Video)
                         .ThenInclude(i => i.Owner)
-                    .FirstOrDefaultAsync(c => c.Id == guid)
+                    .FirstOrDefaultAsync(c => c.Id == id)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != authData.Id && 
-                    authData.Role != Entity.Models.User.RoleType.Admin && 
-                    comment.Video.Owner.UserId != authData.Id)
+                if (comment.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;

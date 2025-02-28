@@ -83,6 +83,8 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
   const handleDeleteComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
 
+    let comIndex = comments.findIndex((c) => c.id === id);
+
     axios
       .delete(QueriesUrls.COMMENT_COMMON, {
         params: {
@@ -90,7 +92,9 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         },
       })
       .then(() => {
-        refreshTrigger.trigger();
+        let d = [...comments.slice(0, comIndex), ...comments.slice(comIndex + 1)];
+        setComments(d);
+        console.log(d);
       })
       .catch((err: AxiosError) => {
         setError(err.message);
@@ -99,8 +103,6 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
   const handleLikeComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
-
-    console.log(video.id);
 
     axios
       .post(QueriesUrls.COMMENT_LIKE, null, {
