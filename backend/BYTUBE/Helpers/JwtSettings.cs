@@ -1,4 +1,4 @@
-﻿namespace BYTUBE.Models
+﻿namespace BYTUBE.Helpers
 {
     public class JwtSettings
     {

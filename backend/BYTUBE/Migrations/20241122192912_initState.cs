@@ -210,12 +210,12 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Channels_UserId",
                 table: "Channels",
-                column: "UserId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
                 table: "Comments",
-                column: "UserId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_VideoId",
@@ -235,7 +235,7 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_UserId",
                 table: "Playlists",
-                column: "UserId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reports_VideoId",
@@ -250,7 +250,7 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_UserId",
                 table: "Subscriptions",
-                column: "UserId");
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

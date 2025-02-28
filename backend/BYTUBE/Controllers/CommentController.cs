@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models;
 using BYTUBE.Models.UserModels;
 using BYTUBE.Services;
@@ -16,10 +17,6 @@ namespace BYTUBE.Controllers
         private readonly PostgresDbContext _db;
         private readonly LocalDataService _localData;
 
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
-
         public CommentController(PostgresDbContext db, LocalDataService localData)
         {
             _db = db;
@@ -31,6 +28,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
@@ -43,8 +42,8 @@ namespace BYTUBE.Controllers
 
                 bool userIsLikeIt = false;
 
-                if (IsAutorize)
-                    userIsLikeIt = comment.Likes.Contains(UserId);
+                if (authData.IsAutorize)
+                    userIsLikeIt = comment.Likes.Contains(authData.Id);
 
                 return Results.Json(new CommentModel()
                 {
@@ -75,6 +74,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(vid, out Guid vguid))
                     throw new ServerException("vId is not correct!");
 
@@ -93,10 +94,10 @@ namespace BYTUBE.Controllers
                     bool userIsLikeIt = false;
                     bool isVideoOwner = false;
 
-                    if (IsAutorize)
+                    if (authData.IsAutorize)
                     {
-                        userIsLikeIt = comment.Likes.Contains(UserId);
-                        isVideoOwner = comment.Video!.Owner!.UserId == UserId;
+                        userIsLikeIt = comment.Likes.Contains(authData.Id);
+                        isVideoOwner = comment.Video!.Owner!.UserId == authData.Id;
                     } 
 
                     return new CommentModel()
@@ -129,6 +130,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(model.VideoId, out Guid vguid))
                     throw new ServerException("Video id is not correct!");
 
@@ -136,7 +139,7 @@ namespace BYTUBE.Controllers
                 {
                     Message = model.Message,
                     VideoId = vguid,
-                    UserId = UserId,
+                    UserId = authData.Id,
                     Likes = [],
                     Created = DateTime.Now.ToUniversalTime(),
                 });
@@ -156,16 +159,18 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
                 var comment = await _db.Comments.FindAsync(guid)
                         ?? throw new ServerException("Комментарий не найден!", 404);
 
-                if (!comment.Likes.Contains(UserId))
-                    comment.Likes.Add(UserId);
+                if (!comment.Likes.Contains(authData.Id))
+                    comment.Likes.Add(authData.Id);
                 else
-                    comment.Likes.Remove(UserId);
+                    comment.Likes.Remove(authData.Id);
 
                 _db.Comments.Update(comment);
 
@@ -184,6 +189,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
@@ -193,9 +200,9 @@ namespace BYTUBE.Controllers
                     .FirstOrDefaultAsync(c => c.Id == guid)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId && 
-                    Role != Entity.Models.User.RoleType.Admin && 
-                    comment.Video.Owner.UserId != UserId)
+                if (comment.UserId != authData.Id && 
+                    authData.Role != Entity.Models.User.RoleType.Admin && 
+                    comment.Video.Owner.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -217,6 +224,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
@@ -226,9 +235,9 @@ namespace BYTUBE.Controllers
                                         .FirstOrDefaultAsync(c => c.Id == guid)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId 
-                 && Role != Entity.Models.User.RoleType.Admin 
-                 && comment.Video.Owner.UserId != UserId)
+                if (comment.UserId != authData.Id 
+                 && authData.Role != Entity.Models.User.RoleType.Admin 
+                 && comment.Video.Owner.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);

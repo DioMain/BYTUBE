@@ -1,5 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
-using BYTUBE.Models;
+using BYTUBE.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

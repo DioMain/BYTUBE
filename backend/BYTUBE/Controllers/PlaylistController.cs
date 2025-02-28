@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,6 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
 
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-
         public PlaylistController(PostgresDbContext db)
         {
             _db = db;
@@ -26,6 +24,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
@@ -37,9 +37,9 @@ namespace BYTUBE.Controllers
 
                 if (playlist.Access == Playlist.AccessType.Private)
                 {
-                    if (!IsAutorize)
+                    if (!authData.IsAutorize)
                         throw new ServerException("Плейлист не доступен!", 401);
-                    else if (UserId != playlist.UserId)
+                    else if (authData.Id != playlist.UserId)
                         throw new ServerException("Плейлист вам не принодлежит!", 403);
                 }
                     
@@ -69,9 +69,11 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 Playlist[] playlist = await _db.Playlists
                     .Include(i => i.PlaylistItems)
-                    .Where(i => i.UserId == UserId)
+                    .Where(i => i.UserId == authData.Id)
                     .ToArrayAsync();
 
                 return Results.Json(playlist.Select(playlist =>
@@ -102,11 +104,13 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 _db.Playlists.Add(new Playlist()
                 {
                     Name = model.Name,
                     Access = model.Access,
-                    UserId = UserId,
+                    UserId = authData.Id,
                 });
 
                 await _db.SaveChangesAsync();
@@ -124,6 +128,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
@@ -136,7 +142,7 @@ namespace BYTUBE.Controllers
                 if (playlist == null || video == null)
                     throw new ServerException("Видео или плейлист не найден", 404);
 
-                if (playlist.UserId != UserId)
+                if (playlist.UserId != authData.Id)
                     throw new ServerException("Плейлист вам не принадлежит", 403);
 
                 var playlistItems = await _db.PlaylistItems
@@ -170,6 +176,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
@@ -182,7 +190,7 @@ namespace BYTUBE.Controllers
                 if (playlist == null || video == null)
                     throw new ServerException("Видео или плейлист не найден", 404);
 
-                if (playlist.UserId != UserId)
+                if (playlist.UserId != authData.Id)
                     throw new ServerException("Плейлист вам не принадлежит", 403);
 
                 PlaylistItem? playlistItem = await _db.PlaylistItems
@@ -206,13 +214,15 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
                 Playlist playlist = await _db.Playlists.FindAsync(guid)
                     ?? throw new ServerException("Плейлист не найден!", 404);
 
-                if (playlist.UserId != UserId)
+                if (playlist.UserId != authData.Id)
                     throw new ServerException("Плейлист вам не пренадлежит", 403);
 
                 playlist.Name = model.Name;
@@ -235,13 +245,15 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("id is not correct!");
 
                 Playlist playlist = await _db.Playlists.FindAsync(guid)
                     ?? throw new ServerException("Плейлист не найден!", 404);
 
-                if (playlist.UserId != UserId)
+                if (playlist.UserId != authData.Id)
                     throw new ServerException("Плейлист вам не пренадлежит", 403);
 
                 _db.Playlists.Remove(playlist);

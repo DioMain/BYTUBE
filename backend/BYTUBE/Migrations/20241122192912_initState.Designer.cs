@@ -43,12 +43,12 @@ namespace BYTUBE.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Channels");
                 });
@@ -72,7 +72,7 @@ namespace BYTUBE.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.Property<int>("VideoGuid")
@@ -80,7 +80,7 @@ namespace BYTUBE.Migrations
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id");
 
                     b.HasIndex("VideoGuid");
 
@@ -102,12 +102,12 @@ namespace BYTUBE.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Playlists");
                 });
@@ -176,14 +176,14 @@ namespace BYTUBE.Migrations
                     b.Property<int>("ChannelId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.HasKey("Guid");
 
                     b.HasIndex("ChannelId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Id");
 
                     b.ToTable("Subscriptions");
                 });
@@ -283,7 +283,7 @@ namespace BYTUBE.Migrations
                 {
                     b.HasOne("BYTUBE.Entity.Models.User", "Owner")
                         .WithMany("Channels")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -294,7 +294,7 @@ namespace BYTUBE.Migrations
                 {
                     b.HasOne("BYTUBE.Entity.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -313,7 +313,7 @@ namespace BYTUBE.Migrations
                 {
                     b.HasOne("BYTUBE.Entity.Models.User", "User")
                         .WithMany("Playlists")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -360,7 +360,7 @@ namespace BYTUBE.Migrations
 
                     b.HasOne("BYTUBE.Entity.Models.User", "User")
                         .WithMany("Subscribes")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

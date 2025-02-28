@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +16,6 @@ namespace BYTUBE.Controllers
         private readonly PostgresDbContext _db;
         private readonly LocalDataService _localDataManager;
 
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-
         public ChannelController(PostgresDbContext db, LocalDataService localDataManager)
         {
             _db = db;
@@ -29,6 +27,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid cGuid))
                     throw new ServerException("Channel id is not correct!");
 
@@ -41,8 +41,8 @@ namespace BYTUBE.Controllers
 
                 bool isSubscribed = false;
 
-                if (IsAutorize)
-                    isSubscribed = channel.Subscribes.Any(i => i.UserId == UserId);
+                if (authData.IsAutorize)
+                    isSubscribed = channel.Subscribes.Any(i => i.UserId == authData.Id);
 
                 return Results.Json(new ChannelFullModel()
                 {
@@ -66,11 +66,13 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
                 Channel? channel = await _db.Channels.Include(i => i.Subscribes)
-                                         .FirstOrDefaultAsync(i => i.Id == guid && i.UserId == UserId);
+                                         .FirstOrDefaultAsync(i => i.Id == guid && i.UserId == authData.Id);
 
                 if (channel == null)
                     throw new ServerException("Не найден подходящий канал", 401);
@@ -98,12 +100,14 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 Channel cur = (await _db.Channels.AddAsync(new Channel()
                 {
                     Name = model.Name,
                     Description = model.Description,
                     Created = DateTime.Now.ToUniversalTime(),
-                    UserId = UserId,
+                    UserId = authData.Id,
                 })).Entity;
 
                 await _db.SaveChangesAsync();
@@ -123,6 +127,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
@@ -131,7 +137,7 @@ namespace BYTUBE.Controllers
                 if (channel == null)
                     throw new ServerException("Канал не найден!", 404);
 
-                if (channel.UserId != UserId)
+                if (channel.UserId != authData.Id)
                     throw new ServerException("Канал вам не пренадлежит!", 403);
 
                 channel.Name = model.Name;
@@ -161,6 +167,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
@@ -169,7 +177,7 @@ namespace BYTUBE.Controllers
                 if (channel == null)
                     throw new ServerException("Канал не найден!", 404);
 
-                if (channel.UserId != UserId)
+                if (channel.UserId != authData.Id)
                     throw new ServerException("Канал вам не пренадлежит!", 403);
 
                 foreach (var video in _db.Videos.Where(i => i.OwnerId == channel.Id))
@@ -203,9 +211,11 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 Channel[] channels = await _db.Channels
                     .Include(i => i.Subscribes)
-                    .Where(i => i.Subscribes.Any(subs => subs.UserId == UserId))
+                    .Where(i => i.Subscribes.Any(subs => subs.UserId == authData.Id))
                     .ToArrayAsync();
 
                 return Results.Json(channels.Select(channel =>
@@ -233,6 +243,8 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
@@ -241,12 +253,12 @@ namespace BYTUBE.Controllers
                 if (channel == null)
                     throw new ServerException("Канал не найден", 404);
 
-                if (await _db.Subscriptions.AnyAsync(i => i.UserId == UserId && i.ChannelId == guid))
+                if (await _db.Subscriptions.AnyAsync(i => i.UserId == authData.Id && i.ChannelId == guid))
                     throw new ServerException("Уже подписан");
 
                 await _db.Subscriptions.AddAsync(new Subscribe()
                 {
-                    UserId = UserId,
+                    UserId = authData.Id,
                     ChannelId = channel.Id,
                 });
 
@@ -265,16 +277,16 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
-
-                if (channel == null)
-                    throw new ServerException("Канал не найден", 404);
+                Channel? channel = await _db.Channels.FindAsync(guid)
+                    ?? throw new ServerException("Канал не найден", 404);
 
                 Subscribe? subscribe = await _db.Subscriptions
-                    .FirstOrDefaultAsync(i => i.UserId == UserId && i.ChannelId == guid);
+                    .FirstOrDefaultAsync(i => i.UserId == authData.Id && i.ChannelId == guid);
 
                 if (subscribe == null)
                     throw new ServerException("Не подписан");

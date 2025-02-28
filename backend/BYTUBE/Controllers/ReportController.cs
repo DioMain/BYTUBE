@@ -13,10 +13,6 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
 
-        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-
         public ReportController(PostgresDbContext db)
         {
             _db = db;

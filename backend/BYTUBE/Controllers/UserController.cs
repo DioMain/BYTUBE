@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.UserModels;
@@ -17,8 +18,6 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
         private readonly LocalDataService _localDataManager;
-
-        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
 
         public UserController(PostgresDbContext db, LocalDataService localDataManager)
         {
@@ -51,7 +50,9 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                var user = await _db.Users.FindAsync(UserId)
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                var user = await _db.Users.FindAsync(authData.Id)
                     ?? throw new ServerException("Пользователь не найден");
 
                 var iconExt = _localDataManager.GetUserData(user.Id).IconExtention;
@@ -60,7 +61,7 @@ namespace BYTUBE.Controllers
                 {
                     Email = user.Email,
                     Name = user.Name,
-                    Id = UserId.ToString(),
+                    Id = authData.Id.ToString(),
                     Role = user.Role,
                     IconUrl = $"/data/users/{user.Id}/icon.{iconExt}",
                 });
@@ -76,7 +77,9 @@ namespace BYTUBE.Controllers
         {
             try
             {
-                Channel[] channels = [.. await _db.Channels.Where(i => i.UserId == UserId).ToArrayAsync()];
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                Channel[] channels = [.. await _db.Channels.Where(i => i.UserId == authData.Id).ToArrayAsync()];
 
                 return Results.Json(channels.Select(item =>
                 {
