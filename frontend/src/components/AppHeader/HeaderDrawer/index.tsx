@@ -52,7 +52,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
       });
     };
 
-    const handleClickChannel = (channelId: number) => {
+    const handleClickChannel = (channelId: string) => {
       window.location.assign(`/Studio?channelid=${channelId}`);
     };
 

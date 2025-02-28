@@ -1,8 +1,8 @@
 import VideoModel from "./VideoModel";
 
 interface PlaylistItemModel {
-  playlistId: number;
-  videoId: number;
+  playlistId: string;
+  videoId: string;
   order: number;
 }
 
@@ -12,12 +12,12 @@ enum PlaylistAccess {
 }
 
 interface PlaylistModel {
-  id: number;
+  id: string;
   name: string;
 
   access: PlaylistAccess;
 
-  userId: number;
+  userId: string;
 
   playlistItems: PlaylistItemModel[];
 

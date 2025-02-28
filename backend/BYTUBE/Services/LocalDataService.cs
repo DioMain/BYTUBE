@@ -6,7 +6,7 @@ using Xabe.FFmpeg;
 
 namespace BYTUBE.Services
 {
-    public class LocalDataManager
+    public class LocalDataService
     {
         #region Data classes
 
@@ -33,7 +33,7 @@ namespace BYTUBE.Services
         public const string ChannelsPath = "./Data/channels";
         public const string UsersPath = "./Data/users";
 
-        public LocalDataManager()
+        public LocalDataService()
         {
             if (!Directory.Exists("./Data"))
                 Directory.CreateDirectory("./Data");
@@ -48,20 +48,19 @@ namespace BYTUBE.Services
                 Directory.CreateDirectory(UsersPath);
         }
 
-
         #region Video
 
-        public VideoData GetVideoData(int id)
+        public VideoData GetVideoData(Guid id)
         {
             return JsonSerializer.Deserialize<VideoData>(File.ReadAllText(Path.Combine(VideosPath, $"{id}/info.json")))!;
         }
-        public void SetVideoData(int id, VideoData data)
+        public void SetVideoData(Guid id, VideoData data)
         {
             File.WriteAllText(Path.Combine(VideosPath, $"{id}/info.json"), JsonSerializer.Serialize(data));
         }
 
         /// <exception cref="ServerException"></exception>
-        public async Task SaveVideoFiles(int id, IFormFile previewFile, IFormFile videoFile)
+        public async Task SaveVideoFiles(Guid id, IFormFile previewFile, IFormFile videoFile)
         {
             try
             {
@@ -97,7 +96,7 @@ namespace BYTUBE.Services
         }
 
         /// <exception cref="ServerException"></exception>
-        public async Task SaveVideoFiles(int id, IFormFile previewFile)
+        public async Task SaveVideoFiles(Guid id, IFormFile previewFile)
         {
             try
             {
@@ -130,17 +129,17 @@ namespace BYTUBE.Services
 
         #region Channel
 
-        public ChannelData GetChannelData(int id)
+        public ChannelData GetChannelData(Guid id)
         {
             return JsonSerializer.Deserialize<ChannelData>(File.ReadAllText(Path.Combine(ChannelsPath, $"{id}/info.json")))!;
         }
-        public void SetChannelData(int id, ChannelData data)
+        public void SetChannelData(Guid id, ChannelData data)
         {
             File.WriteAllText(Path.Combine(ChannelsPath, $"{id}/info.json"), JsonSerializer.Serialize(data));
         }
 
         /// <exception cref="ServerException"></exception>
-        public async Task SaveChannelFiles(int id, IFormFile? iconFile, IFormFile? bannerFile, bool alreadyExists = false)
+        public async Task SaveChannelFiles(Guid id, IFormFile? iconFile, IFormFile? bannerFile, bool alreadyExists = false)
         {
             try
             {
@@ -200,17 +199,17 @@ namespace BYTUBE.Services
 
         #region User
 
-        public UserData GetUserData(int id)
+        public UserData GetUserData(Guid id)
         {
             return JsonSerializer.Deserialize<UserData>(File.ReadAllText(Path.Combine(UsersPath, $"{id}/info.json")))!;
         }
-        public void SetUserData(int id, UserData data)
+        public void SetUserData(Guid id, UserData data)
         {
             File.WriteAllText(Path.Combine(UsersPath, $"{id}/info.json"), JsonSerializer.Serialize(data));
         }
 
         /// <exception cref="ServerException"></exception>
-        public async Task SaveUserFiles(int id, IFormFile? iconFile)
+        public async Task SaveUserFiles(Guid id, IFormFile? iconFile)
         {
             try
             {

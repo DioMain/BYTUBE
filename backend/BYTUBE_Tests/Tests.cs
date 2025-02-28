@@ -8,7 +8,7 @@ namespace BYTUBE_Tests
     public class Tests
     {
 
-        private readonly JwtManager jwtManager = new JwtManager(new JwtSettings()
+        private readonly JwtService jwtManager = new JwtService(new JwtSettings()
         {
             Audience = "http://localhost:8081/api",
             Issuer = "http://localhost:8081",
@@ -26,7 +26,7 @@ namespace BYTUBE_Tests
         [Fact]
         public void PasswordHasherTest0()
         {
-            PasswordHasher hasher = new PasswordHasher("salt");
+            PasswordHasherService hasher = new PasswordHasherService("salt");
 
             string passwordHashed = hasher.Hash("pravoda01");
 
@@ -36,7 +36,7 @@ namespace BYTUBE_Tests
         [Fact]
         public void PasswordHasherTest1()
         {
-            PasswordHasher hasher = new PasswordHasher("salt");
+            PasswordHasherService hasher = new PasswordHasherService("salt");
 
             string passwordHashed = hasher.Hash("pravoda01");
 
@@ -46,14 +46,14 @@ namespace BYTUBE_Tests
         [Fact]
         public void JwtManagerTest0()
         {
-            string token = JwtManager.GenerateJwtToken(jwtManager.AccessToken, new User()
+            string token = JwtService.GenerateJwtToken(jwtManager.AccessToken, new User()
             {
                 Id = 12,
                 Name = "Test",
                 Role = User.RoleType.User
             });
 
-            ClaimsPrincipal claims = JwtManager.ValidateToken(token, JwtManager.GetParameters(jwtManager.AccessToken));
+            ClaimsPrincipal claims = JwtService.ValidateToken(token, JwtService.GetParameters(jwtManager.AccessToken));
 
             Assert.Equal("12", claims.Claims.First().Value);
         }
@@ -61,14 +61,14 @@ namespace BYTUBE_Tests
         [Fact]
         public void JwtManagerTest1()
         {
-            string token = JwtManager.GenerateJwtToken(jwtManager.RefreshToken, new User()
+            string token = JwtService.GenerateJwtToken(jwtManager.RefreshToken, new User()
             {
                 Id = 13,
                 Name = "Testsad",
                 Role = User.RoleType.User
             });
 
-            ClaimsPrincipal claims = JwtManager.ValidateToken(token, JwtManager.GetParameters(jwtManager.RefreshToken));
+            ClaimsPrincipal claims = JwtService.ValidateToken(token, JwtService.GetParameters(jwtManager.RefreshToken));
 
             Assert.Equal("13", claims.Claims.First().Value);
         }

@@ -60,7 +60,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
       });
   };
 
-  const handleUpdateComment = (text: string, id: number) => {
+  const handleUpdateComment = (text: string, id: string) => {
     if (user.status !== AuthState.Authed) return;
 
     axios
@@ -80,7 +80,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
       });
   };
 
-  const handleDeleteComment = (id: number) => {
+  const handleDeleteComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
 
     axios
@@ -97,7 +97,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
       });
   };
 
-  const handleLikeComment = (id: number) => {
+  const handleLikeComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
 
     console.log(video.id);

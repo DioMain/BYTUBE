@@ -13,7 +13,7 @@ enum Status {
 }
 
 interface VideoModel {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   created: string;

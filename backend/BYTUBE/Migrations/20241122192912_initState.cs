@@ -49,7 +49,7 @@ namespace BYTUBE.Migrations
                         name: "FK_Channels_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -70,7 +70,7 @@ namespace BYTUBE.Migrations
                         name: "FK_Playlists_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -90,13 +90,13 @@ namespace BYTUBE.Migrations
                         name: "FK_Subscriptions_Channels_ChannelId",
                         column: x => x.ChannelId,
                         principalTable: "Channels",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Subscriptions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -125,7 +125,7 @@ namespace BYTUBE.Migrations
                         name: "FK_Videos_Channels_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Channels",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -148,13 +148,13 @@ namespace BYTUBE.Migrations
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_Videos_VideoId",
                         column: x => x.VideoId,
                         principalTable: "Videos",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -175,13 +175,13 @@ namespace BYTUBE.Migrations
                         name: "FK_PlaylistItems_Playlists_PlaylistId",
                         column: x => x.PlaylistId,
                         principalTable: "Playlists",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PlaylistItems_Videos_VideoId",
                         column: x => x.VideoId,
                         principalTable: "Videos",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -203,7 +203,7 @@ namespace BYTUBE.Migrations
                         name: "FK_Reports_Videos_VideoId",
                         column: x => x.VideoId,
                         principalTable: "Videos",
-                        principalColumn: "Id",
+                        principalColumn: "Guid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -220,7 +220,7 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_VideoId",
                 table: "Comments",
-                column: "VideoId");
+                column: "VideoGuid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlaylistItems_PlaylistId",
@@ -230,7 +230,7 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PlaylistItems_VideoId",
                 table: "PlaylistItems",
-                column: "VideoId");
+                column: "VideoGuid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Playlists_UserId",
@@ -240,7 +240,7 @@ namespace BYTUBE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reports_VideoId",
                 table: "Reports",
-                column: "VideoId");
+                column: "VideoGuid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_ChannelId",

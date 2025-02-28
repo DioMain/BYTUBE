@@ -13,30 +13,31 @@ namespace BYTUBE.Controllers
     public class ChannelController : ControllerBase
     {
         private readonly PostgresDbContext _db;
-        private readonly LocalDataManager _localDataManager;
+        private readonly LocalDataService _localDataManager;
 
         private bool IsAutorize => HttpContext.User.Claims.Any();
-        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
 
-        public ChannelController(PostgresDbContext db, LocalDataManager localDataManager)
+        public ChannelController(PostgresDbContext db, LocalDataService localDataManager)
         {
             _db = db;
             _localDataManager = localDataManager;
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] int id)
+        public async Task<IResult> Get([FromQuery] string id)
         {
             try
             {
+                if (!Guid.TryParse(id, out Guid cGuid))
+                    throw new ServerException("Channel id is not correct!");
+
                 Channel? channel = await _db.Channels
                     .Include(i => i.Subscribes)
-                    .FirstOrDefaultAsync(i => i.Id == id);
+                    .FirstOrDefaultAsync(i => i.Id == cGuid) 
+                    ?? throw new ServerException("Не найден подходящий канал", 404);
 
-                if (channel == null)
-                    throw new ServerException("Не найден подходящий канал", 404);
-
-                var localData = _localDataManager.GetChannelData(id);
+                var localData = _localDataManager.GetChannelData(cGuid);
 
                 bool isSubscribed = false;
 
@@ -45,7 +46,7 @@ namespace BYTUBE.Controllers
 
                 return Results.Json(new ChannelFullModel()
                 {
-                    Id = id,
+                    Id = cGuid.ToString(),
                     Name = channel.Name,
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
@@ -61,17 +62,20 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("check"), Authorize]
-        public async Task<IResult> CheckChannel([FromQuery] int id)
+        public async Task<IResult> CheckChannel([FromQuery] string id)
         {
             try
             {
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
                 Channel? channel = await _db.Channels.Include(i => i.Subscribes)
-                                         .FirstOrDefaultAsync(i => i.Id == id && i.UserId == UserId);
+                                         .FirstOrDefaultAsync(i => i.Id == guid && i.UserId == UserId);
 
                 if (channel == null)
                     throw new ServerException("Не найден подходящий канал", 401);
 
-                var localData = _localDataManager.GetChannelData(id);
+                var localData = _localDataManager.GetChannelData(guid);
 
                 return Results.Json(new ChannelFullModel()
                 {
@@ -115,11 +119,14 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPut, Authorize]
-        public async Task<IResult> Put([FromForm] EditChannelModel model, [FromQuery] int id)
+        public async Task<IResult> Put([FromForm] EditChannelModel model, [FromQuery] string id)
         {
             try
             {
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
 
                 if (channel == null)
                     throw new ServerException("Канал не найден!", 404);
@@ -134,7 +141,7 @@ namespace BYTUBE.Controllers
 
                 await _db.SaveChangesAsync();
 
-                await _localDataManager.SaveChannelFiles(id, model.IconFile, model.BannerFile, true);
+                await _localDataManager.SaveChannelFiles(guid, model.IconFile, model.BannerFile, true);
 
                 return Results.Ok();
             }
@@ -150,11 +157,14 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] int id)
+        public async Task<IResult> Delete([FromQuery] string id)
         {
             try
             {
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
 
                 if (channel == null)
                     throw new ServerException("Канал не найден!", 404);
@@ -164,12 +174,12 @@ namespace BYTUBE.Controllers
 
                 foreach (var video in _db.Videos.Where(i => i.OwnerId == channel.Id))
                 {
-                    Directory.Delete($"{LocalDataManager.VideosPath}/{video.Id}", true);
+                    Directory.Delete($"{LocalDataService.VideosPath}/{video.Id}", true);
 
                     _db.Videos.Remove(video);
                 }
 
-                Directory.Delete($"{LocalDataManager.ChannelsPath}/{id}", true);
+                Directory.Delete($"{LocalDataService.ChannelsPath}/{guid}", true);
 
                 _db.Channels.Remove(channel);
 
@@ -204,7 +214,7 @@ namespace BYTUBE.Controllers
 
                     return new ChannelModel()
                     {
-                        Id = channel.Id,
+                        Id = channel.Id.ToString(),
                         Name = channel.Name,
                         Subscribes = channel.Subscribes.Count,
                         IsSubscripted = true,
@@ -219,16 +229,19 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("subscribe"), Authorize]
-        public async Task<IResult> Subscribe([FromQuery] int id)
+        public async Task<IResult> Subscribe([FromQuery] string id)
         {
             try
             {
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
 
                 if (channel == null)
                     throw new ServerException("Канал не найден", 404);
 
-                if (await _db.Subscriptions.AnyAsync(i => i.UserId == UserId && i.ChannelId == id))
+                if (await _db.Subscriptions.AnyAsync(i => i.UserId == UserId && i.ChannelId == guid))
                     throw new ServerException("Уже подписан");
 
                 await _db.Subscriptions.AddAsync(new Subscribe()
@@ -248,17 +261,20 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete("subscribe"), Authorize]
-        public async Task<IResult> Unsubscribe([FromQuery] int id)
+        public async Task<IResult> Unsubscribe([FromQuery] string id)
         {
             try
             {
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
+                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
 
                 if (channel == null)
                     throw new ServerException("Канал не найден", 404);
 
                 Subscribe? subscribe = await _db.Subscriptions
-                    .FirstOrDefaultAsync(i => i.UserId == UserId && i.ChannelId == id);
+                    .FirstOrDefaultAsync(i => i.UserId == UserId && i.ChannelId == guid);
 
                 if (subscribe == null)
                     throw new ServerException("Не подписан");

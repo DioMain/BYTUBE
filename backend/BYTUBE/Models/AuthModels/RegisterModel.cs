@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BYTUBE.Models
+namespace BYTUBE.Models.AuthModels
 {
     public class RegisterModel
     {

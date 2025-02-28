@@ -1,5 +1,5 @@
 interface ChannelModel {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   created?: string;

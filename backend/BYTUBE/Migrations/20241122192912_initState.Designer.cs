@@ -27,11 +27,11 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Channel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -46,7 +46,7 @@ namespace BYTUBE.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("UserId");
 
@@ -55,11 +55,11 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -75,25 +75,25 @@ namespace BYTUBE.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("VideoId")
+                    b.Property<int>("VideoGuid")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("VideoId");
+                    b.HasIndex("VideoGuid");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Playlist", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<int>("Access")
                         .HasColumnType("int");
@@ -105,7 +105,7 @@ namespace BYTUBE.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("UserId");
 
@@ -114,11 +114,11 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.PlaylistItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
@@ -126,25 +126,25 @@ namespace BYTUBE.Migrations
                     b.Property<int>("PlaylistId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("VideoId")
+                    b.Property<int>("VideoGuid")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("PlaylistId");
 
-                    b.HasIndex("VideoId");
+                    b.HasIndex("VideoGuid");
 
                     b.ToTable("PlaylistItems");
                 });
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Report", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -155,23 +155,23 @@ namespace BYTUBE.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<int>("VideoId")
+                    b.Property<int>("VideoGuid")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
-                    b.HasIndex("VideoId");
+                    b.HasIndex("VideoGuid");
 
                     b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Subscribe", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<int>("ChannelId")
                         .HasColumnType("integer");
@@ -179,7 +179,7 @@ namespace BYTUBE.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("ChannelId");
 
@@ -190,11 +190,11 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -218,7 +218,7 @@ namespace BYTUBE.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -228,11 +228,11 @@ namespace BYTUBE.Migrations
 
             modelBuilder.Entity("BYTUBE.Entity.Models.Video", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Guid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Guid"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -272,7 +272,7 @@ namespace BYTUBE.Migrations
                     b.Property<int>("Views")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Guid");
 
                     b.HasIndex("OwnerId");
 
@@ -300,7 +300,7 @@ namespace BYTUBE.Migrations
 
                     b.HasOne("BYTUBE.Entity.Models.Video", "Video")
                         .WithMany("Comments")
-                        .HasForeignKey("VideoId")
+                        .HasForeignKey("VideoGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -330,7 +330,7 @@ namespace BYTUBE.Migrations
 
                     b.HasOne("BYTUBE.Entity.Models.Video", "Video")
                         .WithMany("PlaylistItems")
-                        .HasForeignKey("VideoId")
+                        .HasForeignKey("VideoGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -343,7 +343,7 @@ namespace BYTUBE.Migrations
                 {
                     b.HasOne("BYTUBE.Entity.Models.Video", "Video")
                         .WithMany("Reports")
-                        .HasForeignKey("VideoId")
+                        .HasForeignKey("VideoGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

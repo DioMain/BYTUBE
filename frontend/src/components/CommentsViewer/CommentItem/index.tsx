@@ -11,12 +11,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SettingsIcon from "@mui/icons-material/Settings";
 import VideoModel from "@type/models/VideoModel";
+import UnknownUserImage from "@assets/images/UnknownUser.jpg";
 
 interface CommentItemProps {
   comment: CommentModel;
-  onUpdate: (text: string, id: number) => void;
-  onDelete: (id: number) => void;
-  onLike: (id: number) => void;
+  onUpdate: (text: string, id: string) => void;
+  onDelete: (id: string) => void;
+  onLike: (id: string) => void;
 }
 
 const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, onUpdate }) => {

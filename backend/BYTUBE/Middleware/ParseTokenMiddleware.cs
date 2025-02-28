@@ -5,16 +5,16 @@ using System.Security.Claims;
 
 namespace BYTUBE.Middleware
 {
-    public class GetTokenMiddleware
+    public class ParseTokenMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly JwtManager _jwtManager;
+        private readonly JwtService _jwtService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public GetTokenMiddleware(RequestDelegate next, JwtManager jwtManager, IServiceScopeFactory serviceScopeFactory)
+        public ParseTokenMiddleware(RequestDelegate next, JwtService jwtManager, IServiceScopeFactory serviceScopeFactory)
         {
             _next = next;
-            _jwtManager = jwtManager;
+            _jwtService = jwtManager;
             _serviceScopeFactory = serviceScopeFactory;
         }
 
@@ -26,32 +26,36 @@ namespace BYTUBE.Middleware
             if (refresh == null || string.IsNullOrEmpty(refresh))
                 return _next(httpContext);
 
-            ClaimsPrincipal? refreshJwtClaims = JwtManager.ValidateToken(refresh, JwtManager.GetParameters(_jwtManager.RefreshToken));
+            ClaimsPrincipal? refreshJwtClaims = JwtService.ValidateToken(refresh, JwtService.GetParameters(_jwtService.RefreshToken));
 
             if (refreshJwtClaims == null)
                 return _next(httpContext);
 
             var claims = refreshJwtClaims.Claims.Select(i => new { i.Type, i.Value }).ToList();
 
-            int userId = int.Parse(claims[0].Value);
+            if (!Guid.TryParse(claims[0].Value, out Guid userId))
+                return _next(httpContext);
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var dbContect = scope.ServiceProvider.GetRequiredService<PostgresDbContext>();
 
-                var user = dbContect.Users.First(u => u.Id == userId);
+                var user = dbContect.Users.Find(userId);
+
+                if (user == null)
+                    return _next(httpContext);
 
                 if (user.Token != refresh)
                     return _next(httpContext);
             }
 
-            ClaimsPrincipal? accessJwtClaims = JwtManager.ValidateToken(access, JwtManager.GetParameters(_jwtManager.AccessToken));
+            ClaimsPrincipal? accessJwtClaims = JwtService.ValidateToken(access, JwtService.GetParameters(_jwtService.AccessToken));
 
             if (access == null || string.IsNullOrEmpty(access) || accessJwtClaims == null)
             {
-                access = JwtManager.GenerateJwtToken(_jwtManager.AccessToken, new User()
+                access = JwtService.GenerateJwtToken(_jwtService.AccessToken, new()
                 {
-                    Id = int.Parse(claims[0].Value),
+                    Id = userId,
                     Role = Enum.Parse<User.RoleType>(claims[1].Value)
                 });
 
@@ -64,11 +68,11 @@ namespace BYTUBE.Middleware
         }
     }
 
-    public static class GetTokenExtensions
+    public static class ParseTokenExtensions
     {
-        public static IApplicationBuilder UseGetToken(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseParseToken(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<GetTokenMiddleware>();
+            return builder.UseMiddleware<ParseTokenMiddleware>();
         }
     }
 }

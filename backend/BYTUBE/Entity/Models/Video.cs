@@ -5,6 +5,7 @@ namespace BYTUBE.Entity.Models
 {
     public class Video
     {
+        #region Enums
         public enum Access
         {
             All, LinkOnly, Private
@@ -14,14 +15,14 @@ namespace BYTUBE.Entity.Models
         {
             NoLimit, Limited, Blocked
         }
+        #endregion
 
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Required]
-        public string Title { get; set; } = string.Empty;
+        public required string Title { get; set; }
 
-        public string? Description { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         public int Views { get; set; } = 0;
 
@@ -32,20 +33,18 @@ namespace BYTUBE.Entity.Models
         public List<string> Tags { get; set; } = [];
 
         [Column(TypeName = "jsonb")]
-        public List<int> Likes { get; set; } = [];
+        public List<Guid> Likes { get; set; } = [];
 
         [Column(TypeName = "jsonb")]
-        public List<int> Dislikes { get; set; } = [];
+        public List<Guid> Dislikes { get; set; } = [];
 
-        public DateTime Created {  get; set; } = DateTime.Now.ToUniversalTime();
+        public required DateTime Created {  get; set; }
 
-        [Column(TypeName = "int")]
-        public Access VideoAccess { get; set; } = Access.All;
-        [Column(TypeName = "int")]
-        public Status VideoStatus { get; set; } = Status.NoLimit;
+        public required Access VideoAccess { get; set; } = Access.All;
+        public required Status VideoStatus { get; set; } = Status.NoLimit;
 
         [Required]
-        public int OwnerId { get; set; }
+        public required Guid OwnerId { get; set; }
 
         [ForeignKey(nameof(OwnerId))]
         public Channel? Owner { get; set; }

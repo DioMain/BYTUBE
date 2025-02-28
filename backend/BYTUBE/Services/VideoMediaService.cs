@@ -6,6 +6,14 @@ namespace BYTUBE.Services
 {
     public class VideoMediaService
     {
+        #region Resolution struct
+        public struct Resolution
+        {
+            public int Width;
+            public int Height;
+        }
+        #endregion
+
         private readonly string ffmpegPath;
 
         public VideoMediaService(string ffmpegPath)
@@ -20,9 +28,9 @@ namespace BYTUBE.Services
             return await FFmpeg.GetMediaInfo(videoPath);
         }
 
-        public async Task CompressVideo(string inputPath, string outputPath, string resolution)
+        public async Task CompressVideo(string inputPath, string outputPath, Resolution resolution)
         {
-            var args = $"-i \"{inputPath}\" -vf scale={resolution} -c:v libx264 -crf 28 -preset fast -c:a aac \"{outputPath}\"";
+            var args = $"-i \"{inputPath}\" -vf scale={resolution.Width}:{resolution.Height} -c:v libx264 -crf 28 -preset fast -c:a aac \"{outputPath}\"";
 
             var process = new Process
             {

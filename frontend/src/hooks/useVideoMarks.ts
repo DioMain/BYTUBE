@@ -11,7 +11,7 @@ interface VideoMarkModel {
   userIsDislikeIt: boolean;
 }
 
-function useVideoMarks(id: number) {
+function useVideoMarks(id: string) {
   const [data, setData] = useState<VideoMarkModel | undefined>(undefined);
   const [state, setState] = useState(StatusBase.Loading);
   const [error, setError] = useState("");

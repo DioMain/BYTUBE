@@ -4,7 +4,7 @@ import VideoElement from "../VideoElement";
 import { useRef } from "react";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 
-const OtherVideos: React.FC<{ videoId: number }> = ({ videoId }) => {
+const OtherVideos: React.FC<{ videoId: string }> = ({ videoId }) => {
   const observeElement = useRef<HTMLDivElement>(null);
 
   const { data, ended, status } = useVideosWithPagination(observeElement, {

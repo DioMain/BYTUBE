@@ -7,14 +7,22 @@ using System.Text;
 
 namespace BYTUBE.Services
 {
-    public class JwtManager
+    public class JwtService
     {
+        #region UserData struct
+        public struct UserData
+        {
+            public Guid Id;
+            public User.RoleType Role;
+        }
+        #endregion
+
         public JwtSettings AccessToken { get; private set; }
         public JwtSettings RefreshToken { get; private set; }
 
         public CookieOptions JwtCookieOptions { get; private set; }
 
-        public JwtManager(JwtSettings accessToken, JwtSettings refreshToken)
+        public JwtService(JwtSettings accessToken, JwtSettings refreshToken)
         {
             RefreshToken = refreshToken;
             AccessToken = accessToken;
@@ -27,14 +35,14 @@ namespace BYTUBE.Services
             };
         }
 
-        public static string GenerateJwtToken(JwtSettings settings, User user)
+        public static string GenerateJwtToken(JwtSettings settings, UserData user)
         {
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SecretKey));
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Typ, user.Role.ToString()),
+                new Claim(ClaimTypes.UserData, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -83,6 +91,24 @@ namespace BYTUBE.Services
             catch
             {
                 return null;
+            }
+        }
+
+        public static bool TryValidateToken(string token, TokenValidationParameters parameters, out ClaimsPrincipal claims)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            try
+            {
+                claims = tokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
+
+                return true;
+            }
+            catch
+            {
+                claims = new ClaimsPrincipal();
+
+                return false;
             }
         }
     }

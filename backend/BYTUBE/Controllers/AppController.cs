@@ -15,6 +15,12 @@ namespace BYTUBE.Controllers
             return Results.Text(System.IO.File.ReadAllText("./Public/index.html"), contentType: "text/html");
         }
 
+        [HttpGet, Route("/")]
+        public IResult GetPageRed0()
+        {
+            return Results.Redirect("/App/Main");
+        }
+
         [HttpGet, Route("/App/Main")]
         public IResult GetPage0()
         {

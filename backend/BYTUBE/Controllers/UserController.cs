@@ -1,4 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
+using BYTUBE.Exceptions;
 using BYTUBE.Models;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.UserModels;
@@ -15,59 +16,58 @@ namespace BYTUBE.Controllers
     public class UserController : ControllerBase
     {
         private readonly PostgresDbContext _db;
-        private readonly LocalDataManager _localDataManager;
+        private readonly LocalDataService _localDataManager;
 
-        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
+        private Guid UserId => Guid.Parse(HttpContext.User.Claims.ToArray()[0].Value);
 
-        public UserController(PostgresDbContext db, LocalDataManager localDataManager)
+        public UserController(PostgresDbContext db, LocalDataService localDataManager)
         {
             _db = db;
             _localDataManager = localDataManager;
         }   
 
         [HttpGet("geticon")]
-        public IResult GetUserIcon([FromQuery] string email)
+        public async Task<IResult> GetUserIcon([FromQuery] string email)
         {
-            string imgUrl = "";
-
             try
             {
-                var usr = _db.Users.First(i => i.Email == email);
-                var ext = _localDataManager.GetUserData(usr.Id).IconExtention;
+                var user = await _db.Users.FirstOrDefaultAsync(i => i.Email == email)
+                    ?? throw new ServerException("Пользователь не найден");
 
-                imgUrl = $"/data/users/{usr.Id}/icon.{ext}";
+                var userLocalData = _localDataManager.GetUserData(user.Id);
+
+                string imgUrl = $"/data/users/{user.Id}/icon.{userLocalData.IconExtention}";
+
+                return Results.Json(imgUrl);
             }
-            catch
+            catch (ServerException err)
             {
-                var srvError = new ServerErrorModel(404, "User not found!");
-                srvError.errors.Add("User", ["Пользователь с такой почтой не найден"]);
-
-                return Results.Json(srvError, statusCode: 404);
+                return Results.Json(err.GetModel(), statusCode: err.Code);
             }
-
-            return Results.Json(imgUrl);
         }
 
         [HttpGet("auth"), Authorize]
-        public IResult Auth()
+        public async Task<IResult> Auth()
         {
             try
             {
-                var user = _db.Users.First(i => i.Id == UserId);
+                var user = await _db.Users.FindAsync(UserId)
+                    ?? throw new ServerException("Пользователь не найден");
+
                 var iconExt = _localDataManager.GetUserData(user.Id).IconExtention;
 
                 return Results.Json(new UserPrivateModel()
                 {
                     Email = user.Email,
                     Name = user.Name,
-                    Id = UserId,
+                    Id = UserId.ToString(),
                     Role = user.Role,
                     IconUrl = $"/data/users/{user.Id}/icon.{iconExt}",
                 });
             }
-            catch (Exception err)
+            catch (ServerException err)
             {
-                return Results.Problem(err.Message);
+                return Results.Json(err.GetModel(), statusCode: err.Code);
             }
         }
 
@@ -84,7 +84,7 @@ namespace BYTUBE.Controllers
 
                     return new ChannelModel()
                     {
-                        Id = item.Id,
+                        Id = item.Id.ToString(),
                         Name = item.Name,
                         IconUrl = $"/data/channels/{item.Id}/icon.{iconEx}"
                     };

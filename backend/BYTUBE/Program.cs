@@ -20,9 +20,9 @@ internal class Program
 
         Console.WriteLine(ffmpegPath);
 
-        builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
-        builder.Services.AddSingleton(new PasswordHasher(salt!));
-        builder.Services.AddSingleton(new LocalDataManager());
+        builder.Services.AddSingleton(new JwtService(accessToken!, refreshToken!));
+        builder.Services.AddSingleton(new PasswordHasherService(salt!));
+        builder.Services.AddSingleton(new LocalDataService());
         builder.Services.AddSingleton(new VideoMediaService(ffmpegPath!));
 
         builder.Services.AddDistributedMemoryCache();
@@ -42,7 +42,7 @@ internal class Program
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = JwtManager.GetParameters(accessToken);
+                options.TokenValidationParameters = JwtService.GetParameters(accessToken);
             });
 
         builder.Services.AddControllers();
@@ -82,7 +82,7 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        app.UseGetToken();
+        app.UseParseToken();
 
         app.UseAuthentication();
         app.UseAuthorization();

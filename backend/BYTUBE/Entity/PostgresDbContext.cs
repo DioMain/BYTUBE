@@ -31,13 +31,17 @@ public class PostgresDbContext : DbContext
 
     private static async void InsertData(ModelBuilder builder)
     {
-        LocalDataManager dataManager = new LocalDataManager();
+        LocalDataService dataManager = new LocalDataService();
+        PasswordHasherService hasher = new PasswordHasherService("BYTUBE");
 
-        PasswordHasher hasher = new PasswordHasher("BYTUBE");
+        Guid userGuid1 = Guid.Parse("cda93124-d3cc-4e11-b529-8c0c4078835c");
+        Guid userGuid2 = Guid.Parse("73ef0c94-ac5a-4414-af7f-7fbdb40a9795");
+
+        Guid channelGuid = Guid.Parse("7dc1efc5-688a-499f-8638-0caaf0539616");
 
         builder.Entity<User>().HasData(new User()
         {
-            Id = 1,
+            Id = userGuid1,
             Role = User.RoleType.Admin,
             Name = "ADMIN",
             Email = "ADMIN@mail.com",
@@ -45,8 +49,8 @@ public class PostgresDbContext : DbContext
         },
         new User()
         {
-            Id = 2,
-            Role = User.RoleType.Admin,
+            Id = userGuid2,
+            Role = User.RoleType.User,
             Name = "DataGenerator",
             Email = "Generator@mail.com",
             Password = hasher.Hash("123456")
@@ -54,19 +58,19 @@ public class PostgresDbContext : DbContext
 
         builder.Entity<Channel>().HasData(new Channel()
         {
-            Id = 1,
-            UserId = 2,
+            Id = channelGuid,
+            UserId = userGuid2,
             Name = "DataGenerator",
             Created = DateTime.UtcNow,
             Description = "DataGeneratorChannel",
         });
 
-        if (!Directory.Exists("./Data/users/1"))
-            await dataManager.SaveUserFiles(1, null);
-        if (!Directory.Exists("./Data/users/2"))
-            await dataManager.SaveUserFiles(2, null);
+        if (!Directory.Exists($"./Data/users/{userGuid1}"))
+            await dataManager.SaveUserFiles(userGuid1, null);
+        if (!Directory.Exists($"./Data/users/{userGuid2}"))
+            await dataManager.SaveUserFiles(userGuid2, null);
 
-        if (!Directory.Exists("./Data/channels/1"))
-            await dataManager.SaveChannelFiles(1, null, null);
+        if (!Directory.Exists($"./Data/channels/{channelGuid}"))
+            await dataManager.SaveChannelFiles(channelGuid, null, null);
     }
 }

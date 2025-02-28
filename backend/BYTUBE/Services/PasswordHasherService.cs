@@ -3,11 +3,11 @@ using System.Text;
 
 namespace BYTUBE.Services
 {
-    public class PasswordHasher
+    public class PasswordHasherService
     {
         private readonly string _salt;
 
-        public PasswordHasher(string salt)
+        public PasswordHasherService(string salt)
         {
             _salt = salt;
         }

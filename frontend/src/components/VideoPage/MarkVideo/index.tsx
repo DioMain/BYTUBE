@@ -10,7 +10,7 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import StatusBase from "@type/StatusBase";
 
-const MarkVideo: React.FC<{ id: number }> = ({ id }) => {
+const MarkVideo: React.FC<{ id: string }> = ({ id }) => {
   const greenLine = useRef<HTMLDivElement>(null);
   const redLine = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);

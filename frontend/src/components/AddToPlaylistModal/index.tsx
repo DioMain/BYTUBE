@@ -31,7 +31,7 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
     });
   }, [user.status]);
 
-  const addHandle = (playlist: number) => {
+  const addHandle = (playlist: string) => {
     axios
       .post(QueriesUrls.ADD_ELEMENT_TO_PLAYLIST, null, {
         params: {

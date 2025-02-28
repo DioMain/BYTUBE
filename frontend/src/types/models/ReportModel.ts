@@ -13,11 +13,11 @@ enum ReportType {
 }
 
 interface ReportModel {
-  id: number;
+  id: string;
   description: string;
   type: ReportType;
 
-  videoId: number;
+  videoId: string;
   created?: string;
 }
 

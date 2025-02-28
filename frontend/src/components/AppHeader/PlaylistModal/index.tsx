@@ -42,7 +42,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
       });
   };
 
-  const removeHandle = (vid: number) => {
+  const removeHandle = (vid: string) => {
     axios
       .delete(QueriesUrls.REMOVE_ELEMENT_FROM_PLAYLIST, {
         params: {
