@@ -8,6 +8,7 @@ import SearchPage from "@components/SearchPage";
 import StudioPage from "@components/StudioPage";
 import VideoMain from "@components/VideoMain";
 import VideoPage from "@components/VideoPage";
+import WatchTogetherMainPage from "@components/WatchTogether/MainPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const GeneralRoutes: React.FC = () => {
@@ -20,6 +21,10 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Search" Component={SearchPage} />
             <Route path="Video" Component={VideoPage} />
             <Route path="Channel" Component={ChannelPage} />
+            <Route path="WatchTogether/">
+              <Route path="Main" Component={WatchTogetherMainPage} />
+              <Route path="Lobby" />
+            </Route>
           </Route>
           <Route path="/Auth/" Component={AuthPage}>
             <Route path="Signin" Component={Signin} />

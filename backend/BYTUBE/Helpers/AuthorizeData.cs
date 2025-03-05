@@ -1,4 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
+using System.Security.Claims;
 
 namespace BYTUBE.Helpers
 {
@@ -34,6 +35,18 @@ namespace BYTUBE.Helpers
             User.RoleType Role = Enum.Parse<User.RoleType>(context.User.Claims.ToArray()[1].Value);
 
             return new AuthorizeData(UserId, Role, IsAutorize);
+        }
+
+        public static AuthorizeData FromClaims(ClaimsPrincipal? claims)
+        {
+            if (claims == null)
+                return new AuthorizeData();
+
+            Guid UserId = Guid.Parse(claims.Claims.ToArray()[0].Value);
+
+            User.RoleType Role = Enum.Parse<User.RoleType>(claims.Claims.ToArray()[1].Value);
+
+            return new AuthorizeData(UserId, Role, true);
         }
     }
 }

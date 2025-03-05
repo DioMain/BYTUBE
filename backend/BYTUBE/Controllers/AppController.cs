@@ -68,5 +68,17 @@ namespace BYTUBE.Controllers
         {
             return GetView();
         }
+
+        [HttpGet, Route("/App/WatchTogether/Main")]
+        public IResult GetPage8()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/WatchTogether/Lobby")]
+        public IResult GetPage9()
+        {
+            return GetView();
+        }
     }
 }

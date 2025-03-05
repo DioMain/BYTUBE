@@ -21,10 +21,13 @@ import "./style.scss";
 import { HeaderDrawerProps } from "./types";
 import { MainPageFilter } from "@stores/SearchDataStore";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
+import WatchTogetherIcon from "@mui/icons-material/GroupWork";
 
 const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
   ({ isOpened, closeCallback, onClickChannelCreation, onClickPlaylistCreation, onClickPlaylistOpenView }) => {
     const { user, searchData } = useStores();
+    const navigator = useNavigate();
 
     const [channelsList, setChannelsList] = useState<ChannelModel[]>([]);
     const [playlistList, setPlaylistList] = useState<PlaylistModel[]>([]);
@@ -53,7 +56,7 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
     };
 
     const handleClickChannel = (channelId: string) => {
-      window.location.assign(`/Studio?channelid=${channelId}`);
+      navigator(`/Studio?channelid=${channelId}`);
     };
 
     const handleClickPlaylist = (playlist: PlaylistModel) => {
@@ -62,6 +65,10 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
 
     const handleMainPageFilter = (filter: MainPageFilter) => {
       searchData.setMainPageFilter(filter);
+    };
+
+    const handleW2GButton = () => {
+      navigator("/App/WatchTogether/Main");
     };
 
     return (
@@ -117,10 +124,15 @@ const HeaderDrawer: React.FC<HeaderDrawerProps> = observer(
                       }
                       prefix={<Favorite />}
                     />
+                    <HeaderDrawerButton
+                      onClick={handleW2GButton}
+                      text="Совместный просмотр"
+                      prefix={<WatchTogetherIcon />}
+                    />
                   </>
                 ) : (
                   <HeaderDrawerButton
-                    onClick={() => window.location.assign(QueriesUrls.MAIN_PAGE)}
+                    onClick={() => navigator(QueriesUrls.MAIN_PAGE)}
                     text="На главную"
                     prefix={<HomeOutlinedIcon />}
                   />

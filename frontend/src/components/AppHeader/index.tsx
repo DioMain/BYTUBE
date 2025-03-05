@@ -16,9 +16,12 @@ import PlaylistListModal from "./PlaylistModal";
 import { skip } from "node:test";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import GetUrlParams from "@helpers/GetUrlParams";
+import { useNavigate } from "react-router-dom";
 
 const AppHeader: React.FC = observer(() => {
   const search = GetUrlParams().get("search") ?? "";
+
+  const navigator = useNavigate();
 
   const searchBarField = useRef<HTMLInputElement>(null);
 
@@ -50,7 +53,7 @@ const AppHeader: React.FC = observer(() => {
   );
 
   const handleSearch = () => {
-    window.location.assign(`${QueriesUrls.SEARCH_PAGE}?search=${searchBarField.current?.value}`);
+    navigator(`${QueriesUrls.SEARCH_PAGE}?search=${searchBarField.current?.value}`);
   };
 
   const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";

@@ -27,7 +27,7 @@ import PlaylistModel from "@type/models/PlaylistModel";
 import useVideoGlobal from "@hooks/useVideoGlobal";
 import { observer } from "mobx-react-lite";
 import CommentsViewer from "@components/CommentsViewer";
-
+import WatchTogeather from "@mui/icons-material/AddToQueue";
 import "./style.scss";
 import { Expand, ExpandMore } from "@mui/icons-material";
 import ReportModal from "./ReportModal";
@@ -121,6 +121,13 @@ const VideoPage: React.FC = observer(() => {
               <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
                 <ChannelButton channel={video.value?.channel!} />
                 <Stack direction={"row"} spacing={2}>
+                  <Stack justifyContent={"center"}>
+                    <Tooltip title="Совместный просмотр">
+                      <IconButton onClick={addToPlaylistHandle} disabled={user.status !== AuthState.Authed}>
+                        <WatchTogeather />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Добавить в плейлист">
                       <IconButton onClick={addToPlaylistHandle} disabled={user.status !== AuthState.Authed}>

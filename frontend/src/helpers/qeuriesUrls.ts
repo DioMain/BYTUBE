@@ -39,6 +39,9 @@ const QueriesUrls = {
 
   REPORT_COMMON: "/api/report",
   GET_VIDEO_REPORTS: "/api/report/video",
+
+  GET_W2G_LOBBYS: "/api/watchtogether/lobbys",
+  W2G_LOBBYS_COMMON: "/api/watchtogether/lobby",
 };
 
 export default QueriesUrls;
