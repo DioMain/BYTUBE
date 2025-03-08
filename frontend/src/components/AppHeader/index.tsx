@@ -6,17 +6,17 @@ import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
 import HeaderDrawer from "./HeaderDrawer";
-import "./style.scss";
 import CreateChannelModal from "./CreateChannelModal";
 import { Stack } from "@mui/material";
 import Logo from "@components/Logo";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
 import PlaylistListModal from "./PlaylistModal";
-import { skip } from "node:test";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import GetUrlParams from "@helpers/GetUrlParams";
 import { useNavigate } from "react-router-dom";
+import IconPlaceholder from "@assets/images/UnknownUser.jpg";
+import "./style.scss";
 
 const AppHeader: React.FC = observer(() => {
   const search = GetUrlParams().get("search") ?? "";
@@ -56,7 +56,7 @@ const AppHeader: React.FC = observer(() => {
     navigator(`${QueriesUrls.SEARCH_PAGE}?search=${searchBarField.current?.value}`);
   };
 
-  const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";
+  const iconUrl = user.value ? `url(${user.value.iconUrl})` : `url(${IconPlaceholder})`;
 
   return (
     <>

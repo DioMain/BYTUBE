@@ -8,7 +8,9 @@ import SearchPage from "@components/SearchPage";
 import StudioPage from "@components/StudioPage";
 import VideoMain from "@components/VideoMain";
 import VideoPage from "@components/VideoPage";
-import WatchTogetherMainPage from "@components/WatchTogether/MainPage";
+import WatchTogether from "@components/WatchTogether";
+import W2GMainPage from "@components/WatchTogether/MainPage";
+import W2GWatchPage from "@components/WatchTogether/WatchPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const GeneralRoutes: React.FC = () => {
@@ -21,9 +23,9 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Search" Component={SearchPage} />
             <Route path="Video" Component={VideoPage} />
             <Route path="Channel" Component={ChannelPage} />
-            <Route path="WatchTogether/">
-              <Route path="Main" Component={WatchTogetherMainPage} />
-              <Route path="Lobby" />
+            <Route path="WatchTogether/" Component={WatchTogether}>
+              <Route path="Main" Component={W2GMainPage} />
+              <Route path="Lobby" Component={W2GWatchPage} />
             </Route>
           </Route>
           <Route path="/Auth/" Component={AuthPage}>

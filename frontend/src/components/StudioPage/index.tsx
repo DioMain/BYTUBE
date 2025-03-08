@@ -13,12 +13,16 @@ import ChannelSettings from "./ChannelSettings";
 
 import "./style.scss";
 import VideosSettings from "./VideosSettings";
+import { useNavigate } from "react-router-dom";
 
 const StudioPage: React.FC = observer(() => {
   const cid = GetUrlParams().get("channelid") as number;
 
   useAuth();
   useProtected();
+
+  const navigator = useNavigate();
+
   const { status } = useOwnChannel(cid);
   const { user, channel } = useStores();
 
@@ -41,7 +45,7 @@ const StudioPage: React.FC = observer(() => {
 
   if (user.status === AuthState.Loading || status === StatusBase.Loading) return <LinearProgress />;
 
-  if (status === StatusBase.Failed) window.location.assign("/App/Main");
+  if (status === StatusBase.Failed) navigator("/App/Main");
 
   return (
     <Stack className="studio">

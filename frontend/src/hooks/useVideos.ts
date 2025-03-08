@@ -15,7 +15,6 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
   }, [status, setStatus]);
 
   useEffect(() => {
-    console.log(status);
     if (status === StatusBase.Loading) {
       axios
         .get(QueriesUrls.GET_VIDEOS, {

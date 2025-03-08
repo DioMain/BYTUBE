@@ -1,4 +1,5 @@
-﻿using BYTUBE.Services;
+﻿using BYTUBE.Helpers;
+using BYTUBE.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace BYTUBE.Hubs
@@ -12,14 +13,20 @@ namespace BYTUBE.Hubs
             _watchTogetherLobby = watchTogetherLobby;
         }
 
-        public override async Task OnConnectedAsync()
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            await base.OnConnectedAsync();
-        }
+            var lobby = _watchTogetherLobby.Lobbies
+                            .FirstOrDefault(l => l.Users
+                                .Any(u => u.Value == Context.ConnectionId));
 
-        public override Task OnDisconnectedAsync(Exception? exception)
-        {
-             return base.OnDisconnectedAsync(exception);
+            if (lobby == null)
+                return;
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.Name);
+
+            var user = AuthorizeData.FromClaims(Context.User);
+
+            lobby.Users.Remove(user.Id);
         }
 
         public async Task Play()
@@ -47,14 +54,19 @@ namespace BYTUBE.Hubs
             
         }
 
-        public async Task JoinToGroup(Guid userId, string groupName)
+        public async Task JoinToLobby(string lobbyName)
         {
-            
-        }
+            var lobby = _watchTogetherLobby.Lobbies
+                .FirstOrDefault(l => l.Name == lobbyName);
 
-        public async Task LeaveTheGroup(string groupName)
-        {
+            if (lobby == null)
+                return;
 
+            var user = AuthorizeData.FromClaims(Context.User);
+
+            lobby.Users.Add(user.Id, Context.ConnectionId);
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
         }
     }
 }
