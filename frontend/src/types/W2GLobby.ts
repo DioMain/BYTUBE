@@ -3,7 +3,9 @@ interface W2GLobby {
 
   onwerId: string;
 
-  users: Map<string, string>;
+  usersCount: number;
+
+  isPrivate: boolean;
 }
 
 export default W2GLobby;

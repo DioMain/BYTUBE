@@ -8,14 +8,13 @@
     &__inputLobbyName {
       @include TextField();
     }
+
+    &__inputLobbyPassword {
+      @include TextField();
+    }
   }
 
   &-lobbyList {
-    &-list {
-      margin-left: 20%;
-      margin-right: 20%;
-    }
-
     &-item {
       background-color: rgb(30, 30, 30);
       border-radius: 8px;

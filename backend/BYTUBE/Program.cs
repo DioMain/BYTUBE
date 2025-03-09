@@ -28,6 +28,7 @@ internal class Program
         builder.Services.AddSingleton(new LocalDataService());
         builder.Services.AddSingleton(new VideoMediaService(ffmpegPath!));
         builder.Services.AddSingleton(new WatchTogetherLobbyService());
+        builder.Services.AddHostedService<WatchTogetherLobbyCleaningService>();
 
         builder.Services.AddDistributedMemoryCache();
 

@@ -1,4 +1,4 @@
-import { Stack, Grid2, Button } from "@mui/material";
+import { Stack, Grid2, Button, LinearProgress, FormControlLabel, Checkbox, Tooltip } from "@mui/material";
 import useTrigger from "@hooks/useTrigger";
 import { useCallback, useEffect, useRef, useState } from "react";
 import W2GLobby from "@type/W2GLobby";
@@ -11,6 +11,7 @@ import "./styles.scss";
 import AuthState from "@type/AuthState";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
+import LockIcon from "@mui/icons-material/Lock";
 
 const W2GMainPage: React.FC = observer(() => {
   useProtected();
@@ -18,11 +19,14 @@ const W2GMainPage: React.FC = observer(() => {
   const navigator = useNavigate();
 
   const lobbyNameInput = useRef<HTMLInputElement>(null);
+  const lobbyPasswordInput = useRef<HTMLInputElement>(null);
 
   const { handler, trigger } = useTrigger();
 
   const [lobbys, setLobbys] = useState<W2GLobby[]>([]);
   const [createLobbyError, setCreateLobbyError] = useState("");
+
+  const [isPrivateLobby, setIsPrivateLobby] = useState(false);
 
   const { user } = useStores();
 
@@ -38,11 +42,15 @@ const W2GMainPage: React.FC = observer(() => {
       return;
     }
 
+    if (lobbyPasswordInput.current?.value === "" && isPrivateLobby) {
+      setCreateLobbyError("Пароль для лобби должен быть указан");
+      return;
+    }
+
     axios
-      .post(QueriesUrls.W2G_LOBBYS_COMMON, null, {
-        params: {
-          lobbyName: lobbyNameInput.current?.value,
-        },
+      .post(QueriesUrls.W2G_LOBBYS_COMMON, {
+        Name: lobbyNameInput.current?.value,
+        Password: isPrivateLobby ? lobbyPasswordInput.current?.value : null,
       })
       .then(() => {
         navigator(`/App/WatchTogether/Lobby?lobby=${lobbyNameInput.current?.value}`);
@@ -52,13 +60,17 @@ const W2GMainPage: React.FC = observer(() => {
 
         setCreateLobbyError(srvErr.getFirstError());
       });
-  }, [lobbyNameInput]);
+  }, [lobbyNameInput, isPrivateLobby]);
 
-  if (user.status === AuthState.Loading) return <></>;
+  const connectToLobby = (lobby: W2GLobby) => {
+    navigator(`/App/WatchTogether/Lobby?lobby=${lobby.name}`);
+  };
+
+  if (user.status === AuthState.Loading) return <LinearProgress></LinearProgress>;
 
   return (
-    <Grid2 container spacing={2} marginTop={"16px"} justifyContent={"center"}>
-      <Grid2 size={6} minWidth={"390px"}>
+    <Grid2 container spacing={2} margin={"16px"} justifyContent={"center"}>
+      <Grid2 size={6} minWidth={"380px"}>
         <Stack spacing={2} className="w2g-createLobby">
           <Stack justifyContent={"center"} direction={"row"}>
             <h2>Создание лобби</h2>
@@ -70,6 +82,24 @@ const W2GMainPage: React.FC = observer(() => {
             defaultValue={`${user.value?.name}\`s lobby`}
             placeholder="Название лобби"
           />
+          <Stack direction={"row"} justifyContent={"space-between"}>
+            <input
+              ref={lobbyPasswordInput}
+              type="text"
+              className="w2g-createLobby__inputLobbyPassword"
+              placeholder="Пароль"
+              disabled={!isPrivateLobby}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  defaultChecked={isPrivateLobby}
+                  onChange={(evt) => setIsPrivateLobby(evt.currentTarget.checked)}
+                />
+              }
+              label="Приватный?"
+            />
+          </Stack>
           <Button variant="contained" color="primary" onClick={createLobby}>
             Создать
           </Button>
@@ -80,17 +110,32 @@ const W2GMainPage: React.FC = observer(() => {
           )}
         </Stack>
       </Grid2>
-      <Grid2 size={6} minWidth={"390px"}>
+      <Grid2 size={6} minWidth={"380px"}>
         <Stack spacing={2} className="w2g-lobbyList">
           <Stack justifyContent={"center"} direction={"row"}>
             <h3>Список доступный лобби</h3>
           </Stack>
           <Stack spacing={1} className="w2g-lobbyList-list">
-            {lobbys.map((lobby) => {
+            {lobbys.map((lobby, index) => {
               return (
-                <Stack className="w2g-lobbyList-item">
-                  <h5>{lobby.name}</h5>
-                  <Button variant="contained" color="primary">
+                <Stack
+                  className="w2g-lobbyList-item"
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                  key={`lobby-item-${index}`}
+                >
+                  <Stack spacing={2}>
+                    <h4>{lobby.name}</h4>
+                    <Stack direction={"row"} spacing={2}>
+                      <div>Пользователей: {lobby.usersCount}</div>
+                      {lobby.isPrivate && (
+                        <Tooltip title="Приватное лобби">
+                          <LockIcon />
+                        </Tooltip>
+                      )}
+                    </Stack>
+                  </Stack>
+                  <Button variant="contained" color="primary" onClick={() => connectToLobby(lobby)}>
                     Присоедениться
                   </Button>
                 </Stack>
