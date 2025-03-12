@@ -30,11 +30,41 @@ namespace BYTUBE.Controllers
                 return new W2GLobbyModel()
                 {
                     Name = l.Name,
-                    OwnerId = l.OwnerId,
+                    Master = l.Master,
                     UsersCount = l.ConnectedUsers.Count,
-                    IsPrivate = l.Password != null
+                    IsPrivate = l.Password != null,
+                    VideoId = l.VideoId
                 };
             }));
+        }
+
+        [HttpGet("lobby"), Authorize]
+        public IResult GetLobby([FromQuery] string lobbyName)
+        {
+            try
+            {
+                var lobby = _watchTogetherLobby.Lobbies.FirstOrDefault(l => lobbyName == l.Name)
+                    ?? throw new ServerException("Lobby not found", 404);
+
+                var user = AuthorizeData.FromContext(HttpContext);
+
+                if (!lobby.AllowedUser.Contains(user.Id))
+                    throw new ServerException("Lobby not allowed", 403);
+
+                return Results.Json(new W2GLobbyModel()
+                {
+                    Name = lobby.Name,
+                    Master = lobby.Master,
+                    Users = [.. lobby.ConnectedUsers.Select(cu => cu.Key)],
+                    UsersCount = lobby.ConnectedUsers.Count,
+                    IsPrivate = lobby.Password != null,
+                    VideoId = lobby.VideoId
+                });
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
         }
 
         [HttpPost("lobby"), Authorize]
@@ -44,16 +74,13 @@ namespace BYTUBE.Controllers
             {
                 var user = AuthorizeData.FromContext(HttpContext);
 
-                var oldLobby = _watchTogetherLobby.Lobbies.FirstOrDefault(l => l.OwnerId == user.Id);
-
-                if (oldLobby != null)
-                    _watchTogetherLobby.Lobbies.Remove(oldLobby);
-
+                if (_watchTogetherLobby.Lobbies.Any(l => l.Name == model.Name))
+                    throw new ServerException("Lobby with this name has exists!");
 
                 _watchTogetherLobby.Lobbies.Add(new()
                 {
                     Name = model.Name,
-                    OwnerId = user.Id,
+                    Master = user.Id,
                     Password = model.Password != null ? _passwordHasher.Hash(model.Password) : null,
                     AllowedUser = [user.Id]
                 });
@@ -76,7 +103,7 @@ namespace BYTUBE.Controllers
                 if (string.IsNullOrEmpty(lobbyName))
                     throw new SystemException("У лобби не указано название!");
 
-                var oldLobby = _watchTogetherLobby.Lobbies.FirstOrDefault(l => l.OwnerId == user.Id)
+                var oldLobby = _watchTogetherLobby.Lobbies.FirstOrDefault(l => l.Master == user.Id)
                     ?? throw new ServerException("Лобби не найдено!", 404);
 
                 _watchTogetherLobby.Lobbies.Remove(oldLobby);

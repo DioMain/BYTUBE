@@ -4,7 +4,8 @@ function useTrigger() {
   const [handler, setHandler] = useState(false);
 
   const trigger = useCallback(() => {
-    setHandler(!handler);
+    if (handler) setHandler(false);
+    else setHandler(true);
   }, [handler, setHandler]);
 
   return { handler, trigger };

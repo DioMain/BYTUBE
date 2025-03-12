@@ -2,6 +2,49 @@
   margin: 16px;
 
   &-video {
-    justify-content: center;
+    width: 60%;
+  }
+
+  &-lobbyTitle {
+    background-color: rgb(30, 30, 30);
+    border-left: solid 1px gray;
+
+    padding: 8px;
+
+    vertical-align: middle;
+
+    & > h5 {
+      text-decoration: underline;
+    }
+  }
+
+  &-selectButton {
+    padding: 8px;
+
+    border-radius: 8px;
+
+    border: 2px solid;
+
+    border-color: rgb(117, 117, 117);
+
+    text-align: center;
+
+    background-color: rgb(30, 30, 30);
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(40, 40, 40);
+    }
+
+    &__title {
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .w2g {
+    &-video {
+      width: 90%;
+    }
   }
 }

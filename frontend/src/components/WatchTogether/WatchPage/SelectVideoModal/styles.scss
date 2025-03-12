@@ -1,0 +1,36 @@
+@import "@styles/Inputs";
+
+.w2g-svm {
+  width: 500px;
+  height: max-content;
+
+  &__search {
+    @include Textarea;
+  }
+
+  &-list {
+    overflow-y: auto;
+
+    height: 400px;
+
+    &-item {
+      padding: 4px;
+
+      background-color: rgb(39, 39, 39);
+
+      border-radius: 4px;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(50, 50, 50);
+      }
+
+      &__prv {
+        background-size: cover;
+        background-position: center;
+        width: 120px;
+        height: 70px;
+      }
+    }
+  }
+}

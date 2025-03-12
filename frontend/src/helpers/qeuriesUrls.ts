@@ -42,6 +42,8 @@ const QueriesUrls = {
 
   GET_W2G_LOBBYS: "/api/watchtogether/lobbys",
   W2G_LOBBYS_COMMON: "/api/watchtogether/lobby",
+  W2G_LOBBYS_TRY: "/api/watchtogether/try",
+  W2G_LOBBYS_PASS: "/api/watchtogether/pass",
 };
 
 export default QueriesUrls;

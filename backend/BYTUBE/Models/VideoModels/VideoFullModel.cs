@@ -6,8 +6,6 @@
 
         public List<string> Tags { get; set; }
 
-        public string Duration { get; set; }
-
         public string VideoUrl { get; set; }
     }
 }

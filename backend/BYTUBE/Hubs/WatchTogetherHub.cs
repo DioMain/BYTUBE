@@ -15,16 +15,7 @@ namespace BYTUBE.Hubs
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
-
-            if (lobby == null)
-                return;
-
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.Name);
-
-            var user = AuthorizeData.FromClaims(Context.User);
-
-            lobby.ConnectedUsers.Remove(user.Id);
+            await LeaveTheLobby();
         }
 
         public async Task Play()
@@ -59,14 +50,14 @@ namespace BYTUBE.Hubs
             await Clients.OthersInGroup(lobby.Name).SendAsync("onSeek", time);
         }
 
-        public async Task Sync(float time, bool isPlay)
+        public async Task Sync(float time)
         {
             var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
 
             if (lobby == null)
                 return;
 
-            await Clients.OthersInGroup(lobby.Name).SendAsync("onSync", time, isPlay);
+            await Clients.OthersInGroup(lobby.Name).SendAsync("onSync", time);
         }
 
         public async Task RequestSync()
@@ -76,7 +67,29 @@ namespace BYTUBE.Hubs
             if (lobby == null || lobby.ConnectedUsers.Count == 0)
                 return;
 
-            await Clients.Client(lobby.ConnectedUsers.First().Value).SendAsync("onRequestSync");
+            if (lobby.Master == null)
+                return;
+
+            var masterConId = lobby.ConnectedUsers[(Guid)lobby.Master];
+
+            await Clients.Client(masterConId).SendAsync("onRequestSync");
+        }
+
+        public async Task VideoChange(Guid videoId)
+        {
+            var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
+
+            if (lobby == null)
+                return;
+
+            var user = AuthorizeData.FromClaims(Context.User);
+
+            if (lobby.Master != user.Id)
+                return;
+
+            lobby.VideoId = videoId;
+
+            await Clients.Group(lobby.Name).SendAsync("onLobbyChanged");
         }
 
         public async Task SendMessage(string message)
@@ -86,7 +99,9 @@ namespace BYTUBE.Hubs
             if (lobby == null)
                 return;
 
-            await Clients.OthersInGroup(lobby.Name).SendAsync("onMessage", message);
+            var user = AuthorizeData.FromClaims(Context.User);
+
+            await Clients.OthersInGroup(lobby.Name).SendAsync("onMessage", message, user.Id);
         }
 
         public async Task JoinToLobby(string lobbyName)
@@ -104,7 +119,38 @@ namespace BYTUBE.Hubs
             else
                 lobby.ConnectedUsers.Add(user.Id, Context.ConnectionId);
 
+            if (lobby.Master == null)
+                lobby.Master = user.Id;
+
+            await Clients.OthersInGroup(lobby.Name).SendAsync("onPause");
+
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
+
+            await Clients.Group(lobby.Name).SendAsync("onLobbyChanged");
+        }
+
+        public async Task LeaveTheLobby()
+        {
+            var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
+
+            if (lobby == null)
+                return;
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, lobby.Name);
+
+            var user = AuthorizeData.FromClaims(Context.User);
+
+            lobby.ConnectedUsers.Remove(user.Id);
+
+            if (lobby.Master == user.Id)
+            {
+                if (lobby.ConnectedUsers.Count > 0)
+                    lobby.Master = lobby.ConnectedUsers.First().Key;
+                else
+                    lobby.Master = null;
+            }
+
+            await Clients.Group(lobby.Name).SendAsync("onLobbyChanged");
         }
     }
 }

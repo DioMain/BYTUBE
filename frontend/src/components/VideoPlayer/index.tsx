@@ -7,9 +7,9 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>((props, ref) =>
   const videoElement = useRef<ReactPlayer>(null);
   const playerContainer = useRef<HTMLDivElement>(null);
 
-  const [isPlay, setPlay] = useState<boolean>(props.autoplay ?? false);
   const [autoWidth, setAutoWidth] = useState<number | undefined>(undefined);
   const [controls, setControls] = useState(true);
+  const [innerPlayer, setInnerPlayer] = useState<HTMLVideoElement | null>(null);
 
   const notifys = useRef({
     playNotify: true,
@@ -24,27 +24,34 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>((props, ref) =>
     return () => clearInterval(interval);
   }, [autoWidth]);
 
+  useEffect(() => {
+    setInnerPlayer(videoElement.current?.getInternalPlayer() as HTMLVideoElement);
+    videoElement.current?.seekTo(0, "seconds");
+  }, [videoElement.current]);
+
+  const IsPlaying = () => !innerPlayer?.paused && !innerPlayer?.ended;
+
   useImperativeHandle(ref, () => ({
-    getPlayer: () => videoElement.current?.getInternalPlayer() as HTMLVideoElement,
+    getPlayer: () => innerPlayer!,
     getTime: () => videoElement.current?.getCurrentTime()!,
-    getIsPlay: () => true,
+    getIsPlay: IsPlaying,
 
     setControls: (controls) => setControls(controls),
 
-    play: () => setPlay(true),
-    pause: () => setPlay(false),
+    play: () => innerPlayer?.play(),
+    pause: () => innerPlayer?.pause(),
     seek: (time) => videoElement.current?.seekTo(time, "seconds"),
 
     playNotNotify: () => {
-      if (!isPlay) {
+      if (!IsPlaying()) {
         notifys.current.playNotify = false;
-        setPlay(true);
+        innerPlayer?.play();
       }
     },
     pauseNotNotify: () => {
-      if (isPlay) {
+      if (IsPlaying()) {
         notifys.current.pauseNotify = false;
-        setPlay(false);
+        innerPlayer?.pause();
       }
     },
     seekNotNotify: (time) => {
@@ -53,12 +60,13 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>((props, ref) =>
     },
   }));
 
+  if (innerPlayer === null) return;
+
   return (
     <div ref={playerContainer} className={`player ${props.className}`} style={props.style}>
       <div className="player__main">
         <ReactPlayer
           ref={videoElement}
-          playing={isPlay}
           url={props.url}
           width={props.width === "auto" ? `${autoWidth}px` : props.width}
           height={"auto"}

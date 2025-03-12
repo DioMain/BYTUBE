@@ -6,9 +6,11 @@ public class WatchTogetherLobbyService
     public class Lobby
     {
         public required string Name { get; set; }
-        public required Guid OwnerId { get; set; }
+        public Guid? Master { get; set; }
 
         public Dictionary<Guid, string> ConnectedUsers { get; set; } = [];
+
+        public Guid? VideoId;
 
         public string? Password { get; set; }
 

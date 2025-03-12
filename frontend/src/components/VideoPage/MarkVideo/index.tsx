@@ -30,6 +30,10 @@ const MarkVideo: React.FC<{ id: string }> = ({ id }) => {
     redLine.current!.style.width = `${totalWidth * redLineAspect}px`;
   }, [bar, data]);
 
+  useEffect(() => {
+    setState(StatusBase.Loading);
+  }, [id]);
+
   const likeHandle = () => {
     axios
       .post(QueriesUrls.VIDEO_LIKE, null, {

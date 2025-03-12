@@ -1,9 +1,13 @@
 interface W2GLobby {
   name: string;
 
-  onwerId: string;
+  master: string | null;
+
+  videoId: string | null;
 
   usersCount: number;
+
+  users?: string[];
 
   isPrivate: boolean;
 }
