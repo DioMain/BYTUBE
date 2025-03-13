@@ -1,11 +1,14 @@
-﻿using BYTUBE.Exceptions;
+﻿using BYTUBE.Entity.Models;
+using BYTUBE.Exceptions;
 using BYTUBE.Helpers;
 using BYTUBE.Models;
+using BYTUBE.Models.UserModels;
 using BYTUBE.Models.W2GLobby;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BYTUBE.Controllers
 {
@@ -15,11 +18,19 @@ namespace BYTUBE.Controllers
     {
         private readonly WatchTogetherLobbyService _watchTogetherLobby;
         private readonly PasswordHasherService _passwordHasher;
+        private readonly PostgresDbContext _postgresDb;
+        private readonly LocalDataService _localData;
 
-        public WatchTogetherController(WatchTogetherLobbyService watchTogetherLobby, PasswordHasherService passwordHasher)
+        public WatchTogetherController(
+            WatchTogetherLobbyService watchTogetherLobby, 
+            PasswordHasherService passwordHasher, 
+            PostgresDbContext postgresDb,
+            LocalDataService localData)
         {
             _watchTogetherLobby = watchTogetherLobby;
             _passwordHasher = passwordHasher;
+            _postgresDb = postgresDb;
+            _localData = localData;
         }
 
         [HttpGet("lobbys")]
@@ -39,7 +50,7 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("lobby"), Authorize]
-        public IResult GetLobby([FromQuery] string lobbyName)
+        public async Task<IResult> GetLobby([FromQuery] string lobbyName)
         {
             try
             {
@@ -51,11 +62,36 @@ namespace BYTUBE.Controllers
                 if (!lobby.AllowedUser.Contains(user.Id))
                     throw new ServerException("Lobby not allowed", 403);
 
+                List<User> users = [];
+
+                foreach (var usedId in lobby.ConnectedUsers.Keys)
+                {
+                    var usr = await _postgresDb.Users.FindAsync(usedId);
+
+                    if (usr == null)
+                        continue;
+
+                    users.Add(usr);
+                }
+
                 return Results.Json(new W2GLobbyModel()
                 {
                     Name = lobby.Name,
                     Master = lobby.Master,
-                    Users = [.. lobby.ConnectedUsers.Select(cu => cu.Key)],
+                    Users = users.Select(u =>
+                    {
+                        var userLocalData = _localData.GetUserData(u.Id);
+                        string imgUrl = $"/data/users/{u.Id}/icon.{userLocalData.IconExtention}";
+
+                        return new UserPrivateModel()
+                        {
+                            Id = u.Id.ToString(),
+                            Name = u.Name,
+                            Email = u.Email,
+                            IconUrl = imgUrl,
+                            Role = u.Role
+                        };
+                    }).ToList(),
                     UsersCount = lobby.ConnectedUsers.Count,
                     IsPrivate = lobby.Password != null,
                     VideoId = lobby.VideoId

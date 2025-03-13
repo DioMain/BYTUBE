@@ -1,8 +1,8 @@
 import VideoPlayer from "@components/VideoPlayer";
-import { Alert, Stack, Container } from "@mui/material";
+import { Alert, Stack, Container, Button } from "@mui/material";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import "./styles.scss";
 import useW2GConnection from "@hooks/useW2GConnetion";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -10,11 +10,18 @@ import AuthState from "@type/AuthState";
 import { HubConnectionState } from "@microsoft/signalr";
 import { VideoPlayerRef } from "@components/VideoPlayer/types";
 import W2GLobby from "@type/W2GLobby";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import VideoModel from "@type/models/VideoModel";
 import SelectVideoModal from "./SelectVideoModal";
 import MarkVideo from "@components/VideoPage/MarkVideo";
+import { User } from "@type/models/UserModel";
+import ChatMessageItem from "./ChatMessageItem/intex";
+
+interface ChatMessage {
+  user: User;
+  message: string;
+}
 
 const W2GWatchPage: React.FC = observer(() => {
   const params = useSearchParams();
@@ -23,15 +30,18 @@ const W2GWatchPage: React.FC = observer(() => {
   const navigator = useNavigate();
 
   const player = useRef<VideoPlayerRef>(null);
+  const inputMessage = useRef<HTMLInputElement>(null);
+  const rememberedUsers = useRef<User[]>([]);
 
   const { w2gConnetion, connectionState } = useW2GConnection(lobbyName);
+
+  const { user } = useStores();
 
   const [video, setVideo] = useState<VideoModel | null>(null);
   const [lobbyData, setLobbyData] = useState<W2GLobby | null>(null);
   const [isReady, setReady] = useState(false);
   const [selectVideoOpened, setSelectVideoOpened] = useState(false);
-
-  const { user } = useStores();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const getLobbyData = useCallback(() => {
     if (connectionState !== HubConnectionState.Connected) return;
@@ -51,7 +61,15 @@ const W2GWatchPage: React.FC = observer(() => {
           getFullVideo(lobby.videoId);
         }
 
+        lobby.users?.forEach((usr) => {
+          if (!rememberedUsers.current.some((rU) => rU.id === usr.id))
+            rememberedUsers.current.push(JSON.parse(JSON.stringify(usr)) as User);
+        });
+
         setLobbyData(lobby);
+      })
+      .catch((err: AxiosError) => {
+        if (err.code === "401") window.location.assign("/App/Main");
       });
   }, [connectionState]);
 
@@ -114,6 +132,27 @@ const W2GWatchPage: React.FC = observer(() => {
     };
   }, [connectionState]);
 
+  useEffect(() => {
+    if (connectionState !== HubConnectionState.Connected) return;
+
+    w2gConnetion.on("onMessage", (message: string, userId: string) => {
+      const mesUser = rememberedUsers.current.find((val) => val.id === userId);
+
+      if (mesUser === undefined) return;
+
+      messages.push({
+        user: mesUser,
+        message: message,
+      });
+
+      setMessages([...messages]);
+    });
+
+    return () => {
+      w2gConnetion.off("onMessage");
+    };
+  }, [connectionState, rememberedUsers]);
+
   //#region use effects
   useEffect(() => {
     player.current?.setControls(isReady);
@@ -153,6 +192,21 @@ const W2GWatchPage: React.FC = observer(() => {
     getFullVideo(video.id);
     w2gConnetion.invoke("VideoChange", video.id);
   };
+
+  const sendMessageHandle = useCallback(() => {
+    const value = inputMessage.current?.value!;
+
+    if (value === "" || user.status !== AuthState.Authed) return;
+
+    messages.push({
+      user: user.value!,
+      message: value,
+    });
+
+    setMessages([...messages]);
+
+    w2gConnetion.invoke("SendMessage", value);
+  }, [inputMessage]);
 
   const isMaster = user.value?.id === lobbyData?.master;
 
@@ -217,15 +271,39 @@ const W2GWatchPage: React.FC = observer(() => {
               </Stack>
               <MarkVideo id={video.id} />
             </Stack>
-            <p style={{ padding: "4px", backgroundColor: "#202020", borderRadius: "8px" }}>{video.description}</p>
+            <p style={{ padding: "8px", backgroundColor: "#202020", borderRadius: "8px" }}>{video.description}</p>
           </Stack>
         )}
-        <Stack direction={"row"} justifyContent={"space-between"} spacing={2}>
+        <div className="w2g-footer">
           {/*Список пользователей*/}
-          <Stack></Stack>
+          <Stack className="w2g-userlist" spacing={3} flexWrap={"wrap"} direction={"row"}>
+            {lobbyData?.users?.map((item, index) => {
+              return (
+                <Stack className="w2g-userlist-item" key={`list-user-${index}`} spacing={1}>
+                  <Stack
+                    className="w2g-userlist-item__avatar"
+                    style={{ backgroundImage: `url("${item.iconUrl}")` }}
+                  ></Stack>
+                  <h5 style={{ textAlign: "center" }}>{item.name}</h5>
+                </Stack>
+              );
+            })}
+          </Stack>
           {/*Чат*/}
-          <Stack></Stack>
-        </Stack>
+          <Stack className="w2g-chat" spacing={2}>
+            <Stack className="w2g-chat-container" spacing={1}>
+              {messages.map((item, index) => {
+                return <ChatMessageItem user={item.user} key={`chat-message-${index}`} message={item.message} />;
+              })}
+            </Stack>
+            <Stack direction={"row"} justifyContent={"space-between"} spacing={2} width={"auto"}>
+              <input ref={inputMessage} type="text" className="w2g-chat__inputMessage" placeholder="Сообщение..." />
+              <Button variant="contained" color="primary" onClick={sendMessageHandle}>
+                Отправить
+              </Button>
+            </Stack>
+          </Stack>
+        </div>
       </Stack>
 
       {/*Модальные окна*/}

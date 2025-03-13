@@ -1,0 +1,13 @@
+@import "@styles/Mixins";
+
+.w2g-chat-item {
+  padding: 6px;
+
+  border-radius: 4px;
+
+  background-color: rgb(75, 75, 75);
+
+  &__icon {
+    @include Avatar(36px);
+  }
+}

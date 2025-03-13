@@ -55,8 +55,10 @@ const SelectVideoModal: React.FC<SelectVideoModalProps> = ({ opened, onClose, on
                   direction={"row"}
                   className="w2g-svm-list-item"
                   spacing={1}
+                  key={`video-list-${index}`}
                   onClick={() => {
                     if (onVideoSelected) onVideoSelected(video);
+                    if (onClose) onClose();
                   }}
                 >
                   <div

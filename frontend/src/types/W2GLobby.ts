@@ -1,3 +1,5 @@
+import { User } from "./models/UserModel";
+
 interface W2GLobby {
   name: string;
 
@@ -7,7 +9,7 @@ interface W2GLobby {
 
   usersCount: number;
 
-  users?: string[];
+  users?: User[];
 
   isPrivate: boolean;
 }

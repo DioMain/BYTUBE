@@ -1,15 +1,21 @@
 import AppHeader from "@components/AppHeader";
 import useAuth from "@hooks/useAuth";
+import { Stack } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 const App: React.FC = () => {
   useAuth();
 
   return (
-    <div style={{ backgroundColor: "#111111", minHeight: "720px" }}>
-      <AppHeader />
-      <Outlet />
-    </div>
+    <Stack style={{ backgroundColor: "#111111", minHeight: "800px" }} justifyContent={"space-between"}>
+      <Stack>
+        <AppHeader />
+        <Outlet />
+      </Stack>
+      <Stack style={{ backgroundColor: "#080808", marginTop: "16px" }}>
+        <Stack style={{ margin: "16px" }}>StarSverSquad.com</Stack>
+      </Stack>
+    </Stack>
   );
 };
 

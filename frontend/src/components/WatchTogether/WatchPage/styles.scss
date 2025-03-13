@@ -1,3 +1,6 @@
+@import "@styles/Mixins";
+@import "@styles/Inputs";
+
 .w2g {
   margin: 16px;
 
@@ -39,12 +42,67 @@
     &__title {
     }
   }
+
+  &-userlist {
+    padding: 16px;
+    background-color: rgb(41, 41, 41);
+
+    border-radius: 4px;
+
+    max-width: 400px;
+
+    height: min-content;
+
+    &-item {
+      &__avatar {
+        @include Avatar(64px);
+      }
+    }
+  }
+
+  &-footer {
+    flex-direction: row;
+    display: flex;
+    gap: 4px;
+    justify-content: space-between;
+
+    margin: 32px;
+  }
+
+  &-chat {
+    background-color: rgb(40, 40, 40);
+    padding: 8px;
+    min-width: 400px;
+    border-radius: 4px;
+
+    max-width: 600px;
+
+    &-container {
+      background-color: rgb(50, 50, 50);
+      padding: 4px;
+
+      height: 400px;
+      max-height: 400px;
+
+      overflow-y: auto;
+    }
+
+    &__inputMessage {
+      @include TextField;
+
+      width: 100%;
+    }
+  }
 }
 
 @media screen and (max-width: 960px) {
   .w2g {
     &-video {
       width: 90%;
+    }
+
+    &-footer {
+      flex-direction: column;
     }
   }
 }
