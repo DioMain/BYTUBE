@@ -21,17 +21,26 @@ const VideoItem: React.FC<{ video: VideoModel }> = ({ video }) => {
           <div className="searchpage-videoitem__img-duration">{video.duration}</div>
         </Stack>
       </Stack>
-      <Stack justifyContent={"space-between"}>
-        <Stack>
-          <h3>{video.title}</h3>
-          <a className="searchpage-videoitem-channel" href={`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`}>
-            {video.channel?.name}
-          </a>
-        </Stack>
-        <Stack>
-          <h5>
+      <Stack spacing={2}>
+        <Stack spacing={1}>
+          <h2>{video.title}</h2>
+          <div style={{ fontSize: "14px" }}>
             {getCreatedTimeText(video.created)} - {video.views} просмотров
-          </h5>
+          </div>
+        </Stack>
+        <Stack direction={"row"} className="searchpage-videoitem-channel" spacing={1}>
+          <div
+            className="searchpage-videoitem-channel__icon"
+            style={{ backgroundImage: `url("${video.channel?.iconUrl}")` }}
+          ></div>
+          <Stack>
+            <a
+              className="searchpage-videoitem-channel__link"
+              href={`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`}
+            >
+              {video.channel?.name}
+            </a>
+          </Stack>
         </Stack>
       </Stack>
     </Stack>

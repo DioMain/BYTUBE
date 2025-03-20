@@ -1,3 +1,5 @@
+@import "@styles/Mixins";
+
 .searchpage-videoitem {
   padding: 12px;
 
@@ -30,12 +32,19 @@
   }
 
   &-channel {
-    font-size: 14px;
-    color: rgb(212, 212, 212);
-    text-decoration: none;
+    &__icon {
+      @include Avatar(32px);
+    }
 
-    &:hover {
-      text-decoration: underline;
+    &__link {
+      font-size: 16px;
+      color: rgb(212, 212, 212);
+      text-decoration: none;
+      width: max-content;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

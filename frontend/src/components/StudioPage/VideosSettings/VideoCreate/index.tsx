@@ -238,6 +238,9 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
             control={<Checkbox color="primary" />}
           />
         </Stack>
+        {loading && (
+          <h3 style={{ textAlign: "center" }}>Видео загружается не закрывайте и не перезагружайте страницу!</h3>
+        )}
         <Stack className="studio-videocreate-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
         <Stack direction={"row"} justifyContent={"end"}>
           <LoadingButton
