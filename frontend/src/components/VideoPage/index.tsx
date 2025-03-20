@@ -88,6 +88,13 @@ const VideoPage: React.FC = observer(() => {
     }
   };
 
+  const handleTagClick = (tag: string) => {
+    let url = new URL(QueriesUrls.SEARCH_PAGE, window.location.origin);
+    url.searchParams.set("search", tag);
+
+    window.location.assign(url.toString());
+  };
+
   switch (videoResponce.status) {
     case StatusBase.Loading:
       return <LinearProgress />;
@@ -111,7 +118,7 @@ const VideoPage: React.FC = observer(() => {
                 <Stack direction={"row"} spacing={1}>
                   {video.value?.tags?.map((item, index) => {
                     return (
-                      <div key={`vp-tag-${index}`} className="videopage-tag">
+                      <div key={`vp-tag-${index}`} className="videopage-tag" onClick={() => handleTagClick(`#${item}`)}>
                         #{item}
                       </div>
                     );

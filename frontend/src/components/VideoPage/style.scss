@@ -35,6 +35,11 @@
     border-radius: 8px;
 
     padding: 4px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #cbcbcb;
+    }
   }
 
   &-description {

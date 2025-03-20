@@ -53,7 +53,10 @@ const AppHeader: React.FC = observer(() => {
   );
 
   const handleSearch = () => {
-    navigator(`${QueriesUrls.SEARCH_PAGE}?search=${searchBarField.current?.value}`);
+    let url = new URL(QueriesUrls.SEARCH_PAGE, window.location.origin);
+    url.searchParams.set("search", searchBarField.current?.value as string);
+
+    window.location.assign(url.toString());
   };
 
   const iconUrl = user.value ? `url(${user.value.iconUrl})` : `url(${IconPlaceholder})`;

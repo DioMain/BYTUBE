@@ -8,10 +8,14 @@ import { SelectOrderBy } from "@type/SelectOptions";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 import VideoItem from "./VideoItem";
 import StatusBase from "@type/StatusBase";
+import { useSearchParams } from "react-router-dom";
 
 const SearchPage: React.FC = observer(() => {
   const sortValues = ["Просмотры", "Новое", "Старое"];
-  const search = GetUrlParams().get("search") ?? "";
+
+  const searchParams = useSearchParams();
+
+  const search = searchParams[0].get("search") ?? "";
 
   const observeElement = useRef<HTMLDivElement>(null);
 
@@ -43,7 +47,7 @@ const SearchPage: React.FC = observer(() => {
 
   useEffect(() => {
     refresh();
-  }, [searchData.selectOptions?.orderBy]);
+  }, [searchData.selectOptions?.orderBy, search]);
 
   return (
     <Stack className="searchpage" spacing={2}>
@@ -73,7 +77,7 @@ const SearchPage: React.FC = observer(() => {
         })}
         {status === StatusBase.Loading && <LinearProgress />}
         {status === StatusBase.Failed && <Alert severity="error">Во время поиска произошла ошибка!</Alert>}
-        {ended ? <Alert severity="info">Больше видео не найдено</Alert> : <div ref={observeElement}>1</div>}
+        {ended ? <Alert severity="info">Больше видео не найдено</Alert> : <div ref={observeElement}></div>}
       </Stack>
     </Stack>
   );

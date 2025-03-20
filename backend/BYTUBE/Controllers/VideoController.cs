@@ -224,13 +224,15 @@ namespace BYTUBE.Controllers
                 var tagPattern = @"#\w+";
                 var tags = Regex.Matches(options.SearchPattern, tagPattern)
                                 .Cast<Match>()
-                                .Select(m => m.Value)
+                                .Select(m => m.Value[1..])
                                 .ToList();
 
+                var searchPatternNoTags = Regex.Replace(options.SearchPattern, tagPattern, "").Trim();
+
                 var query = _dbContext.Videos
-                    .Include(video => video.Owner)                         
-                        .ThenInclude(o => o.Subscribes)             
-                    .Include(video => video.Reports)                       
+                    .Include(video => video.Owner)
+                        .ThenInclude(o => o.Subscribes)
+                    .Include(video => video.Reports)
                     .AsQueryable();
 
                 if (!(options.AsAdmin && authData.IsAutorize && authData.Role == Entity.Models.User.RoleType.Admin))
@@ -239,22 +241,15 @@ namespace BYTUBE.Controllers
                     query = query.Where(video => video.VideoStatus == Video.Status.NoLimit);
                 }
 
-                // TODO
-
-                //if (tags.Any())
-                //{
-                //    query = query.Where(video => video.Tags.Any(tag => tags.Any(tag1 => tag1 == tag)));
-                //}
-
                 if (!string.IsNullOrEmpty(options.Ignore))
                 {
                     var ignoredIds = options.Ignore.Split(',').Select(Guid.Parse);
                     query = query.Where(video => !ignoredIds.Contains(video.Id));
                 }
 
-                if (!string.IsNullOrEmpty(options.SearchPattern))
+                if (!string.IsNullOrEmpty(searchPatternNoTags))
                 {
-                    query = query.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{options.SearchPattern}(\w)*"));
+                    query = query.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{searchPatternNoTags}(\w)*"));
                 }
 
                 if (authData.IsAutorize)
@@ -283,9 +278,14 @@ namespace BYTUBE.Controllers
                     _ => query
                 };
 
-                query = query.Skip(options.Skip).Take(options.Take);
-
                 var videos = await query.ToListAsync();
+
+                if (tags.Count != 0)
+                {
+                    videos = videos.Where(video => video.Tags.Any(vtag => tags.Contains(vtag))).ToList();
+                }
+
+                videos = videos.Skip(options.Skip).Take(options.Take).ToList();
 
                 var result = videos.Select(video =>
                 {
@@ -303,8 +303,6 @@ namespace BYTUBE.Controllers
                         Views = video.Views,
                         ReportsCount = video.Reports.Count,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
-                        
-
                         Channel = new ChannelModel
                         {
                             Id = video.Owner.Id.ToString(),
