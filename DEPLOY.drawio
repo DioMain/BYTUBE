@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&amp;lt;&amp;lt;device&amp;gt;&amp;gt;&lt;/font&gt;&lt;div style=&quot;&quot;&gt;Docker Compose 2.26.1 / Window Server 2022 10.20348.169&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-1" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&amp;lt;&amp;lt;device&amp;gt;&amp;gt;&lt;/font&gt;&lt;div style=&quot;&quot;&gt;Docker Compose 4.39.0 / Window Server 2022 10.20348.169&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-790" y="260" width="580" height="300" as="geometry" />
         </mxCell>
         <mxCell id="PNTqQ1LK-q0UgE5t2Ike-4" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&amp;lt;&amp;lt;device&amp;gt;&amp;gt;&lt;/font&gt;&lt;div style=&quot;&quot;&gt;Docker 26.0.0 / Linux&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
