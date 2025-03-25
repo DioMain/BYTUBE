@@ -1,7 +1,7 @@
 import { HttpTransportType, HubConnectionBuilder } from "@microsoft/signalr";
 
 const t2gConnetion = new HubConnectionBuilder()
-  .withUrl("http://localhost:8081/WatchTogetherHub", HttpTransportType.WebSockets)
+  .withUrl("https://localhost:8081/WatchTogetherHub", HttpTransportType.WebSockets)
   .withAutomaticReconnect()
   .build();
 

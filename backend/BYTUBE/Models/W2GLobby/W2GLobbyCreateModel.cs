@@ -8,4 +8,6 @@ public class W2GLobbyCreateModel
     public string Name { get; set; }
 
     public string? Password { get; set; }
+
+    public Guid? Video { get; set; }
 }

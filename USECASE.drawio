@@ -114,7 +114,7 @@
         <mxCell id="4aJVaFBn8uNp1Ig8Rj45-10" value="Регистрация" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="510" y="50" width="130" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="4aJVaFBn8uNp1Ig8Rj45-11" value="Аутентификация" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="4aJVaFBn8uNp1Ig8Rj45-11" value="Авторизация" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="510" y="155" width="130" height="90" as="geometry" />
         </mxCell>
         <mxCell id="m1uOOj59rF31rRHAzahm-17" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=none;endFill=0;" parent="1" source="4aJVaFBn8uNp1Ig8Rj45-24" target="m1uOOj59rF31rRHAzahm-15" edge="1">
@@ -131,7 +131,7 @@
         <mxCell id="4aJVaFBn8uNp1Ig8Rj45-25" value="&lt;span style=&quot;font-size: 14px; font-family: &amp;quot;Times New Roman&amp;quot;, serif;&quot;&gt;Просмотр&lt;br style=&quot;font-size: 14px;&quot;&gt;жалоб&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 14px; font-family: &amp;quot;Times New Roman&amp;quot;, serif;&quot;&gt;пользователей&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="480" y="985" width="130" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="4aJVaFBn8uNp1Ig8Rj45-26" value="&lt;span style=&quot;font-size: 14px; font-family: &amp;quot;Times New Roman&amp;quot;, serif;&quot;&gt;Обеспечивать&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 14px; font-family: &amp;quot;Times New Roman&amp;quot;, serif;&quot;&gt;&amp;nbsp;удаление комментариев&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="4aJVaFBn8uNp1Ig8Rj45-26" value="&lt;div&gt;&lt;span style=&quot;font-size: 14px; font-family: &amp;quot;Times New Roman&amp;quot;, serif;&quot;&gt;Удаление любых комментариев&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="480" y="765" width="130" height="90" as="geometry" />
         </mxCell>
         <mxCell id="eN5u8DYPw_jCEcZoBxwO-1" value="1" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
@@ -234,7 +234,7 @@
         <mxCell id="m1uOOj59rF31rRHAzahm-29" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;Удаление плейлита&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1150" y="745" width="130" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="m1uOOj59rF31rRHAzahm-30" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;Добовление видео в плейлист&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="m1uOOj59rF31rRHAzahm-30" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;Добавление видео в плейлист&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1147" y="965" width="130" height="90" as="geometry" />
         </mxCell>
         <mxCell id="m1uOOj59rF31rRHAzahm-31" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;Воспроизведение плейлиста&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" parent="1" vertex="1">

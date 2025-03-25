@@ -118,6 +118,7 @@ namespace BYTUBE.Controllers
                     Name = model.Name,
                     Master = user.Id,
                     Password = model.Password != null ? _passwordHasher.Hash(model.Password) : null,
+                    VideoId = model.Video, 
                     AllowedUser = [user.Id]
                 });
 

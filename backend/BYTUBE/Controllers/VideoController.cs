@@ -360,7 +360,7 @@ namespace BYTUBE.Controllers
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
 
                 string minutesString = minutes.ToString();
-                string secoundsString = minutes.ToString();
+                string secoundsString = secound.ToString();
 
                 minutesString = minutesString.Length == 1 ? $"0{minutesString}" : minutesString;
                 secoundsString = secoundsString.Length == 1 ? $"0{secoundsString}" : secoundsString;

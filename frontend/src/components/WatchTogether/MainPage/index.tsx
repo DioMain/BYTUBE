@@ -82,7 +82,7 @@ const W2GMainPage: React.FC = observer(() => {
             defaultValue={`${user.value?.name}\`s lobby`}
             placeholder="Название лобби"
           />
-          <Stack direction={"row"} justifyContent={"space-between"}>
+          {/* <Stack direction={"row"} justifyContent={"space-between"}>
             <input
               ref={lobbyPasswordInput}
               type="text"
@@ -99,7 +99,7 @@ const W2GMainPage: React.FC = observer(() => {
               }
               label="Приватный?"
             />
-          </Stack>
+          </Stack> */}
           <Button variant="contained" color="primary" onClick={createLobby}>
             Создать
           </Button>

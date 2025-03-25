@@ -31,12 +31,16 @@ import WatchTogeather from "@mui/icons-material/AddToQueue";
 import "./style.scss";
 import { Expand, ExpandMore } from "@mui/icons-material";
 import ReportModal from "./ReportModal";
+import { useNavigate } from "react-router-dom";
+import ServerError from "@type/ServerError";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
   const playlistId = GetUrlParams().get("playlistId") as number | undefined;
 
   const videoResponce = useVideoGlobal(id);
+
+  const navigator = useNavigate();
 
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
   const [reportModalOpened, setReportModalOpened] = useState(false);
@@ -95,6 +99,25 @@ const VideoPage: React.FC = observer(() => {
     window.location.assign(url.toString());
   };
 
+  const handleToW2G = () => {
+    const name = `${user.value?.name}\`s lobby ${video.value?.title}`;
+
+    axios
+      .post(QueriesUrls.W2G_LOBBYS_COMMON, {
+        Name: name,
+        Password: null,
+        Video: video.value?.id,
+      })
+      .then(() => {
+        navigator(`/App/WatchTogether/Lobby?lobby=${name}`);
+      })
+      .catch((err: AxiosError) => {
+        let srvErr = new ServerError(err.response?.data);
+
+        console.error(srvErr.getFirstError());
+      });
+  };
+
   switch (videoResponce.status) {
     case StatusBase.Loading:
       return <LinearProgress />;
@@ -130,7 +153,7 @@ const VideoPage: React.FC = observer(() => {
                 <Stack direction={"row"} spacing={2}>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Совместный просмотр">
-                      <IconButton onClick={addToPlaylistHandle} disabled={user.status !== AuthState.Authed}>
+                      <IconButton onClick={handleToW2G} disabled={user.status !== AuthState.Authed}>
                         <WatchTogeather />
                       </IconButton>
                     </Tooltip>
