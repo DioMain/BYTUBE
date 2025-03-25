@@ -17,6 +17,7 @@ import SelectVideoModal from "./SelectVideoModal";
 import MarkVideo from "@components/VideoPage/MarkVideo";
 import { User } from "@type/models/UserModel";
 import ChatMessageItem from "./ChatMessageItem/intex";
+import { measurePing } from "@helpers/WatchTogetherService";
 
 interface ChatMessage {
   user: User;
@@ -32,6 +33,7 @@ const W2GWatchPage: React.FC = observer(() => {
   const player = useRef<VideoPlayerRef>(null);
   const inputMessage = useRef<HTMLInputElement>(null);
   const rememberedUsers = useRef<User[]>([]);
+  const currentPing = useRef(0);
 
   const { w2gConnetion, connectionState } = useW2GConnection(lobbyName);
 
@@ -103,13 +105,15 @@ const W2GWatchPage: React.FC = observer(() => {
     });
 
     w2gConnetion.on("onSeek", (time) => {
-      console.log("remote: seek");
-      player.current?.seekNotNotify(time);
+      const latency = currentPing.current / 1000;
+      console.log(`remote: seek [latency: ${latency}]`);
+      player.current?.seekNotNotify(time + latency);
     });
 
     w2gConnetion.on("onSync", (time) => {
+      const latency = currentPing.current / 1000;
       console.log(`remote: sync [time: ${time}]`);
-      player.current?.seekNotNotify(time);
+      player.current?.seekNotNotify(time + latency);
     });
 
     w2gConnetion.on("onRequestSync", () => {
@@ -121,6 +125,10 @@ const W2GWatchPage: React.FC = observer(() => {
       getLobbyData();
     });
 
+    const pingTestInterval = setInterval(() => {
+      measurePing(w2gConnetion).then((value) => (currentPing.current = value));
+    }, 100);
+
     return () => {
       w2gConnetion.invoke("LeaveTheLobby");
 
@@ -129,6 +137,8 @@ const W2GWatchPage: React.FC = observer(() => {
       w2gConnetion.off("onSeek");
       w2gConnetion.off("onSync");
       w2gConnetion.off("onRequestSync");
+
+      clearInterval(pingTestInterval);
     };
   }, [connectionState]);
 

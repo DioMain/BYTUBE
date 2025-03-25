@@ -18,6 +18,11 @@ namespace BYTUBE.Hubs
             await LeaveTheLobby();
         }
 
+        public async Task<long> PingTest()
+        {
+             return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        }
+
         public async Task Play()
         {
             var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
