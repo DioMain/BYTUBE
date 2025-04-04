@@ -1,21 +1,17 @@
 import { createRoot } from "react-dom/client";
 import GeneralRoutes from "@components/GeneralRoutes";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material/styles";
 import { AppStoreContext } from "appStoreContext";
 import StoreWrapper from "@stores/StoreWrapper";
-import "@styles/Base.scss";
 import "@styles/Fonts.scss";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import "@styles/Base.scss";
+import { lightThemeMUI } from "@styles/Themes";
+import GlobalStyles from "@styles/Global";
 
 createRoot(document.getElementById("root")!).render(
   <AppStoreContext.Provider value={new StoreWrapper()}>
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={lightThemeMUI}>
+      <GlobalStyles />
       <GeneralRoutes />
     </ThemeProvider>
   </AppStoreContext.Provider>

@@ -5,6 +5,8 @@ import { ReportType } from "@type/models/ReportModel";
 import axios from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
+import styled from "styled-components";
+import { BoxStyled } from "@styles/Common";
 
 interface RM_Props {
   opened: boolean;
@@ -43,25 +45,14 @@ const ReportModal: React.FC<RM_Props> = ({ opened, onClose }) => {
       .post(QueriesUrls.REPORT_COMMON, {
         description: other,
         type: reportType,
-        videoId: video.value?.id,
+        videoGuid: video.value?.id,
       })
       .then(() => onClose());
   };
 
   return (
     <Modal open={opened} onClose={onClose} className="addtoplaylist">
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-        }}
-      >
+      <BoxStyled>
         <Stack spacing={2} className="reportmodal">
           <h3 className="reportmodal-title">Укажите причину жалобы</h3>
           <RadioGroup value={radioValue} onChange={(evt, val) => setRadioValue(Number.parseInt(val))}>
@@ -76,7 +67,7 @@ const ReportModal: React.FC<RM_Props> = ({ opened, onClose }) => {
             Подтвердить
           </Button>
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

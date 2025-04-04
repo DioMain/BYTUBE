@@ -35,9 +35,7 @@ const PlaylistViewer: React.FC<PVProps> = ({ playlist }) => {
 
   return (
     <Stack className="playlistview" spacing={2}>
-      <div>
-        плейлист: <span className="playlistview-title">{playlist.name}</span>
-      </div>
+      <div className="playlistview-title">{playlist.name}</div>
       <Stack spacing={1}>
         {videos.map((item, index) => {
           return (

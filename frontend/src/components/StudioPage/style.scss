@@ -1,7 +1,6 @@
 @import "@styles/mixins";
 
 .studio {
-  background-color: rgb(10, 10, 10);
   min-height: 700px;
 
   &-header {
@@ -9,7 +8,7 @@
     padding-right: 36px;
     padding-left: 36px;
 
-    background-color: rgb(31, 31, 31);
+    background-color: white;
 
     &-channelicon {
       @include Avatar(48px);
@@ -21,7 +20,7 @@
   }
 
   &__tabs {
-    background-color: rgb(26, 26, 26);
+    background-color: #f6f6f6;
 
     .MuiTabs-flexContainer {
       justify-content: center;

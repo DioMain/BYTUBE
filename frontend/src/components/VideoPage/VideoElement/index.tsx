@@ -1,31 +1,25 @@
 import VideoModel from "@type/models/VideoModel";
-import "./style.scss";
 import { Stack } from "@mui/material";
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
 import CircleIcon from "@mui/icons-material/Circle";
+import styles from "./styled";
 
 const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
   return (
-    <Stack
-      className="vpvideoelement"
+    <styles.VideoElement
       onClick={() => window.location.assign(`/App/Video?id=${video.id}`)}
       direction={"row"}
       spacing={2}
     >
-      <Stack
-        className="vpvideoelement-image"
-        style={{ backgroundImage: `url("${video.previewUrl}")` }}
-        justifyContent={"end"}
-      >
+      <styles.VideoElementImage style={{ backgroundImage: `url("${video.previewUrl}")` }} justifyContent={"end"}>
         <Stack direction={"row"} justifyContent={"end"}>
-          <Stack className="vpvideoelement-image-duration">{video.duration}</Stack>
+          <styles.VideoElementImage_Duration>{video.duration}</styles.VideoElementImage_Duration>
         </Stack>
-      </Stack>
+      </styles.VideoElementImage>
       <Stack justifyContent={"space-between"}>
         <h4>{video.title}</h4>
         <Stack>
-          <div
-            className="vpvideoelement-chname"
+          <styles.ChannelName
             onClick={(evt) => {
               if (!evt.isPropagationStopped()) evt.stopPropagation();
 
@@ -33,13 +27,13 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
             }}
           >
             {video.channel?.name}
-          </div>
-          <div className="vpvideoelement-viewscreated">
+          </styles.ChannelName>
+          <styles.VideoCreated>
             {video.views} просмотров <CircleIcon sx={{ fontSize: "8px" }} /> {getCreatedTimeText(video.created)}
-          </div>
+          </styles.VideoCreated>
         </Stack>
       </Stack>
-    </Stack>
+    </styles.VideoElement>
   );
 };
 

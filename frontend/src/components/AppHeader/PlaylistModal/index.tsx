@@ -6,6 +6,7 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import VideoItem from "./VideoItem";
 import SortVideosByOrder from "@helpers/SortVideosByOrder";
+import { BoxStyled } from "@styles/Common";
 
 interface AHPLM_Props {
   opened: boolean;
@@ -57,18 +58,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
 
   return (
     <Modal open={opened} onClose={onClose} className="createplaylist">
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "450px",
-        }}
-      >
+      <BoxStyled sx={{ width: "500px" }}>
         {playlist === null ? (
           <CircularProgress />
         ) : (
@@ -101,7 +91,7 @@ const PlaylistModal: React.FC<AHPLM_Props> = ({ playlist, onClose, opened }) => 
             </Stack>
           </Stack>
         )}
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

@@ -1,5 +1,5 @@
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
-import { Stack, Button, IconButton, Tooltip } from "@mui/material";
+import { Stack, Button, IconButton } from "@mui/material";
 import AuthState from "@type/AuthState";
 import CommentModel from "@type/models/CommentModel";
 import { Role } from "@type/models/UserModel";
@@ -9,9 +9,7 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SettingsIcon from "@mui/icons-material/Settings";
-import VideoModel from "@type/models/VideoModel";
-import UnknownUserImage from "@assets/images/UnknownUser.jpg";
+import styles from "../styled";
 
 interface CommentItemProps {
   comment: CommentModel;
@@ -61,32 +59,24 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
   };
 
   return (
-    <Stack className="commentviewer-list-item" direction={"row"} spacing={2}>
-      <div
-        className="commentviewer-list-item__icon"
-        style={{ backgroundImage: `url("${comment.user?.iconUrl}")`, width: "48px" }}
-      ></div>
+    <styles.ListItem direction={"row"} spacing={2}>
+      <styles.ItemIcon style={{ backgroundImage: `url("${comment.user?.iconUrl}")`, width: "48px" }}></styles.ItemIcon>
 
       <Stack spacing={1} style={{ width: "90%" }}>
         <Stack direction={"row"} justifyContent={"space-between"}>
-          <Stack className="commentviewer-list-item__name">{comment.user?.name}</Stack>
-          <div className="commentviewer-list-item__created">{getCreatedTimeText(comment.created!)}</div>
+          <styles.ItemName>{comment.user?.name}</styles.ItemName>
+          <styles.ItemCreated>{getCreatedTimeText(comment.created!)}</styles.ItemCreated>
         </Stack>
         <Stack direction={"row"} justifyContent={"space-between"} spacing={2}>
           {updateMode ? (
             <>
-              <input
-                type="text"
-                className="commentviewer-list-item__input"
-                ref={updateField}
-                defaultValue={comment.message}
-              />
+              <styles.ItemInput type="text" ref={updateField} defaultValue={comment.message} />
               <Button variant="contained" color="primary" onClick={handleSubmitUpdate}>
                 Подтвердить
               </Button>
             </>
           ) : (
-            <p className="commentviewer-list-item__text">{message}</p>
+            <styles.ItemText>{message}</styles.ItemText>
           )}
         </Stack>
         <Stack direction={"row"} spacing={1}>
@@ -113,7 +103,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
           )}
         </Stack>
       </Stack>
-    </Stack>
+    </styles.ListItem>
   );
 };
 

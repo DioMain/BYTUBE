@@ -1,7 +1,7 @@
 @import "@styles/animations.scss";
 
-$upload_in_bg: rgb(20, 20, 20);
-$upload_out_bg: rgb(30, 30, 30);
+$upload_default_bg: #f6f6f6;
+$upload_hover_bg: #ddd;
 
 .studio-videolist {
   &__upload {
@@ -10,19 +10,43 @@ $upload_out_bg: rgb(30, 30, 30);
 
     cursor: pointer;
 
-    background-color: $upload_in_bg;
+    background-color: $upload_default_bg;
 
-    outline: 1px rgb(48, 48, 48) solid;
+    outline: 2px rgb(48, 48, 48) solid;
 
     display: flex;
     gap: 4px;
     justify-content: center;
 
-    @include fadingAnimation(0.1s, $upload_in_bg, $upload_out_bg);
+    animation: hover_out 0.05s linear;
+
+    &:hover {
+      animation: hover_in 0.05s linear forwards;
+    }
   }
 
   &__list {
     padding-left: 64px;
     padding-right: 64px;
+  }
+}
+
+@keyframes hover_in {
+  from {
+    background-color: $upload_default_bg;
+  }
+
+  to {
+    background-color: $upload_hover_bg;
+  }
+}
+
+@keyframes hover_out {
+  from {
+    background-color: $upload_hover_bg;
+  }
+
+  to {
+    background-color: $upload_default_bg;
   }
 }

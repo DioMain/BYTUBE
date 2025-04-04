@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import ServerError from "@type/ServerError";
+import { BoxStyled } from "@styles/Common";
 
 interface APCPM_Props {
   opened: boolean;
@@ -45,18 +46,7 @@ const CreatePlaylistModal: React.FC<APCPM_Props> = ({ opened, onClose }) => {
 
   return (
     <Modal open={opened} onClose={onClose} className="createplaylist">
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-        }}
-      >
+      <BoxStyled>
         <Stack spacing={2}>
           <h2 style={{ textAlign: "center" }}>Создание Плейлиста</h2>
           <Stack spacing={1}>
@@ -90,7 +80,7 @@ const CreatePlaylistModal: React.FC<APCPM_Props> = ({ opened, onClose }) => {
             </Alert>
           )}
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

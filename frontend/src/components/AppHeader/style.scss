@@ -6,7 +6,7 @@
   padding: 8px;
   padding-right: 16px;
 
-  background-color: rgb(31, 31, 31);
+  background-color: rgb(255, 255, 255);
 
   position: sticky;
 
@@ -39,8 +39,6 @@
 
         background-color: transparent;
         border: none;
-
-        color: white;
 
         &:focus {
           outline: none;

@@ -8,6 +8,7 @@ import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import IsRightImageFormat from "@helpers/IsRightImageFormat";
 import ServerError from "@type/ServerError";
+import { BoxStyled } from "@styles/Common";
 
 interface CCMProps extends PropsBase {
   isOpened: boolean;
@@ -67,18 +68,7 @@ const CreateChannelModal: React.FC<CCMProps> = ({ isOpened, closeCallback }) => 
 
   return (
     <Modal open={isOpened} onClose={closeCallback}>
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "70%",
-        }}
-      >
+      <BoxStyled sx={{ width: "60%" }}>
         <Stack spacing={2} className="createchannel">
           <h2 className="createchannel-title">Создание канала</h2>
           <Stack
@@ -138,7 +128,7 @@ const CreateChannelModal: React.FC<CCMProps> = ({ isOpened, closeCallback }) => 
           </Stack>
           <h5 style={{ textAlign: "center", color: "red" }}>{error}</h5>
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

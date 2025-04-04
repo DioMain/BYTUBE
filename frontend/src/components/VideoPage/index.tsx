@@ -28,11 +28,11 @@ import useVideoGlobal from "@hooks/useVideoGlobal";
 import { observer } from "mobx-react-lite";
 import CommentsViewer from "@components/CommentsViewer";
 import WatchTogeather from "@mui/icons-material/AddToQueue";
-import "./style.scss";
-import { Expand, ExpandMore } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import ReportModal from "./ReportModal";
 import { useNavigate } from "react-router-dom";
 import ServerError from "@type/ServerError";
+import styles from "./styled";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -126,29 +126,28 @@ const VideoPage: React.FC = observer(() => {
     default:
       return (
         <>
-          <div className="videopage">
-            <Stack className="videopage-main">
+          <styles.VideoPage>
+            <styles.VideoPageMain>
               <VideoPlayer
                 url={video.value?.videoUrl!}
-                className="videopage__player"
                 width={`auto`}
                 onVideoEnded={onEndVideoHandler}
                 autoplay={false}
               />
-              <h1 className="videopage-vtitle">{video.value?.title}</h1>
+              <styles.VideoTitle>{video.value?.title}</styles.VideoTitle>
               <Stack spacing={3} direction={"row"}>
-                <div className="videopage-views">{video.value?.views} просмотров</div>
+                <div>{video.value?.views} просмотров</div>
                 <Stack direction={"row"} spacing={1}>
                   {video.value?.tags?.map((item, index) => {
                     return (
-                      <div key={`vp-tag-${index}`} className="videopage-tag" onClick={() => handleTagClick(`#${item}`)}>
+                      <styles.VideoTag key={`vp-tag-${index}`} onClick={() => handleTagClick(`#${item}`)}>
                         #{item}
-                      </div>
+                      </styles.VideoTag>
                     );
                   })}
                 </Stack>
               </Stack>
-              <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
+              <Stack direction={"row"} spacing={2} justifyContent={"space-between"}>
                 <ChannelButton channel={video.value?.channel!} />
                 <Stack direction={"row"} spacing={2}>
                   <Stack justifyContent={"center"}>
@@ -175,8 +174,8 @@ const VideoPage: React.FC = observer(() => {
                   <MarkVideo id={video.value?.id!} />
                 </Stack>
               </Stack>
-              <Stack className="videopage-description">{video.value?.description}</Stack>
-              <Stack className="videopage-comments">
+              <styles.VideoDescription>{video.value?.description}</styles.VideoDescription>
+              <Stack>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMore />}>Комментарии</AccordionSummary>
                   <AccordionDetails>
@@ -184,8 +183,8 @@ const VideoPage: React.FC = observer(() => {
                   </AccordionDetails>
                 </Accordion>
               </Stack>
-            </Stack>
-            <Stack className="videopage-othervideos" spacing={2}>
+            </styles.VideoPageMain>
+            <styles.OtherVideos spacing={2}>
               {playlistId === undefined ? (
                 <OtherVideos videoId={video.value?.id!} />
               ) : (
@@ -198,8 +197,8 @@ const VideoPage: React.FC = observer(() => {
                   )}
                 </>
               )}
-            </Stack>
-          </div>
+            </styles.OtherVideos>
+          </styles.VideoPage>
 
           <AddToPlaylistModal
             video={video.value!}

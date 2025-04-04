@@ -32,7 +32,7 @@ module.exports = {
         exclude: /mode_modules/,
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ttf)$/i,
         type: "asset/resource",
       },
       {

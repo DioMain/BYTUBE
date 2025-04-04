@@ -2,7 +2,6 @@
 @import "@styles/Variables";
 
 .createchannel {
-
   box-sizing: border-box;
   &-title {
     text-align: center;
@@ -17,7 +16,7 @@
     background-position: center;
     background-size: cover;
 
-    background-color: rgb(33, 33, 33);
+    background-color: rgb(170, 170, 170);
 
     padding: $CommonPadding;
   }
@@ -25,7 +24,7 @@
   &-icon {
     @include Avatar(100px);
 
-    background-color: rgb(33, 33, 33);
+    background-color: rgb(170, 170, 170);
 
     padding: $CommonPadding;
   }

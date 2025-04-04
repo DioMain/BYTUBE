@@ -1,5 +1,4 @@
-import { Stack } from "@mui/material";
-import "./style.scss";
+import { Alert, Stack } from "@mui/material";
 import VideoModel from "@type/models/VideoModel";
 import { useEffect, useState } from "react";
 import ReportModel, { ReportType } from "@type/models/ReportModel";
@@ -25,10 +24,12 @@ const ReportView: React.FC<ReportView_Props> = ({ video }) => {
       });
   }, [video]);
 
+  const otherReports = reports.filter((i) => i.type === ReportType.Other);
+
   return (
     <Stack spacing={2}>
-      <h1 style={{ textAlign: "center" }}>Жалаобы по теме</h1>
-      <h4>Пахабный контент: {reports.filter((i) => i.type === ReportType.SexyalContent).length}</h4>
+      <h1 style={{ textAlign: "center" }}>Жалобы по теме</h1>
+      <h4>Сексуальный контент: {reports.filter((i) => i.type === ReportType.SexyalContent).length}</h4>
       <h4>Насилие в контенте: {reports.filter((i) => i.type === ReportType.GoreContent).length}</h4>
       <h4>Шокирующий контент: {reports.filter((i) => i.type === ReportType.InsultContent).length}</h4>
       <h4>Издевательство или абьюз: {reports.filter((i) => i.type === ReportType.BullyOrAbuse).length}</h4>
@@ -40,9 +41,8 @@ const ReportView: React.FC<ReportView_Props> = ({ video }) => {
       <h4>Ввод в заблуждение: {reports.filter((i) => i.type === ReportType.SpamOrLie).length}</h4>
       <h4>Нарушение закона: {reports.filter((i) => i.type === ReportType.NatinalLawBreaking).length}</h4>
       <h2>Другие жалобы</h2>
-      {reports
-        .filter((i) => i.type === ReportType.Other)
-        .map((item, index) => {
+      {otherReports.length > 0 ? (
+        otherReports.map((item, index) => {
           return (
             <Stack
               spacing={1}
@@ -52,7 +52,10 @@ const ReportView: React.FC<ReportView_Props> = ({ video }) => {
               <div style={{ fontSize: "16px" }}>{item.description}</div>
             </Stack>
           );
-        })}
+        })
+      ) : (
+        <Alert severity="info">Другие жалобу не обнаружены</Alert>
+      )}
     </Stack>
   );
 };

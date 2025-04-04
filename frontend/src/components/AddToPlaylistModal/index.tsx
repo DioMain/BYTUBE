@@ -8,9 +8,9 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-
 import "./styles.scss";
 import AuthState from "@type/AuthState";
+import { BoxStyled } from "@styles/Common";
 
 interface ARPM_Props {
   opened: boolean;
@@ -44,18 +44,7 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
 
   return (
     <Modal open={opened} onClose={onClose} className="addtoplaylist">
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-        }}
-      >
+      <BoxStyled>
         <Stack spacing={2}>
           <h5 style={{ textAlign: "center" }}>Плейлисты</h5>
           {playlists.map((playlist, index) => {
@@ -86,7 +75,7 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
             );
           })}
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };
