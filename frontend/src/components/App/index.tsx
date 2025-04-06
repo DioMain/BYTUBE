@@ -12,7 +12,7 @@ const App: React.FC = () => {
         <AppHeader />
         <Outlet />
       </Stack>
-      <Stack style={{ backgroundColor: "#080808", marginTop: "16px" }}>
+      <Stack style={{ backgroundColor: "#222", marginTop: "16px" }}>
         <Stack style={{ margin: "16px", color: "white" }}>StarSverSquad.com</Stack>
       </Stack>
     </Stack>

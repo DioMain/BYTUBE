@@ -1,18 +1,17 @@
 import { DefaultFont } from "./Mixins";
+import { ThemeValues } from "./Themes";
 
 const TextFieldMixin = () => `
-  color: black;
-
   ${DefaultFont("14px")}
 
   font-weight: 500;
 
   resize: none;
 
-  padding: 8px;
-  padding-left: 12px;
+  padding: ${ThemeValues.smallPadding};
+  padding-left: 8px;
 
-  border-radius: 6px;
+  border-radius: ${ThemeValues.smallBorderRadius};
 
   outline: none;
 
@@ -20,7 +19,6 @@ const TextFieldMixin = () => `
 
   &:hover {
     outline: none;
-    
   }
 
   &:focus {

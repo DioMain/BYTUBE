@@ -1,33 +1,38 @@
 .videoelement {
   display: flex;
-  
+
   flex-direction: column;
 
-  background-color: rgb(24, 24, 24);
+  background-color: #d6d6d6;
   padding: 12px;
 
-  border-radius: 16px;
+  border-radius: 8px;
 
   gap: 6px;
 
   cursor: pointer;
-  
+
+  &:hover {
+    background-color: #cecece;
+    box-shadow: 0 0 4px #cecece;
+
+    .videoelement-image {
+      background-size: 105%;
+    }
+  }
+
   &-image {
     background-position: center;
     background-size: cover;
 
     width: 320px;
     height: 180px;
-  
+
     display: flex;
     flex-direction: column;
     justify-content: end;
 
     border-radius: 16px;
-
-    &:hover {
-      background-size: 105%;
-    }
 
     &-duration {
       margin-bottom: 6px;
@@ -37,7 +42,9 @@
 
       border-radius: 8px;
 
-      background-color: rgba(0, 0, 0, 0.25);
+      color: white;
+
+      background-color: rgba(0, 0, 0, 0.35);
     }
 
     &-row {
@@ -46,9 +53,9 @@
     }
   }
 
-  &-info{
+  &-info {
     display: flex;
-    
+
     gap: 6px;
 
     &-col0 {
@@ -70,6 +77,7 @@
       display: flex;
       justify-content: start;
       flex-direction: column;
+
       gap: 4px;
 
       &-title {
@@ -77,10 +85,10 @@
       }
 
       &__channelname {
-        color: gray;
+        color: #555;
 
         &:hover {
-          color: rgb(160, 160, 160);
+          color: #222;
 
           text-decoration: underline;
         }

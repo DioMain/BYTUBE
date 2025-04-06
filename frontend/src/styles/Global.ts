@@ -1,14 +1,15 @@
 import styled, { createGlobalStyle } from "styled-components";
+import { ThemeValues } from "./Themes";
 
 const global = createGlobalStyle`
   * {
     margin: 0;
 
-    font-family: "Montserrat";
+    font-family: ${ThemeValues.commonFontFamily};
   }
 
   body {
-    background-color: #DDD;
+    background-color: ${ThemeValues.commonBackColor};
   }
 `;
 
