@@ -10,7 +10,15 @@ const lightThemeMUI = createTheme({
       fontFamily: "Montserrat",
     },
   },
-  components: {},
+  components: {
+    MuiSelect: {
+      styleOverrides: {
+        standard: {
+          backgroundColor: "white",
+        },
+      },
+    },
+  },
 });
 
 export { lightThemeMUI };

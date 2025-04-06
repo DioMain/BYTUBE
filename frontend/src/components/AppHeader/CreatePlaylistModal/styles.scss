@@ -1,9 +1,0 @@
-@import "@styles/inputs.scss";
-
-.createplaylist {
-  &__name {
-    width: 100%;
-
-    @include TextField;
-  }
-}

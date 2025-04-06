@@ -1,5 +1,5 @@
 import { Box, MenuItem, Modal, Select, Stack, Button, Alert } from "@mui/material";
-import "./styles.scss";
+import styles from "./styled";
 import { useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
@@ -45,20 +45,20 @@ const CreatePlaylistModal: React.FC<APCPM_Props> = ({ opened, onClose }) => {
   };
 
   return (
-    <Modal open={opened} onClose={onClose} className="createplaylist">
+    <Modal open={opened} onClose={onClose}>
       <BoxStyled>
         <Stack spacing={2}>
           <h2 style={{ textAlign: "center" }}>Создание Плейлиста</h2>
           <Stack spacing={1}>
             <h4>Название</h4>
             <Stack direction={"row"}>
-              <input type="text" className="createplaylist__name" ref={nameField} />
+              <styles.NameInput type="text" ref={nameField} placeholder="Плейлист..." />
             </Stack>
           </Stack>
-          <Stack spacing={1}>
+          {/* <Stack spacing={1}>
             <h4>Доступ</h4>
             <Stack direction={"row"}>
-              <Select variant="outlined" value={access} onChange={(evt) => setAccess(evt.target.value)}>
+              <Select value={access} onChange={(evt) => setAccess(evt.target.value)}>
                 {playlistAccesses.map((item, index) => {
                   return (
                     <MenuItem value={index} key={`cpm-access-select-${index}`}>
@@ -68,7 +68,7 @@ const CreatePlaylistModal: React.FC<APCPM_Props> = ({ opened, onClose }) => {
                 })}
               </Select>
             </Stack>
-          </Stack>
+          </Stack> */}
           <Stack direction={"row"} justifyContent={"end"}>
             <Button variant="contained" color="success" onClick={CreatePlaylist}>
               Подтвердить
