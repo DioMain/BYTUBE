@@ -53,7 +53,7 @@ const StudioPage: React.FC = observer(() => {
         <Stack spacing={2} direction={"row"}>
           <Logo />
           <Stack justifyContent={"center"}>
-            <h3>Studio</h3>
+            <h3>Студиа</h3>
           </Stack>
         </Stack>
         <Stack direction={"row"} justifyContent={"end"} spacing={2}>

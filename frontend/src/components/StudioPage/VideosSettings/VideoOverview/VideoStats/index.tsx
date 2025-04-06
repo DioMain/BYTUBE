@@ -1,6 +1,14 @@
 import { CopyAll } from "@mui/icons-material";
 import { Stack, IconButton, Tooltip } from "@mui/material";
+import { ThemeValues } from "@styles/Themes";
 import { useStores } from "appStoreContext";
+import styled from "styled-components";
+
+const VideoLink = styled(Stack)`
+  padding: ${ThemeValues.commonPadding};
+  background-color: ${ThemeValues.commonBackColor};
+  border-radius: ${ThemeValues.commonBorderRadius};
+`;
 
 const VideoStats: React.FC = () => {
   const { video } = useStores();
@@ -10,9 +18,9 @@ const VideoStats: React.FC = () => {
       <Stack>
         <h3>Ссылка на видео</h3>
         <Stack direction={"row"} spacing={1}>
-          <Stack direction={"row"} style={{ padding: "6px", backgroundColor: "#222222", borderRadius: "12px" }}>
+          <VideoLink justifyContent={"center"}>
             {window.location.origin}/App/Video?id={video.value?.id}
-          </Stack>
+          </VideoLink>
           <Tooltip title="Копировать в буфер обмена">
             <IconButton
               onClick={() => {

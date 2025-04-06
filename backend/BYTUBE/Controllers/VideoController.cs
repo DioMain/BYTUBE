@@ -118,6 +118,7 @@ namespace BYTUBE.Controllers
                     {
                         Id = video.Id.ToString(),
                         Title = video.Title,
+                        Description = video.Description,
                         Duration = video.Duration,
                         Created = video.Created,
                         Views = video.Views,
@@ -184,6 +185,7 @@ namespace BYTUBE.Controllers
                     {
                         Id = video.Id.ToString(),
                         Title = video.Title,
+                        Description = video.Description,
                         Duration = video.Duration,
                         Created = video.Created,
                         Views = video.Views,

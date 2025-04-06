@@ -1,7 +1,8 @@
 import VideoModel from "@type/models/VideoModel";
-import { Stack } from "@mui/material";
-import "./style.scss";
+import { Divider, Stack } from "@mui/material";
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
+import ImageWithDuration from "@components/ImageWithDuration";
+import styles from "./styled";
 
 interface VIProps {
   video: VideoModel;
@@ -10,19 +11,14 @@ interface VIProps {
 
 const VideoItem: React.FC<VIProps> = ({ video, onClick }) => {
   return (
-    <Stack direction={"row"} className="vlist-vitem" spacing={1} onClick={onClick}>
-      <Stack
-        className="vlist-vitem__preview"
-        justifyContent={"end"}
-        style={{ backgroundImage: `url("${video.previewUrl}")` }}
-      >
-        <Stack direction={"row"} justifyContent={"end"}>
-          <div className="vlist-vitem__preview-duration">{video.duration}</div>
-        </Stack>
-      </Stack>
+    <styles.VideoListItem direction={"row"} className="vlist-vitem" spacing={1} onClick={onClick}>
+      <ImageWithDuration previewUrl={video.previewUrl} duration={video.duration} aspect={1.1} />
       <Stack justifyContent={"space-between"}>
         <Stack>
-          <h2>{video.title}</h2>
+          <styles.ItemTitle>{video.title}</styles.ItemTitle>
+          <Divider />
+          <styles.ItemDescription>{video.description}</styles.ItemDescription>
+          <Divider />
           <div>Просмотров: {video.views}</div>
         </Stack>
 
@@ -30,7 +26,7 @@ const VideoItem: React.FC<VIProps> = ({ video, onClick }) => {
           <div>Создан: {getCreatedTimeText(video.created)}</div>
         </Stack>
       </Stack>
-    </Stack>
+    </styles.VideoListItem>
   );
 };
 

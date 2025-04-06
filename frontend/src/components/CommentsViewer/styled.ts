@@ -1,6 +1,7 @@
 import { Stack } from "@mui/material";
 import { TextFieldMixin } from "@styles/Inputs";
 import { Avatar } from "@styles/Mixins";
+import { ThemeValues } from "@styles/Themes";
 import styled from "styled-components";
 
 const CommentViewer = styled(Stack)``;
@@ -16,11 +17,11 @@ const NewComment = styled(Stack)`
 const CommentList = styled(Stack)``;
 
 const ListItem = styled(Stack)`
-  background-color: #eee;
+  background-color: ${ThemeValues.commonBackColor};
 
-  padding: 6px;
+  padding: ${ThemeValues.commonPadding};
 
-  border-radius: 4px;
+  border-radius: ${ThemeValues.smallBorderRadius};
 `;
 
 const ItemIcon = styled.div`

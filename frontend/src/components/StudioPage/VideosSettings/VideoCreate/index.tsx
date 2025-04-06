@@ -12,8 +12,9 @@ import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { VSEProps } from "../types";
-import "./style.scss";
 import { LoadingButton } from "@mui/lab";
+import styles from "./styled";
+import "./style.scss";
 
 const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
   const videoAccesses = ["Для всех", "По ссылке", "Для меня"];
@@ -148,20 +149,20 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
             </label>
           </Stack>
         </Stack>
-        <Stack className="studio-videocreate-namefield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Название</h4>
           <Stack direction={"row"}>
-            <input ref={nameInput} type="text" />
+            <styles.VideoNameInput ref={nameInput} type="text" />
           </Stack>
         </Stack>
-        <Stack className="studio-videocreate-descfield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Описание</h4>
-          <textarea ref={descInput} rows={6}></textarea>
+          <styles.VideoDescriptionTextArea spellCheck ref={descInput} rows={6}></styles.VideoDescriptionTextArea>
         </Stack>
         <Stack className="studio-videocreate-tags" spacing={1}>
           <h4>Теги</h4>
           <Stack direction={"row"} spacing={2}>
-            <input ref={tagInput} type="text" />
+            <styles.VideoTagInput ref={tagInput} type="text" />
             <IconButton onClick={addTag}>
               <Add />
             </IconButton>

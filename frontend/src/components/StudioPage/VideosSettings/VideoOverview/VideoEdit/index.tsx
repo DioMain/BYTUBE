@@ -9,7 +9,7 @@ import axios, { AxiosError } from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
-
+import styles from "./styled";
 import "./style.scss";
 
 const VideoEdit: React.FC = () => {
@@ -131,20 +131,25 @@ const VideoEdit: React.FC = () => {
       </Stack>
 
       <Stack style={{ margin: "48px", marginTop: "16px" }} spacing={3}>
-        <Stack className="studio-videoedit-namefield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Название</h4>
           <Stack direction={"row"}>
-            <input ref={nameInput} type="text" defaultValue={video.value.title} />
+            <styles.VideoNameInput ref={nameInput} type="text" defaultValue={video.value.title} />
           </Stack>
         </Stack>
-        <Stack className="studio-videoedit-descfield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Описание</h4>
-          <textarea ref={descInput} rows={6} defaultValue={video.value.description}></textarea>
+          <styles.VideoDescriptionTextArea
+            spellCheck
+            ref={descInput}
+            rows={6}
+            defaultValue={video.value.description}
+          ></styles.VideoDescriptionTextArea>
         </Stack>
         <Stack className="studio-videoedit-tags" spacing={1}>
           <h4>Теги</h4>
           <Stack direction={"row"} spacing={2}>
-            <input ref={tagInput} type="text" />
+            <styles.VideoTagInput ref={tagInput} type="text" />
             <IconButton onClick={addTag}>
               <Add />
             </IconButton>

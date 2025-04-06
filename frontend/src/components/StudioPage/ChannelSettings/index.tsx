@@ -9,6 +9,18 @@ import "./style.scss";
 import IsRightImageFormat from "@helpers/IsRightImageFormat";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import ServerError from "@type/ServerError";
+import styled from "styled-components";
+import { TextFieldMixin } from "@styles/Inputs";
+
+const NameInput = styled.input`
+  ${TextFieldMixin()}
+
+  width: 25%;
+`;
+
+const DescriptionTextArea = styled.textarea`
+  ${TextFieldMixin()}
+`;
 
 const ChannelSettings: React.FC = () => {
   const { channel } = useStores();
@@ -97,12 +109,13 @@ const ChannelSettings: React.FC = () => {
                 <input
                   id="iconField"
                   ref={iconField}
+                  accept="image/png, image/jpeg"
                   type="file"
                   style={{ display: "none" }}
                   onChange={(evt) => setIconUrl(GetFileUrl(evt.target))}
                 />
                 <label htmlFor="iconField" className="settings-content__btn">
-                  <FileUploadIcon />
+                  <FileUploadIcon sx={{ color: "white" }} />
                 </label>
               </Stack>
             </Stack>
@@ -117,33 +130,29 @@ const ChannelSettings: React.FC = () => {
             ref={bannerField}
             type="file"
             style={{ display: "none" }}
+            accept="image/png, image/jpeg"
             onChange={(evt) => setBannerUrl(GetFileUrl(evt.target))}
           />
           <label htmlFor="bannerField" className="settings-banner__btn">
-            <FileUploadIcon />
+            <FileUploadIcon sx={{ color: "white" }} />
           </label>
         </Stack>
       </Stack>
-      <Stack spacing={3} className="settings-content">
+      <Stack spacing={2} className="settings-content">
         <Stack spacing={1}>
           <h4>Название канала</h4>
           <Stack direction={"row"}>
-            <input
-              className="settings-content__namefield"
-              type="text"
-              defaultValue={channel.value?.name}
-              ref={nameField}
-            />
+            <NameInput type="text" defaultValue={channel.value?.name} ref={nameField} />
           </Stack>
         </Stack>
         <Stack spacing={1}>
           <h4>Описание канала</h4>
-          <textarea
-            className="settings-content__descriptionfield"
+          <DescriptionTextArea
             rows={8}
             ref={descField}
+            spellCheck
             defaultValue={channel.value?.description}
-          ></textarea>
+          ></DescriptionTextArea>
         </Stack>
         <Stack>{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
         <Stack direction={"row"} justifyContent={"space-between"}>
