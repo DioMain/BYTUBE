@@ -9,7 +9,7 @@ const global = createGlobalStyle`
   }
 
   body {
-    background-color: ${ThemeValues.commonBackColor};
+    background-color: ${ThemeValues.pageBackColor};
   }
 `;
 

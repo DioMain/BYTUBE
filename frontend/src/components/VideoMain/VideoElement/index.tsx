@@ -2,21 +2,23 @@ import VideoModel from "@type/models/VideoModel";
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
 import "./styles.scss";
 import QueriesUrls from "@helpers/QeuriesUrls";
+import ImageWithDuration from "@components/ImageWithDuration";
+import { useNavigate } from "react-router-dom";
 
 const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
   const createdTime = getCreatedTimeText(video.created);
 
+  const navigator = useNavigate();
+
   return (
     <div className="videoelement">
-      <div
+      <ImageWithDuration
+        duration={video.duration}
+        previewUrl={video.previewUrl}
         className="videoelement-image"
-        style={{ backgroundImage: `url("${video.previewUrl}")` }}
-        onClick={() => window.location.assign(`/App/Video?id=${video.id}`)}
-      >
-        <div className="videoelement-image-row">
-          <div className="videoelement-image-duration">{video.duration}</div>
-        </div>
-      </div>
+        aspect={1.28}
+        onClick={() => navigator(`/App/Video?id=${video.id}`)}
+      />
       <div className="videoelement-info">
         <div className="videoelement-info-col0">
           <div
@@ -28,7 +30,7 @@ const VideoElement: React.FC<{ video: VideoModel }> = ({ video }) => {
           <div className="videoelement-info-col1-title">{video.title}</div>
           <div
             className="videoelement-info-col1__channelname"
-            onClick={() => window.location.assign(`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`)}
+            onClick={() => navigator(`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`)}
           >
             {video.channel?.name}
           </div>

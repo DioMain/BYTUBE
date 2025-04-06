@@ -21,8 +21,6 @@ import "./style.scss";
 const AppHeader: React.FC = observer(() => {
   const search = GetUrlParams().get("search") ?? "";
 
-  const navigator = useNavigate();
-
   const searchBarField = useRef<HTMLInputElement>(null);
 
   const [drawerOpened, setDrawerOpen] = useState(false);
@@ -31,7 +29,7 @@ const AppHeader: React.FC = observer(() => {
   const [playlistViewOpened, setPlaylistViewOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
-  const { user, searchData } = useStores();
+  const { user } = useStores();
 
   const handleOpenChannelCreation = useCallback(() => {
     setChannelCreationOpened(true);
@@ -75,7 +73,17 @@ const AppHeader: React.FC = observer(() => {
         <div className="header-searchbar">
           <div className="header-searchbar__r">
             <Stack className="header-searchbar__input" justifyContent={"center"}>
-              <input type="text" placeholder="Поиск" ref={searchBarField} defaultValue={search} />
+              <input
+                type="search"
+                placeholder="Поиск"
+                ref={searchBarField}
+                defaultValue={search}
+                onKeyDown={(evt) => {
+                  if (evt.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
             </Stack>
             <Stack className="header-searchbar__sbtn" justifyContent={"center"} onClick={handleSearch}>
               <SearchIcon />

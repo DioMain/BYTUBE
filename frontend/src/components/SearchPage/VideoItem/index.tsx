@@ -1,49 +1,39 @@
+import { Divider, Stack } from "@mui/material";
 import VideoModel from "@type/models/VideoModel";
-import "./style.scss";
-import { Stack } from "@mui/material";
 import QueriesUrls from "@helpers/QeuriesUrls";
 import getCreatedTimeText from "@helpers/GetCreatedTimeText";
+import ImageWithDuration from "@components/ImageWithDuration";
+import styles from "./styled";
 
 const VideoItem: React.FC<{ video: VideoModel }> = ({ video }) => {
   return (
-    <Stack
-      className="searchpage-videoitem"
+    <styles.SearchPageVideoItem
       direction={"row"}
       spacing={2}
       onClick={() => window.location.assign(`${QueriesUrls.VIDEO_PAGE}?id=${video.id}`)}
     >
-      <Stack
-        justifyContent={"end"}
-        style={{ backgroundImage: `url("${video.previewUrl}")` }}
-        className="searchpage-videoitem__img"
-      >
-        <Stack direction={"row"} justifyContent={"end"}>
-          <div className="searchpage-videoitem__img-duration">{video.duration}</div>
-        </Stack>
-      </Stack>
+      <ImageWithDuration previewUrl={video.previewUrl} duration={video.duration} />
       <Stack spacing={2}>
-        <Stack spacing={1}>
-          <h2>{video.title}</h2>
+        <Stack>
+          <styles.ItemTitle>{video.title}</styles.ItemTitle>
+          <Divider />
+          <styles.ItemDescription>{video.description}</styles.ItemDescription>
           <div style={{ fontSize: "14px" }}>
             {getCreatedTimeText(video.created)} - {video.views} просмотров
           </div>
         </Stack>
-        <Stack direction={"row"} className="searchpage-videoitem-channel" spacing={1}>
-          <div
-            className="searchpage-videoitem-channel__icon"
+        <styles.ItemChannel direction={"row"} spacing={1}>
+          <styles.ItemChannelIcon
             style={{ backgroundImage: `url("${video.channel?.iconUrl}")` }}
-          ></div>
+          ></styles.ItemChannelIcon>
           <Stack>
-            <a
-              className="searchpage-videoitem-channel__link"
-              href={`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`}
-            >
+            <styles.ItemChannelLink href={`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`}>
               {video.channel?.name}
-            </a>
+            </styles.ItemChannelLink>
           </Stack>
-        </Stack>
+        </styles.ItemChannel>
       </Stack>
-    </Stack>
+    </styles.SearchPageVideoItem>
   );
 };
 

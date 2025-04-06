@@ -302,6 +302,7 @@ namespace BYTUBE.Controllers
                         VideoStatus = video.VideoStatus,
                         Views = video.Views,
                         ReportsCount = video.Reports.Count,
+                        Description = video.Description,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
                         Channel = new ChannelModel
                         {

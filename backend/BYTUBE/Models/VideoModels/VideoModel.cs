@@ -7,6 +7,7 @@ namespace BYTUBE.Models.VideoModels
     {
         public string Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
 
         public int Views { get; set; }
         public int? ReportsCount { get; set; }

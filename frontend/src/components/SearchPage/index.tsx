@@ -11,7 +11,7 @@ import StatusBase from "@type/StatusBase";
 import { useSearchParams } from "react-router-dom";
 
 const SearchPage: React.FC = observer(() => {
-  const sortValues = ["Просмотры", "Новое", "Старое"];
+  const sortValues = ["Популярность", "Новое", "Старое"];
 
   const searchParams = useSearchParams();
 
