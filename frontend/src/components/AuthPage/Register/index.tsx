@@ -74,7 +74,7 @@ const Register: React.FC = () => {
               style={{ backgroundImage: `url(${curIcon})` }}
               onClick={openFileDialog}
             >
-              <UploadIcon className="register-icon-upload-icon" sx={{ fontSize: "32px" }} />
+              <UploadIcon className="register-icon-upload-icon" sx={{ fontSize: "32px", color: "white" }} />
               <input
                 ref={iconFileRef}
                 id="registerInputIcon"

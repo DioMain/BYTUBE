@@ -42,6 +42,24 @@ const lightThemeMUI = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          borderRadius: "4px",
+
+          paddingLeft: "2px",
+          paddingRight: "2px",
+        },
+      },
+    },
   },
 });
 
