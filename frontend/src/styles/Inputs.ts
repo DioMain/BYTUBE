@@ -20,6 +20,7 @@ const TextFieldMixin = () => `
 
   &:hover {
     outline: none;
+    
   }
 
   &:focus {
