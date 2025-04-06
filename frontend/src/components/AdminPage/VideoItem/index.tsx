@@ -8,6 +8,7 @@ import { useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import axios from "axios";
+import ImageWithDuration from "@components/ImageWithDuration";
 
 interface APVI_Props {
   video: VideoModel;
@@ -46,15 +47,7 @@ const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }
       spacing={2}
       onClick={selectHandle}
     >
-      <Stack
-        className="admin-videoitem__preview"
-        justifyContent={"end"}
-        style={{ backgroundImage: `url("${video.previewUrl}")` }}
-      >
-        <Stack direction={"row"} justifyContent={"end"}>
-          <div className="admin-videoitem-duration">{video.duration}</div>
-        </Stack>
-      </Stack>
+      <ImageWithDuration duration={video.duration} previewUrl={video.previewUrl} aspect={0.75} />
       <Stack spacing={1}>
         <h3>{video.title}</h3>
         <a className="admin-videoitem-channel" href={`${QueriesUrls.CHANNEL_PAGE}?id=${video.channel?.id}`}>
