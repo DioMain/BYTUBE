@@ -5,6 +5,7 @@ import VideoModel from "@type/models/VideoModel";
 import { useEffect, useRef, useState } from "react";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 import { Search } from "@mui/icons-material";
+import { BoxStyled } from "@styles/Common";
 
 interface SelectVideoModalProps extends DrawerOrModalPropsBase {
   onVideoSelected?: (video: VideoModel) => void;
@@ -29,21 +30,11 @@ const SelectVideoModal: React.FC<SelectVideoModalProps> = ({ opened, onClose, on
 
   return (
     <Modal open={opened} onClose={onClose}>
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
+      <BoxStyled>
         <Stack className="w2g-svm" spacing={2}>
           <h2 style={{ textAlign: "center" }}>Выберете видео</h2>
           <Stack direction={"row"} spacing={1}>
-            <input className="w2g-svm__search" placeholder="some video..." ref={searchRef}></input>
+            <input className="w2g-svm__search" placeholder="Видео..." ref={searchRef}></input>
             <IconButton onClick={() => setSearchText(searchRef.current?.value!)}>
               <Search />
             </IconButton>
@@ -67,7 +58,7 @@ const SelectVideoModal: React.FC<SelectVideoModalProps> = ({ opened, onClose, on
                   ></div>
                   <Stack spacing={1}>
                     <h3>{video.title}</h3>
-                    <Stack justifyContent={"space-between"} spacing={1} direction={"row"}>
+                    <Stack justifyContent={"space-between"} spacing={1} direction={"row"} style={{ fontSize: "14px" }}>
                       <div>Просмотров: {video.views}</div>
                       <div>Длительность: {video.duration}</div>
                     </Stack>
@@ -83,7 +74,7 @@ const SelectVideoModal: React.FC<SelectVideoModalProps> = ({ opened, onClose, on
             {!ended && <div ref={observeElement}></div>}
           </Stack>
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

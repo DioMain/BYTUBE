@@ -1,16 +1,18 @@
 import { Stack } from "@mui/material";
+import { ThemeValues } from "@styles/Themes";
 import styled from "styled-components";
 
 const VideoElement = styled(Stack)`
   padding: 8px;
 
   border-radius: 8px;
-  background-color: rgb(200, 200, 200);
+  background-color: ${ThemeValues.commonBackColor};
 
   cursor: pointer;
 
   &:hover {
-    background-color: rgb(180, 180, 180);
+    background-color: ${ThemeValues.hoveredBackColor};
+    box-shadow: 0 0 4px ${ThemeValues.hoveredBackColor};
   }
 `;
 

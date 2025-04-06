@@ -7,11 +7,11 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import useProtected from "@hooks/useProtected";
 import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
-import "./styles.scss";
 import AuthState from "@type/AuthState";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import LockIcon from "@mui/icons-material/Lock";
+import styles from "./styled";
 
 const W2GMainPage: React.FC = observer(() => {
   useProtected();
@@ -71,22 +71,20 @@ const W2GMainPage: React.FC = observer(() => {
   return (
     <Grid2 container spacing={2} margin={"16px"} justifyContent={"center"}>
       <Grid2 size={6} minWidth={"380px"}>
-        <Stack spacing={2} className="w2g-createLobby">
+        <styles.CreateLobby spacing={2}>
           <Stack justifyContent={"center"} direction={"row"}>
-            <h2>Создание лобби</h2>
+            <h2>Создание комнаты</h2>
           </Stack>
-          <input
+          <styles.InputLobbyName
             ref={lobbyNameInput}
             type="text"
-            className="w2g-createLobby__inputLobbyName"
             defaultValue={`${user.value?.name}\`s lobby`}
-            placeholder="Название лобби"
+            placeholder="Название комнаты"
           />
-          {/* <Stack direction={"row"} justifyContent={"space-between"}>
-            <input
+          <Stack direction={"row"} justifyContent={"space-between"}>
+            <styles.InputLobbyPassword
               ref={lobbyPasswordInput}
               type="text"
-              className="w2g-createLobby__inputLobbyPassword"
               placeholder="Пароль"
               disabled={!isPrivateLobby}
             />
@@ -97,9 +95,9 @@ const W2GMainPage: React.FC = observer(() => {
                   onChange={(evt) => setIsPrivateLobby(evt.currentTarget.checked)}
                 />
               }
-              label="Приватный?"
+              label="Приватная?"
             />
-          </Stack> */}
+          </Stack>
           <Button variant="contained" color="primary" onClick={createLobby}>
             Создать
           </Button>
@@ -108,28 +106,23 @@ const W2GMainPage: React.FC = observer(() => {
               <h5>{createLobbyError}</h5>
             </Stack>
           )}
-        </Stack>
+        </styles.CreateLobby>
       </Grid2>
       <Grid2 size={6} minWidth={"380px"}>
-        <Stack spacing={2} className="w2g-lobbyList">
+        <styles.LobbyList spacing={2}>
           <Stack justifyContent={"center"} direction={"row"}>
-            <h3>Список доступный лобби</h3>
+            <h3>Список доступных комнат</h3>
           </Stack>
           <Stack spacing={1} className="w2g-lobbyList-list">
             {lobbys.map((lobby, index) => {
               return (
-                <Stack
-                  className="w2g-lobbyList-item"
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  key={`lobby-item-${index}`}
-                >
+                <styles.LobbyListItem direction={"row"} justifyContent={"space-between"} key={`lobby-item-${index}`}>
                   <Stack spacing={2}>
                     <h4>{lobby.name}</h4>
                     <Stack direction={"row"} spacing={2}>
                       <div>Пользователей: {lobby.usersCount}</div>
                       {lobby.isPrivate && (
-                        <Tooltip title="Приватное лобби">
+                        <Tooltip title="Приватная комната">
                           <LockIcon />
                         </Tooltip>
                       )}
@@ -138,11 +131,11 @@ const W2GMainPage: React.FC = observer(() => {
                   <Button variant="contained" color="primary" onClick={() => connectToLobby(lobby)}>
                     Присоедениться
                   </Button>
-                </Stack>
+                </styles.LobbyListItem>
               );
             })}
           </Stack>
-        </Stack>
+        </styles.LobbyList>
       </Grid2>
     </Grid2>
   );

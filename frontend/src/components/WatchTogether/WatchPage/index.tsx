@@ -266,7 +266,7 @@ const W2GWatchPage: React.FC = observer(() => {
             <Stack direction={"row"} spacing={1}>
               {video.tags?.map((tg, index) => {
                 return (
-                  <div style={{ backgroundColor: "#202020", padding: "4px", borderRadius: "6px" }} key={`v-t-${index}`}>
+                  <div style={{ backgroundColor: "#ddd", padding: "4px", borderRadius: "6px" }} key={`v-t-${index}`}>
                     {tg}
                   </div>
                 );
@@ -281,10 +281,10 @@ const W2GWatchPage: React.FC = observer(() => {
               </Stack>
               <MarkVideo id={video.id} />
             </Stack>
-            <p style={{ padding: "8px", backgroundColor: "#202020", borderRadius: "8px" }}>{video.description}</p>
+            <p style={{ padding: "8px", backgroundColor: "#ddd", borderRadius: "4px" }}>{video.description}</p>
           </Stack>
         )}
-        <div className="w2g-footer">
+        <div className="w2g-footer" style={{ marginLeft: "24px", marginRight: "24px" }}>
           {/*Список пользователей*/}
           <Stack className="w2g-userlist" spacing={3} flexWrap={"wrap"} direction={"row"}>
             {lobbyData?.users?.map((item, index) => {

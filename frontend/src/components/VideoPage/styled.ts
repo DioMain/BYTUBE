@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Stack, styled as styledM } from "@mui/material";
 import { BoldFont } from "@styles/Mixins";
+import { ThemeValues } from "@styles/Themes";
 
 const VideoPage = styled.div`
   padding: 16px;
@@ -60,7 +61,7 @@ const VideoTag = styled.div`
 `;
 
 const VideoDescription = styled(Stack)`
-  background-color: rgb(196, 196, 196);
+  background-color: ${ThemeValues.commonBackColor};
 
   padding: 6px;
 
