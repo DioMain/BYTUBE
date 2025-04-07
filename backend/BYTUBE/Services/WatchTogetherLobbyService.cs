@@ -2,6 +2,15 @@
 
 public class WatchTogetherLobbyService
 {
+    #region
+    public class ChatMessage
+    {
+        public Guid UserId { get; set; }
+        public string Text { get; set; }
+        public DateTime Created { get; set; }
+    }
+    #endregion
+
     #region Lobby
     public class Lobby
     {
@@ -15,6 +24,8 @@ public class WatchTogetherLobbyService
         public string? Password { get; set; }
 
         public List<Guid> AllowedUser { get; set; } = [];
+
+        public List<ChatMessage> Messages { get; set; } = [];
     }
     #endregion
 

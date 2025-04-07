@@ -1,9 +1,8 @@
 import VideoPlayer from "@components/VideoPlayer";
-import { Alert, Stack, Container, Button } from "@mui/material";
+import { Alert, Stack, Button } from "@mui/material";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import "./styles.scss";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useW2GConnection from "@hooks/useW2GConnetion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AuthState from "@type/AuthState";
@@ -18,10 +17,12 @@ import MarkVideo from "@components/VideoPage/MarkVideo";
 import { User } from "@type/models/UserModel";
 import ChatMessageItem from "./ChatMessageItem/intex";
 import { measurePing } from "@helpers/WatchTogetherService";
+import W2GChatMessage from "@type/W2GChatMessage";
+import "./styles.scss";
 
 interface ChatMessage {
   user: User;
-  message: string;
+  message: W2GChatMessage;
 }
 
 const W2GWatchPage: React.FC = observer(() => {
@@ -34,6 +35,7 @@ const W2GWatchPage: React.FC = observer(() => {
   const inputMessage = useRef<HTMLInputElement>(null);
   const rememberedUsers = useRef<User[]>([]);
   const currentPing = useRef(0);
+  const chatCrollDiv = useRef<HTMLDivElement>(null);
 
   const { w2gConnetion, connectionState } = useW2GConnection(lobbyName);
 
@@ -67,6 +69,8 @@ const W2GWatchPage: React.FC = observer(() => {
           if (!rememberedUsers.current.some((rU) => rU.id === usr.id))
             rememberedUsers.current.push(JSON.parse(JSON.stringify(usr)) as User);
         });
+
+        w2gConnetion.invoke("GetMessages");
 
         setLobbyData(lobby);
       })
@@ -145,23 +149,47 @@ const W2GWatchPage: React.FC = observer(() => {
   useEffect(() => {
     if (connectionState !== HubConnectionState.Connected) return;
 
-    w2gConnetion.on("onMessage", (message: string, userId: string) => {
-      const mesUser = rememberedUsers.current.find((val) => val.id === userId);
+    w2gConnetion.on("onMessage", (message: W2GChatMessage) => {
+      const mesUser = rememberedUsers.current.find((val) => val.id === message.userId);
 
       if (mesUser === undefined) return;
+      setMessages([
+        ...messages,
+        {
+          user: mesUser,
+          message: message,
+        },
+      ]);
+    });
 
-      messages.push({
-        user: mesUser,
-        message: message,
+    w2gConnetion.on("onGetMessages", (w2gMessages: W2GChatMessage[]) => {
+      const rmessages: ChatMessage[] = [];
+
+      w2gMessages.forEach((message) => {
+        const mesUser = rememberedUsers.current.find((val) => val.id === message.userId);
+
+        if (mesUser === undefined) return;
+
+        rmessages.push({
+          user: mesUser,
+          message: message,
+        });
       });
 
-      setMessages([...messages]);
+      setMessages(rmessages);
     });
 
     return () => {
       w2gConnetion.off("onMessage");
+      w2gConnetion.off("onGetMessages");
     };
-  }, [connectionState, rememberedUsers]);
+  }, [connectionState, rememberedUsers, messages]);
+
+  useEffect(() => {
+    if (chatCrollDiv.current) {
+      chatCrollDiv.current.scrollTop = chatCrollDiv.current.scrollHeight;
+    }
+  }, [messages]);
 
   //#region use effects
   useEffect(() => {
@@ -207,13 +235,6 @@ const W2GWatchPage: React.FC = observer(() => {
     const value = inputMessage.current?.value!;
 
     if (value === "" || user.status !== AuthState.Authed) return;
-
-    messages.push({
-      user: user.value!,
-      message: value,
-    });
-
-    setMessages([...messages]);
 
     w2gConnetion.invoke("SendMessage", value);
   }, [inputMessage]);
@@ -301,7 +322,7 @@ const W2GWatchPage: React.FC = observer(() => {
           </Stack>
           {/*Чат*/}
           <Stack className="w2g-chat" spacing={2}>
-            <Stack className="w2g-chat-container" spacing={1}>
+            <Stack className="w2g-chat-container" ref={chatCrollDiv} spacing={1}>
               {messages.map((item, index) => {
                 return <ChatMessageItem user={item.user} key={`chat-message-${index}`} message={item.message} />;
               })}

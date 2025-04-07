@@ -1,4 +1,5 @@
 import { User } from "./models/UserModel";
+import W2GChatMessage from "./W2GChatMessage";
 
 interface W2GLobby {
   name: string;
@@ -10,6 +11,7 @@ interface W2GLobby {
   usersCount: number;
 
   users?: User[];
+  messages?: W2GChatMessage[];
 
   isPrivate: boolean;
 }

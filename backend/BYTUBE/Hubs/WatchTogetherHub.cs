@@ -1,6 +1,7 @@
 ﻿using BYTUBE.Helpers;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 
 namespace BYTUBE.Hubs
 {
@@ -8,9 +9,15 @@ namespace BYTUBE.Hubs
     {
         private readonly WatchTogetherLobbyService _watchTogetherLobby;
 
+        private readonly JsonSerializerOptions _serializerOptions;
+
         public WatchTogetherHub(WatchTogetherLobbyService watchTogetherLobby)
         {
             _watchTogetherLobby = watchTogetherLobby;
+            _serializerOptions = new()
+            {
+                IncludeFields = true,
+            };
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -106,7 +113,26 @@ namespace BYTUBE.Hubs
 
             var user = AuthorizeData.FromClaims(Context.User);
 
-            await Clients.OthersInGroup(lobby.Name).SendAsync("onMessage", message, user.Id);
+            var chatMessage = new WatchTogetherLobbyService.ChatMessage()
+            {
+                UserId = user.Id,
+                Created = DateTime.UtcNow,
+                Text = message
+            };
+
+            lobby.Messages.Add(chatMessage);
+
+            await Clients.Group(lobby.Name).SendAsync("onMessage", chatMessage);
+        }
+
+        public async Task GetMessages()
+        {
+            var lobby = _watchTogetherLobby.GetLobbyByConnetionId(Context.ConnectionId);
+
+            if (lobby == null)
+                return;
+
+            await Clients.Caller.SendAsync("onGetMessages", lobby.Messages);
         }
 
         public async Task JoinToLobby(string lobbyName)
