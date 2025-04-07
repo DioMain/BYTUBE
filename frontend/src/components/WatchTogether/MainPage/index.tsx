@@ -10,8 +10,8 @@ import ServerError from "@type/ServerError";
 import AuthState from "@type/AuthState";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import LockIcon from "@mui/icons-material/Lock";
 import styles from "./styled";
+import LobbyItem from "./LobbyItem";
 
 const W2GMainPage: React.FC = observer(() => {
   useProtected();
@@ -115,24 +115,7 @@ const W2GMainPage: React.FC = observer(() => {
           </Stack>
           <Stack spacing={1} className="w2g-lobbyList-list">
             {lobbys.map((lobby, index) => {
-              return (
-                <styles.LobbyListItem direction={"row"} justifyContent={"space-between"} key={`lobby-item-${index}`}>
-                  <Stack spacing={2}>
-                    <h4>{lobby.name}</h4>
-                    <Stack direction={"row"} spacing={2}>
-                      <div>Пользователей: {lobby.usersCount}</div>
-                      {lobby.isPrivate && (
-                        <Tooltip title="Приватная комната">
-                          <LockIcon />
-                        </Tooltip>
-                      )}
-                    </Stack>
-                  </Stack>
-                  <Button variant="contained" color="primary" onClick={() => connectToLobby(lobby)}>
-                    Присоедениться
-                  </Button>
-                </styles.LobbyListItem>
-              );
+              return <LobbyItem lobby={lobby} key={`lobby-item-${index}`} onConnectClick={connectToLobby} />;
             })}
           </Stack>
         </styles.LobbyList>
