@@ -4,11 +4,12 @@ import VideoModel, { Status } from "@type/models/VideoModel";
 import BlockIcon from "@mui/icons-material/Block";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import "./style.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import axios from "axios";
 import ImageWithDuration from "@components/ImageWithDuration";
+import LimitIcon from "@mui/icons-material/Lock";
 
 interface APVI_Props {
   video: VideoModel;
@@ -18,7 +19,11 @@ interface APVI_Props {
 }
 
 const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }) => {
-  const [blocked, setBlocked] = useState(video.videoStatus === Status.Blocked);
+  const [status, setStatus] = useState<Status>(Status.NoLimit);
+
+  useEffect(() => {
+    setStatus(video.videoStatus);
+  }, [video]);
 
   const selectHandle = () => {
     if (onSelect !== undefined) onSelect(video);
@@ -28,15 +33,16 @@ const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }
     if (onDelete !== undefined) onDelete(video);
   };
 
-  const handleBlockUnblock = () => {
+  const setStatusHandle = (status: Status) => {
     axios
-      .put(QueriesUrls.VIDEO_BLOCK_BY_ADMIN, null, {
+      .put(QueriesUrls.VIDEO_CHANGE_STATUS_BY_ADMIN, null, {
         params: {
           id: video.id,
+          status: status,
         },
       })
       .then(() => {
-        setBlocked(!blocked);
+        setStatus(status);
       });
   };
 
@@ -55,30 +61,47 @@ const VideoItem: React.FC<APVI_Props> = ({ video, selected, onSelect, onDelete }
         </a>
         <div className="admin-videoitem-reportscounter">Количество жалоб: {video.reportsCount}</div>
         <Stack direction={"row"} spacing={1}>
-          {blocked ? (
+          {status !== Status.NoLimit && (
             <Tooltip title="Разблокировать">
               <IconButton
                 color="success"
                 onClick={(evt) => {
                   if (evt.isPropagationStopped()) evt.stopPropagation();
 
-                  handleBlockUnblock();
+                  setStatusHandle(Status.NoLimit);
                 }}
               >
                 <LockOpenIcon />
               </IconButton>
             </Tooltip>
-          ) : (
+          )}
+
+          {status === Status.Limited && (
             <Tooltip title="Заблокировать">
               <IconButton
                 color="error"
                 onClick={(evt) => {
                   if (evt.isPropagationStopped()) evt.stopPropagation();
 
-                  handleBlockUnblock();
+                  setStatusHandle(Status.Blocked);
                 }}
               >
                 <BlockIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+
+          {status !== Status.Limited && (
+            <Tooltip title="Ограничить">
+              <IconButton
+                color="warning"
+                onClick={(evt) => {
+                  if (evt.isPropagationStopped()) evt.stopPropagation();
+
+                  setStatusHandle(Status.Limited);
+                }}
+              >
+                <LimitIcon />
               </IconButton>
             </Tooltip>
           )}

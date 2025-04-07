@@ -1,6 +1,5 @@
 import { Stack } from "@mui/system";
 import { TextFieldMixin } from "@styles/Inputs";
-import { ThemeValues } from "@styles/Themes";
 import styled from "styled-components";
 
 const WatchTogether = styled(Stack)``;
@@ -20,14 +19,6 @@ const InputLobbyPassword = styled.input`
 
 const LobbyList = styled(Stack)``;
 
-const LobbyListItem = styled(Stack)`
-  background-color: ${ThemeValues.commonBackColor};
-
-  border-radius: ${ThemeValues.commonBorderRadius};
-
-  padding: ${ThemeValues.commonPadding};
-`;
-
 export default {
   WatchTogether,
   CreateLobby,
@@ -36,5 +27,4 @@ export default {
   InputLobbyPassword,
 
   LobbyList,
-  LobbyListItem,
 };

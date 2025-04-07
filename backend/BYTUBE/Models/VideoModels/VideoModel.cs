@@ -12,6 +12,8 @@ namespace BYTUBE.Models.VideoModels
         public int Views { get; set; }
         public int? ReportsCount { get; set; }
 
+        public bool ForAdults { get; set; }
+
         public DateTime Created { get; set; }
 
         public Video.Status VideoStatus { get; set; }

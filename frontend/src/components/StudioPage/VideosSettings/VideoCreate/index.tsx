@@ -24,7 +24,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [nolimit, setNolimit] = useState(true);
+  const [forYoungs, setForYoungs] = useState(true);
   const [access, setAccess] = useState("0");
 
   const { channel } = useStores();
@@ -76,6 +76,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
 
     formData.append("Title", nameInput.current?.value!);
     formData.append("Description", descInput.current?.value!);
+    formData.append("ForAdults", forYoungs ? "false" : "true");
 
     tags.forEach((val) => {
       formData.append("Tags", val);
@@ -84,7 +85,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
     formData.append("PreviewFile", previewInput.current?.files?.item(0)!);
     formData.append("VideoFile", videoInput.current?.files?.item(0)!);
     formData.append("VideoAccess", access);
-    formData.append("VideoStatus", nolimit ? "0" : "1");
+    formData.append("VideoStatus", "0");
 
     setLoading(true);
 
@@ -115,7 +116,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
 
         setLoading(false);
       });
-  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, nolimit]);
+  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, forYoungs]);
 
   return (
     <Stack className="studio-videocreate">
@@ -232,8 +233,8 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
         </Stack>
         <Stack direction={"row"}>
           <FormControlLabel
-            checked={nolimit}
-            onChange={(evt, checked) => setNolimit(checked)}
+            checked={forYoungs}
+            onChange={(evt, checked) => setForYoungs(checked)}
             label="Это видео могут смотреть люди не достигшие 18 лет?"
             labelPlacement="end"
             control={<Checkbox color="primary" />}

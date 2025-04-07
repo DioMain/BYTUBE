@@ -14,12 +14,11 @@ const QueriesUrls = {
 
   VIDEO_COMMON: "/api/video",
   VIDEO_DELETE_BY_ADMIN: "/api/video/delete",
-  VIDEO_BLOCK_BY_ADMIN: "/api/video/block",
+  VIDEO_CHANGE_STATUS_BY_ADMIN: "/api/video/status",
   GET_VIDEOS: "/api/video/select",
   GET_PLAYLIST_VIDEOS: "/api/video/playlist",
   GET_VIDEO_MARKS: "/api/video/mark",
-  VIDEO_LIKE: "/api/video/like",
-  VIDEO_DISLIKE: "/api/video/dislike",
+  VIDEO_MARK: "/api/video/mark",
   VIDEO_ADD_VIEW: "/api/video/view",
 
   CHANNEL_COMMON: "/api/channel",

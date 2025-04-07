@@ -14,6 +14,7 @@ public class PostgresDbContext : DbContext
     public DbSet<Report> Reports { get; set; }
     public DbSet<Playlist> Playlists { get; set; }
     public DbSet<PlaylistItem> PlaylistItems { get; set; }
+    public DbSet<VideoMark> VideoMarks { get; set; }
 
     public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
     {
@@ -45,7 +46,8 @@ public class PostgresDbContext : DbContext
             Role = User.RoleType.Admin,
             Name = "ADMIN",
             Email = "ADMIN@mail.com",
-            Password = hasher.Hash("Pravoda01")
+            Password = hasher.Hash("Pravoda01"),
+            BirthDay = DateOnly.Parse("16.04.2004")
         },
         new User()
         {
@@ -53,7 +55,8 @@ public class PostgresDbContext : DbContext
             Role = User.RoleType.User,
             Name = "DataGenerator",
             Email = "Generator@mail.com",
-            Password = hasher.Hash("123456")
+            Password = hasher.Hash("123456"),
+            BirthDay = DateOnly.Parse("16.04.2004")
         });
 
         builder.Entity<Channel>().HasData(new Channel()

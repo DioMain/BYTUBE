@@ -27,6 +27,8 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
             subscribes: options.subscribes,
             favorite: options.favorite,
             asAdmin: options.asAdmin,
+            onlyAllAges: options.onlyAllAges,
+            onlyUnlimited: options.onlyUnlimited,
           },
         })
         .then((responce: AxiosResponse) => {

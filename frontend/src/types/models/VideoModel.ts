@@ -19,6 +19,8 @@ interface VideoModel {
   created: string;
   duration: string;
 
+  forAdults: boolean;
+
   videoAccess: Access;
   videoStatus: Status;
 

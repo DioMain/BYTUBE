@@ -1,5 +1,5 @@
-import { Alert, Button, IconButton, MenuItem, Select, Stack } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { Alert, Button, Checkbox, FormControlLabel, IconButton, MenuItem, Select, Stack } from "@mui/material";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { UploadFile, Add, Close } from "@mui/icons-material";
 import GetFileUrl from "@helpers/GetFileUrl";
 import VideoPlayer from "@components/VideoPlayer";
@@ -25,11 +25,18 @@ const VideoEdit: React.FC = () => {
   const [tags, setTags] = useState<string[]>(video.value.tags!);
   const [error, setError] = useState("");
   const [access, setAccess] = useState(video.value.videoAccess.toString());
+  const [forYoungs, setForYoungs] = useState(true);
 
   const previewInput = useRef<HTMLInputElement>(null);
   const nameInput = useRef<HTMLInputElement>(null);
   const tagInput = useRef<HTMLInputElement>(null);
   const descInput = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (video.value) {
+      setForYoungs(!video.value.forAdults);
+    }
+  }, [video.value]);
 
   const addTag = useCallback(() => {
     if (
@@ -69,6 +76,7 @@ const VideoEdit: React.FC = () => {
 
     formData.append("Title", nameInput.current?.value!);
     formData.append("Description", descInput.current?.value!);
+    formData.append("ForAdults", forYoungs ? "false" : "true");
 
     tags.forEach((val) => {
       formData.append("Tags", val);
@@ -216,6 +224,15 @@ const VideoEdit: React.FC = () => {
               })}
             </Select>
           </Stack>
+        </Stack>
+        <Stack direction={"row"}>
+          <FormControlLabel
+            checked={forYoungs}
+            onChange={(evt, checked) => setForYoungs(checked)}
+            label="Это видео могут смотреть люди не достигшие 18 лет?"
+            labelPlacement="end"
+            control={<Checkbox color="primary" />}
+          />
         </Stack>
         <Stack className="studio-videoedit-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
         <Stack direction={"row"} justifyContent={"space-between"}>

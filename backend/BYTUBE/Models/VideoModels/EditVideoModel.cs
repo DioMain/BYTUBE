@@ -12,6 +12,9 @@ namespace BYTUBE.Models.ChannelModels
         [Required(ErrorMessage = "Описание должно быть")]
         public string Description { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Не указано возврастное ограничение")]
+        public bool ForAdults { get; set; } = false;
+
         [Required(ErrorMessage = "Теги дожны быть")]
         public List<string> Tags { get; set; } = [];
 

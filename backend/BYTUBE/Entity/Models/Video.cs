@@ -29,14 +29,10 @@ namespace BYTUBE.Entity.Models
         [Required]
         public string Duration { get; set; } = string.Empty;
 
+        public bool ForAdults { get; set; } = false;
+
         [Column(TypeName = "jsonb")]
         public List<string> Tags { get; set; } = [];
-
-        [Column(TypeName = "jsonb")]
-        public List<Guid> Likes { get; set; } = [];
-
-        [Column(TypeName = "jsonb")]
-        public List<Guid> Dislikes { get; set; } = [];
 
         public required DateTime Created {  get; set; }
 
@@ -54,5 +50,7 @@ namespace BYTUBE.Entity.Models
         public List<Comment> Comments { get; set; } = [];
 
         public List<PlaylistItem> PlaylistItems { get; set; } = [];
+
+        public List<VideoMark> VideoMarks { get; set; } = [];
     }
 }

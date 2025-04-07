@@ -8,6 +8,9 @@
         public int Take { get; set; } = 6;
         public int Skip { get; set; } = 0;
 
+        public bool OnlyUnlimited { get; set; } = true;
+        public bool OnlyAllAges { get; set; } = true;
+
         public bool Favorite { get; set; } = false;
         public bool Subscribes { get; set; } = false;
 

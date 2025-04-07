@@ -5,6 +5,11 @@ namespace BYTUBE.Entity.Models
 {
     public class Channel
     {
+        public enum ActiveStatus
+        {
+            Normal, Limied, Blocked, 
+        }
+
         [Key]
         public Guid Id { get; set; }
 
@@ -12,6 +17,8 @@ namespace BYTUBE.Entity.Models
         public string? Description { get; set; }
 
         public required DateTime Created {  get; set; }
+
+        public ActiveStatus Status { get; set; } = ActiveStatus.Normal;
 
         public required Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]

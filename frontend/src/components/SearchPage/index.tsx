@@ -43,6 +43,8 @@ const SearchPage: React.FC = observer(() => {
     take: 8,
     searchPattern: search,
     orderBy: searchData.selectOptions.orderBy ?? SelectOrderBy.Views,
+    onlyUnlimited: false,
+    onlyAllAges: false,
   });
 
   useEffect(() => {

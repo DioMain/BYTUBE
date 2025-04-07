@@ -180,9 +180,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\channels\" />
-    <Folder Include="Data\users\" />
-    <Folder Include="Data\videos\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
