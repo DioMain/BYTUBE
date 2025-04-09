@@ -104,7 +104,7 @@ namespace BYTUBE.Controllers
                     .Where(
                     item => item.OwnerId == channelId &&
                     item.VideoStatus != Video.Status.Blocked &&
-                    item.VideoAccess != Video.Access.All)
+                    item.VideoAccess == Video.Access.All)
                     .OrderByDescending(i => i.Created)
                     .Include(video => video.Owner)
                     .ToArrayAsync();

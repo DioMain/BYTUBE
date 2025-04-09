@@ -60,6 +60,14 @@ const lightThemeMUI = createTheme({
         },
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          height: "4px",
+          borderRadius: "4px",
+        },
+      },
+    },
   },
 });
 
