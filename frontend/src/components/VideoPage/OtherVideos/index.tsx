@@ -11,6 +11,7 @@ const OtherVideos: React.FC<{ videoId: string }> = ({ videoId }) => {
     skip: 0,
     take: 8,
     ignore: [videoId],
+    onlyAllAges: false,
   });
 
   return (

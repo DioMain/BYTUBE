@@ -1,18 +1,21 @@
 import React, { useRef, useState } from "react";
+import { Input } from "@mui/material";
+import axios, { AxiosError } from "axios";
 import defaultIcon from "@assets/images/UnknownUser.jpg";
 import UploadIcon from "@mui/icons-material/Upload";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import axios, { AxiosError } from "axios";
 import ServerError from "@type/ServerError";
 import QueriesUrls from "@helpers/QeuriesUrls";
-import "./style.scss";
 import GetFileUrl from "@helpers/GetFileUrl";
 import IsRightImageFormat from "@helpers/IsRightImageFormat";
+import styles from "./styled";
+import "./style.scss";
 
 const Register: React.FC = () => {
   const [curIcon, setCurIcon] = useState(defaultIcon);
   const [error, setError] = useState("");
+  const [date, setDate] = useState<string>("");
 
   const iconFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -37,6 +40,7 @@ const Register: React.FC = () => {
     formData.append("Email", emailField.value);
     formData.append("Password", passwordField.value);
     formData.append("ConfirmPassword", cpasswordField.value);
+    formData.append("BirthDay", date);
 
     if (iconFileRef.current?.files?.item(0) !== null) {
       if (!IsRightImageFormat(iconFileRef.current)) {
@@ -88,6 +92,7 @@ const Register: React.FC = () => {
           <TextField id="emailField" label="Почта" type="email" />
           <TextField id="passwordField" label="Пароль" type="password" />
           <TextField id="cpasswordField" label="Подтвердить пароль" type="password" />
+          <styles.DateInput type="date" onChange={(evt) => setDate(evt.target.value)} />
           <Button variant="contained" color="success" onClick={registerUser}>
             Подтвердить
           </Button>

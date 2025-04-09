@@ -87,7 +87,8 @@ namespace BYTUBE.Controllers
                     Name = model.UserName,
                     Email = model.Email,
                     Password = _passwordHasher.Hash(model.Password),
-                    Role = Entity.Models.User.RoleType.User
+                    Role = Entity.Models.User.RoleType.User,
+                    BirthDay = DateOnly.Parse(model.BirthDay)
                 });
 
                 await _db.SaveChangesAsync();

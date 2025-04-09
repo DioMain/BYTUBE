@@ -33,6 +33,8 @@ import ReportModal from "./ReportModal";
 import { useNavigate } from "react-router-dom";
 import ServerError from "@type/ServerError";
 import styles from "./styled";
+import AgeBlockerModal from "./AgeBlockerModal";
+import { Status } from "@type/models/VideoModel";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -44,6 +46,7 @@ const VideoPage: React.FC = observer(() => {
 
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
   const [reportModalOpened, setReportModalOpened] = useState(false);
+  const [ageBlockerModalOpened, setAgeBlockerModalOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
   const { user, video } = useStores();
@@ -69,6 +72,13 @@ const VideoPage: React.FC = observer(() => {
           .catch((err: AxiosError) => {
             window.location.assign(QueriesUrls.MAIN_PAGE);
           });
+      }
+
+      const userBirthDay = new Date(user.value?.birthDay!);
+      const nowDate = new Date();
+      const userAge = nowDate.getFullYear() - userBirthDay.getFullYear();
+      if (userAge < 18 && (video.value?.forAdults || video.value?.videoStatus === Status.Limited)) {
+        setAgeBlockerModalOpened(true);
       }
     }
   }, [videoResponce.status]);
@@ -205,6 +215,8 @@ const VideoPage: React.FC = observer(() => {
             opened={addToPlaylistOpened}
             onClose={() => setAddToPlaylistOpened(false)}
           />
+
+          <AgeBlockerModal isOpen={ageBlockerModalOpened} />
 
           <ReportModal opened={reportModalOpened} onClose={() => setReportModalOpened(false)} />
         </>

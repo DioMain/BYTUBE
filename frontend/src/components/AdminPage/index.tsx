@@ -37,6 +37,7 @@ const AdminPage: React.FC = observer(() => {
     orderBy: SelectOrderBy.ReportsDesc,
     asAdmin: true,
     searchPattern: searchValue,
+    onlyAllAges: false,
   });
 
   const handleSelectVideo = (videoModel: VideoModel) => {

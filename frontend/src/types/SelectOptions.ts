@@ -6,7 +6,7 @@ class SelectOptions {
   skip: number = 0;
 
   onlyUnlimited?: boolean = true;
-  onlyAllAges?: boolean = true;
+  onlyAllAges?: boolean = false;
 
   favorite?: boolean = false;
   subscribes?: boolean = false;

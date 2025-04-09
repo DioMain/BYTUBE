@@ -63,6 +63,7 @@ namespace BYTUBE.Controllers
                     Name = user.Name,
                     Id = authData.Id.ToString(),
                     Role = user.Role,
+                    BirthDay = user.BirthDay.ToString("o"),
                     IconUrl = $"/data/users/{user.Id}/icon.{iconExt}",
                 });
             }

@@ -104,7 +104,7 @@ const VideoEdit: React.FC = () => {
           setError(srvErr.getFirstError());
         }
       });
-  }, [tags, previewInput, nameInput, descInput, setError, access]);
+  }, [tags, previewInput, nameInput, descInput, setError, access, forYoungs]);
 
   const deleteHandler = () => {
     axios

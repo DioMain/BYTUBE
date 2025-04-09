@@ -21,6 +21,10 @@ namespace BYTUBE.Models.AuthModels
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
+        [Required(ErrorMessage = "Требуеться дата рождения")]
+        [DataType(DataType.Date, ErrorMessage = "Это не дата!")]
+        public string BirthDay { get; set; }
+
         public IFormFile? ImageFile { get; set; }
     }
 }
