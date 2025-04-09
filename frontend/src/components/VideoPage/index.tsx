@@ -33,7 +33,7 @@ import ReportModal from "./ReportModal";
 import { useNavigate } from "react-router-dom";
 import ServerError from "@type/ServerError";
 import styles from "./styled";
-import AgeBlockerModal from "./AgeBlockerModal";
+import AgeBlockerModal from "../AgeBlockerModal";
 import { Status } from "@type/models/VideoModel";
 
 const VideoPage: React.FC = observer(() => {
@@ -216,7 +216,7 @@ const VideoPage: React.FC = observer(() => {
             onClose={() => setAddToPlaylistOpened(false)}
           />
 
-          <AgeBlockerModal isOpen={ageBlockerModalOpened} />
+          <AgeBlockerModal isOpen={ageBlockerModalOpened} onClose={() => setAgeBlockerModalOpened(false)} />
 
           <ReportModal opened={reportModalOpened} onClose={() => setReportModalOpened(false)} />
         </>
