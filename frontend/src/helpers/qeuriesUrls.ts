@@ -26,6 +26,7 @@ const QueriesUrls = {
   CHECK_CHENNEL_IS_OWN: "/api/channel/check",
   GET_USER_SUB_CHANNELS: "/api/channel/user",
   SUB_USER: "/api/channel/subscribe",
+  GET_CHANNELS_BY_ADMIN: "/api/channel/getchannelsbyadmin",
 
   PLAYLIST_COMMON: "/api/playlist",
   GET_USER_PLAYLISTS: "/api/playlist/user",

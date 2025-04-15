@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
-function useOnSeeElement(target: HTMLElement | null, onSee: () => void) {
-  const [, setOnSee] = useState<() => void>(() => {});
-
+function useOnSeeElement(target: RefObject<HTMLElement | null>, onSee: () => void) {
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
@@ -21,10 +19,8 @@ function useOnSeeElement(target: HTMLElement | null, onSee: () => void) {
       }
     );
 
-    observer.current.observe(target);
-  }, [target]);
-
-  return { setOnSee };
+    if (target.current) observer.current.observe(target.current);
+  }, [target.current]);
 }
 
 export default useOnSeeElement;

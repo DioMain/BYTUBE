@@ -1,11 +1,14 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
 using BYTUBE.Helpers;
+using BYTUBE.Models.AdminModels;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Text.RegularExpressions;
 
 namespace BYTUBE.Controllers
 {
@@ -296,6 +299,55 @@ namespace BYTUBE.Controllers
                 await _db.SaveChangesAsync();
 
                 return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpGet("getchannelsbyadmin"), Authorize(Roles = "Admin")]
+        public async Task<IResult> GetAdminControllChannels([FromQuery] int offset, [FromQuery] int count, [FromQuery] string namePattern = "")
+        {
+            try
+            {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                var channels = await _db.Channels
+                    .Include(channel => channel.Owner)
+                    .Where(channel => Regex.IsMatch(channel.Name, $@"\w*{namePattern}\w*"))
+                    .Skip(offset)
+                    .Take(count)
+                    .ToArrayAsync();
+
+                return Results.Json(channels.Select(channel =>
+                {
+                    var channelData = _localDataManager.GetChannelData(channel.Id);
+                    var userData = _localDataManager.GetUserData(channel.Owner.Id);
+
+                    return new ChannelControllDTO()
+                    {
+                        Channel = new()
+                        {
+                            Id = channel.Id.ToString(),
+                            Name = channel.Name,
+                            Description = channel.Description!,
+                            Subscribes = channel.Subscribes.Count,
+                            IsSubscripted = false,
+                            IconUrl = $"/data/channels/{channel.Id}/icon.{channelData.IconExtention}",
+                            BannerUrl = $"/data/channels/{channel.Id}/banner.{channelData.BannerExtention}",
+                        },
+                        User = new()
+                        {
+                            BirthDay = channel.Owner.BirthDay.ToString(),
+                            Email = channel.Owner.Email,
+                            IconUrl = $"/data/users/{channel.Owner.Id}/icon.{userData.IconExtention}",
+                            Id = channel.Owner.Id.ToString(),
+                            Name = channel.Owner.Name,
+                            Role = channel.Owner.Role
+                        }
+                    };
+                }));
             }
             catch (ServerException err)
             {
