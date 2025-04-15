@@ -7,7 +7,7 @@ const App: React.FC = () => {
   useAuth();
 
   return (
-    <Stack style={{ minHeight: "800px" }} justifyContent={"space-between"}>
+    <Stack style={{ minHeight: `${window.innerHeight}px` }} justifyContent={"space-between"}>
       <Stack>
         <AppHeader />
         <Outlet />
