@@ -4,6 +4,7 @@ import AuthPage from "@components/AuthPage";
 import Register from "@components/AuthPage/Register";
 import Signin from "@components/AuthPage/Signin";
 import ChannelPage from "@components/ChannelPage";
+import PrivacyPage from "@components/PrivacyPage";
 import SearchPage from "@components/SearchPage";
 import StudioPage from "@components/StudioPage";
 import VideoMain from "@components/VideoMain";
@@ -23,6 +24,7 @@ const GeneralRoutes: React.FC = () => {
             <Route path="Search" Component={SearchPage} />
             <Route path="Video" Component={VideoPage} />
             <Route path="Channel" Component={ChannelPage} />
+            <Route path="Privacy" Component={PrivacyPage} />
             <Route path="WatchTogether/" Component={WatchTogether}>
               <Route path="Main" Component={W2GMainPage} />
               <Route path="Lobby" Component={W2GWatchPage} />

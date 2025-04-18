@@ -80,5 +80,11 @@ namespace BYTUBE.Controllers
         {
             return GetView();
         }
+
+        [HttpGet, Route("/App/Privacy")]
+        public IResult GetPage10()
+        {
+            return GetView();
+        }
     }
 }
