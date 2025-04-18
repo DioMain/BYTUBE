@@ -89,6 +89,7 @@ namespace BYTUBE.Controllers
                     Name = channel.Name,
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
+                    Status = channel.Status,
                     IconUrl = $"/data/channels/{id}/icon.{localData.IconExtention}",
                     BannerUrl = $"/data/channels/{id}/banner.{localData.BannerExtention}",
                 });
