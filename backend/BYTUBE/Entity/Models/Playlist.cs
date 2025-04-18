@@ -11,15 +11,15 @@ namespace BYTUBE.Entity.Models
         }
 
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public required string Name { get; set; }
 
         [Column(TypeName = "int")]
-        public AccessType Access { get; set; } = AccessType.Public;
+        public required AccessType Access { get; set; }
 
-        public int UserId { get; set; }
+        public required Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
 

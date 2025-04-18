@@ -19,6 +19,7 @@ const VideoMain: React.FC = observer(() => {
     favorite: searchData.mainPageFilter === MainPageFilter.Favorite,
     subscribes: searchData.mainPageFilter === MainPageFilter.Subs,
     orderBy: searchData.mainPageFilter === MainPageFilter.Subs ? SelectOrderBy.CreationDesc : SelectOrderBy.None,
+    onlyAllAges: false,
   });
 
   useEffect(() => {

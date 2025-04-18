@@ -5,10 +5,14 @@ namespace BYTUBE.Models.VideoModels
 {
     public class VideoModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
 
         public int Views { get; set; }
+        public int? ReportsCount { get; set; }
+
+        public bool ForAdults { get; set; }
 
         public DateTime Created { get; set; }
 

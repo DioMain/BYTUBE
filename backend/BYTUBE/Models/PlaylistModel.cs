@@ -8,15 +8,15 @@ namespace BYTUBE.Models
     {
         public class PlaylistItemModel
         {
-            public int PlaylistId { get; set; }
+            public string PlaylistId { get; set; }
 
-            public int VideoId { get; set; }
+            public string VideoId { get; set; }
 
             public int? Order {  get; set; }
         }
 
 
-        public int? Id { get; set; }
+        public string? Id { get; set; }
 
         [Required]
         public string Name { get; set; } = string.Empty;
@@ -24,7 +24,7 @@ namespace BYTUBE.Models
         [Required]
         public Playlist.AccessType Access { get; set; } = Playlist.AccessType.Public;
 
-        public int? UserId { get; set; }
+        public string? UserId { get; set; }
 
         public List<PlaylistItemModel>? PlaylistItems { get; set; }
     }

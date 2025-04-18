@@ -4,7 +4,7 @@
 
   padding: 8px;
 
-  border-radius: 16px;
+  border-radius: 8px;
 
   cursor: pointer;
 
@@ -35,10 +35,10 @@
   }
 
   &:hover {
-    background-color: rgb(80, 80, 80);
+    background-color: #bbb;
   }
 }
 
 .ahbutton0-selected {
-  background-color: rgb(60, 60, 60);
+  background-color: #bbb;
 }

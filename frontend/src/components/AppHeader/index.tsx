@@ -1,20 +1,28 @@
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
 import AuthState from "@type/AuthState";
 import HeaderDrawer from "./HeaderDrawer";
-import "./style.scss";
 import CreateChannelModal from "./CreateChannelModal";
 import { Stack } from "@mui/material";
 import Logo from "@components/Logo";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import PlaylistModel from "@type/models/PlaylistModel";
 import PlaylistListModal from "./PlaylistModal";
+import QueriesUrls from "@helpers/QeuriesUrls";
+import GetUrlParams from "@helpers/GetUrlParams";
+import { useNavigate } from "react-router-dom";
+import IconPlaceholder from "@assets/images/UnknownUser.jpg";
+import "./style.scss";
 
 const AppHeader: React.FC = observer(() => {
+  const search = GetUrlParams().get("search") ?? "";
+
+  const searchBarField = useRef<HTMLInputElement>(null);
+
   const [drawerOpened, setDrawerOpen] = useState(false);
   const [channelCreationOpened, setChannelCreationOpened] = useState(false);
   const [playlistCreationOpened, setPlaylistCreationOpened] = useState(false);
@@ -42,7 +50,14 @@ const AppHeader: React.FC = observer(() => {
     [setPlaylistViewOpened, setDrawerOpen, setPlaylist]
   );
 
-  const iconUrl = user.value ? `url(${user.value.iconUrl})` : "url(/data/users/template/icon.png)";
+  const handleSearch = () => {
+    let url = new URL(QueriesUrls.SEARCH_PAGE, window.location.origin);
+    url.searchParams.set("search", searchBarField.current?.value as string);
+
+    window.location.assign(url.toString());
+  };
+
+  const iconUrl = user.value ? `url(${user.value.iconUrl})` : `url(${IconPlaceholder})`;
 
   return (
     <>
@@ -58,9 +73,19 @@ const AppHeader: React.FC = observer(() => {
         <div className="header-searchbar">
           <div className="header-searchbar__r">
             <Stack className="header-searchbar__input" justifyContent={"center"}>
-              <input type="text" id="headerSearchBar" placeholder="Поиск" />
+              <input
+                type="search"
+                placeholder="Поиск"
+                ref={searchBarField}
+                defaultValue={search}
+                onKeyDown={(evt) => {
+                  if (evt.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
             </Stack>
-            <Stack className="header-searchbar__sbtn" justifyContent={"center"}>
+            <Stack className="header-searchbar__sbtn" justifyContent={"center"} onClick={handleSearch}>
               <SearchIcon />
             </Stack>
           </div>

@@ -1,6 +1,5 @@
 import VideoModel from "@type/models/VideoModel";
-import "./styles.scss";
-import { Alert, Stack, Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useStores } from "appStoreContext";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -9,6 +8,8 @@ import AuthState from "@type/AuthState";
 import ServerError from "@type/ServerError";
 import CommentItem from "./CommentItem";
 import CommentModel from "@type/models/CommentModel";
+import useTrigger from "@hooks/useTrigger";
+import styles from "./styled";
 
 interface CommentsViewerProps {
   video: VideoModel;
@@ -19,6 +20,8 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
   const [error, setError] = useState("");
   const [comments, setComments] = useState<CommentModel[]>([]);
+
+  const refreshTrigger = useTrigger();
 
   const inputMessageField = useRef<HTMLInputElement>(null);
 
@@ -37,7 +40,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
 
         setError(srvErr.getFirstError());
       });
-  }, []);
+  }, [video, refreshTrigger.handler]);
 
   const handleCreateComment = () => {
     if (user.status !== AuthState.Authed) return;
@@ -48,18 +51,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         VideoId: video.id,
       })
       .then(() => {
-        setComments([
-          ...comments,
-          {
-            message: inputMessageField.current!.value,
-            videoId: video.id,
-            created: Date.now().toString(),
-            userId: user.value!.id,
-            likesCount: 0,
-            userIsLikeIt: false,
-            user: user.value!,
-          },
-        ]);
+        refreshTrigger.trigger();
       })
       .catch((err: AxiosError) => {
         const srvError = new ServerError(err);
@@ -68,7 +60,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
       });
   };
 
-  const handleUpdateComment = (text: string, id: number) => {
+  const handleUpdateComment = (text: string, id: string) => {
     if (user.status !== AuthState.Authed) return;
 
     axios
@@ -76,6 +68,7 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         QueriesUrls.COMMENT_COMMON,
         {
           Message: text,
+          VideoId: video.id,
         },
         {
           params: {
@@ -83,13 +76,26 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
           },
         }
       )
+      .then(() => {
+        let d = comments.map((value) => {
+          let newValue = value;
+
+          if (value.id === id) value.message = text;
+
+          return newValue;
+        });
+
+        setComments(d);
+      })
       .catch((err: AxiosError) => {
         setError(err.message);
       });
   };
 
-  const handleDeleteComment = (id: number) => {
+  const handleDeleteComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
+
+    let comIndex = comments.findIndex((c) => c.id === id);
 
     axios
       .delete(QueriesUrls.COMMENT_COMMON, {
@@ -98,14 +104,15 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
         },
       })
       .then(() => {
-        setComments(comments.filter((i) => i.id !== id));
+        let d = [...comments.slice(0, comIndex), ...comments.slice(comIndex + 1)];
+        setComments(d);
       })
       .catch((err: AxiosError) => {
         setError(err.message);
       });
   };
 
-  const handleLikeComment = (id: number) => {
+  const handleLikeComment = (id: string) => {
     if (user.status !== AuthState.Authed) return;
 
     axios
@@ -120,20 +127,20 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
   };
 
   return (
-    <Stack className="commentviewer" spacing={2}>
+    <styles.CommentViewer spacing={2}>
       {user.status === AuthState.Authed ? (
-        <Stack className="commentviewer-newcomment" direction={"row"} spacing={2}>
+        <styles.NewComment direction={"row"} spacing={2}>
           <input type="text" ref={inputMessageField} />
           <Button variant="contained" color="primary" onClick={handleCreateComment}>
             Отправить
           </Button>
-        </Stack>
+        </styles.NewComment>
       ) : (
         <Alert severity="info" variant="outlined">
           Что бы писать комментарии нужно быть авторизованным на сайте
         </Alert>
       )}
-      <Stack className="commentviewer-list" spacing={1}>
+      <styles.CommentList spacing={1}>
         {comments.map((item, index) => {
           return (
             <CommentItem
@@ -145,9 +152,9 @@ const CommentsViewer: React.FC<CommentsViewerProps> = ({ video }) => {
             />
           );
         })}
-      </Stack>
+      </styles.CommentList>
       {error !== "" && <Alert severity="error">{error}</Alert>}
-    </Stack>
+    </styles.CommentViewer>
   );
 };
 

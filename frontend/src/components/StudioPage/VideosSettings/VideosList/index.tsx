@@ -50,7 +50,7 @@ const VideosList: React.FC<VSEProps> = ({ setPage }) => {
         <UploadIcon />
       </div>
       <Stack className="studio-videolist__list">
-        <Grid2 container spacing={2}>
+        <Grid2 container spacing={2} wrap="wrap">
           {videos.map((video, index) => {
             return (
               <Grid2 key={`vl_${index}`} size={6}>

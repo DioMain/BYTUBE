@@ -1,7 +1,7 @@
 @import "@styles/Mixins.scss";
 
 .register {
-  margin-top: 50px;
+  margin-top: 24px;
   display: flex;
   justify-content: center;
 
@@ -15,7 +15,7 @@
   }
 
   &-content {
-    background-color: rgb(28, 28, 28);
+    background-color: #ddd;
 
     padding: 16px;
 
@@ -50,12 +50,12 @@
 
       height: 96px;
       width: 96px;
-  
+
       border-radius: 64px;
       border: solid 2px white;
-  
+
       cursor: pointer;
-      
+
       input {
         display: none;
       }
@@ -78,7 +78,7 @@
   &-signinlink {
     margin-top: 12px;
     text-align: center;
-    
+
     @include defaultFont(12px);
   }
 }

@@ -5,12 +5,15 @@ $tagitem_time: 0.2s;
 
 .studio-videocreate {
   &-preview {
-    background-color: #101010;
+    background-color: #ddd;
 
     border: solid 2px #202020;
 
     padding-top: 32px;
     padding-bottom: 32px;
+
+    border-left: none;
+    border-right: none;
 
     &__notwork {
       border: solid #303030;
@@ -25,21 +28,7 @@ $tagitem_time: 0.2s;
     }
   }
 
-  &-namefield input {
-    width: 30%;
-
-    @include TextField;
-  }
-
-  &-descfield textarea {
-    @include Textarea;
-  }
-
   &-tags {
-    input {
-      @include TextField;
-    }
-
     &__item {
       cursor: pointer;
       z-index: 1;
@@ -50,7 +39,7 @@ $tagitem_time: 0.2s;
         padding: 4px;
         min-height: 24px;
         border: solid 2px #313131;
-        background-color: #1c1c1c;
+        background-color: #ddd;
         border-radius: 8px 0px 8px 0px;
 
         padding-left: 8px;
@@ -79,7 +68,7 @@ $tagitem_time: 0.2s;
 
   &-previewimg {
     border: solid 2px #303030;
-    background-color: #101010;
+    background-color: #ddd;
 
     padding: 8px;
 

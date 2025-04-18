@@ -6,22 +6,20 @@ namespace BYTUBE.Entity.Models
     public class Comment
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Required]
-        public string Message { get; set; } = string.Empty;
+        public required string Message { get; set; }
 
         [Column(TypeName = "jsonb")]
-        public List<int> Likes { get; set; } = [];
+        public List<Guid> Likes { get; set; } = [];
 
-        [Required]
-        public DateTime Created { get; set; } = DateTime.Now.ToUniversalTime();
+        public required DateTime Created { get; set; }
 
-        public int UserId { get; set; }
+        public required Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
 
-        public int VideoId { get; set; }
+        public required Guid VideoId { get; set; }
         [ForeignKey(nameof(VideoId))]
         public Video? Video { get; set; }
     }

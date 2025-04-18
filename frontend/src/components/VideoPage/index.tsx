@@ -27,9 +27,15 @@ import PlaylistModel from "@type/models/PlaylistModel";
 import useVideoGlobal from "@hooks/useVideoGlobal";
 import { observer } from "mobx-react-lite";
 import CommentsViewer from "@components/CommentsViewer";
-
-import "./style.scss";
-import { Expand, ExpandMore } from "@mui/icons-material";
+import WatchTogeather from "@mui/icons-material/AddToQueue";
+import { ExpandMore } from "@mui/icons-material";
+import ReportModal from "./ReportModal";
+import { useNavigate } from "react-router-dom";
+import ServerError from "@type/ServerError";
+import styles from "./styled";
+import AgeBlockerModal from "../AgeBlockerModal";
+import { Status } from "@type/models/VideoModel";
+import { ChannelStatus } from "@type/models/ChannelModel";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -37,7 +43,11 @@ const VideoPage: React.FC = observer(() => {
 
   const videoResponce = useVideoGlobal(id);
 
+  const navigator = useNavigate();
+
   const [addToPlaylistOpened, setAddToPlaylistOpened] = useState(false);
+  const [reportModalOpened, setReportModalOpened] = useState(false);
+  const [ageBlockerModalOpened, setAgeBlockerModalOpened] = useState(false);
   const [playlist, setPlaylist] = useState<PlaylistModel | null>(null);
 
   const { user, video } = useStores();
@@ -64,10 +74,26 @@ const VideoPage: React.FC = observer(() => {
             window.location.assign(QueriesUrls.MAIN_PAGE);
           });
       }
+
+      const userBirthDay = new Date(user.value?.birthDay!);
+      const nowDate = new Date();
+      const userAge = nowDate.getFullYear() - userBirthDay.getFullYear();
+
+      console.log(video.value?.channel);
+      if (
+        userAge < 18 &&
+        (video.value?.forAdults ||
+          video.value?.videoStatus === Status.Limited ||
+          video.value?.channel?.status === ChannelStatus.Limited)
+      ) {
+        setAgeBlockerModalOpened(true);
+      }
     }
   }, [videoResponce.status]);
 
-  const reportHandle = () => {};
+  const reportHandle = () => {
+    setReportModalOpened(true);
+  };
 
   const addToPlaylistHandle = () => {
     setAddToPlaylistOpened(true);
@@ -84,6 +110,32 @@ const VideoPage: React.FC = observer(() => {
     }
   };
 
+  const handleTagClick = (tag: string) => {
+    let url = new URL(QueriesUrls.SEARCH_PAGE, window.location.origin);
+    url.searchParams.set("search", tag);
+
+    window.location.assign(url.toString());
+  };
+
+  const handleToW2G = () => {
+    const name = `${user.value?.name}\`s lobby ${video.value?.title}`;
+
+    axios
+      .post(QueriesUrls.W2G_LOBBYS_COMMON, {
+        Name: name,
+        Password: null,
+        Video: video.value?.id,
+      })
+      .then(() => {
+        navigator(`/App/WatchTogether/Lobby?lobby=${name}`);
+      })
+      .catch((err: AxiosError) => {
+        let srvErr = new ServerError(err.response?.data);
+
+        console.error(srvErr.getFirstError());
+      });
+  };
+
   switch (videoResponce.status) {
     case StatusBase.Loading:
       return <LinearProgress />;
@@ -92,31 +144,37 @@ const VideoPage: React.FC = observer(() => {
     default:
       return (
         <>
-          <div className="videopage">
-            <Stack className="videopage-main">
+          <styles.VideoPage>
+            <styles.VideoPageMain>
               <VideoPlayer
                 url={video.value?.videoUrl!}
-                className="videopage__player"
                 width={`auto`}
                 onVideoEnded={onEndVideoHandler}
-                autoplay
+                autoplay={false}
               />
-              <h1 className="videopage-vtitle">{video.value?.title}</h1>
+              <styles.VideoTitle>{video.value?.title}</styles.VideoTitle>
               <Stack spacing={3} direction={"row"}>
-                <div className="videopage-views">{video.value?.views} просмотров</div>
+                <div>{video.value?.views} просмотров</div>
                 <Stack direction={"row"} spacing={1}>
                   {video.value?.tags?.map((item, index) => {
                     return (
-                      <div key={`vp-tag-${index}`} className="videopage-tag">
+                      <styles.VideoTag key={`vp-tag-${index}`} onClick={() => handleTagClick(`#${item}`)}>
                         #{item}
-                      </div>
+                      </styles.VideoTag>
                     );
                   })}
                 </Stack>
               </Stack>
-              <Stack className="videopage-control" direction={"row"} spacing={2} justifyContent={"space-between"}>
+              <Stack direction={"row"} spacing={2} justifyContent={"space-between"}>
                 <ChannelButton channel={video.value?.channel!} />
                 <Stack direction={"row"} spacing={2}>
+                  <Stack justifyContent={"center"}>
+                    <Tooltip title="Совместный просмотр">
+                      <IconButton onClick={handleToW2G} disabled={user.status !== AuthState.Authed}>
+                        <WatchTogeather />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Добавить в плейлист">
                       <IconButton onClick={addToPlaylistHandle} disabled={user.status !== AuthState.Authed}>
@@ -126,7 +184,7 @@ const VideoPage: React.FC = observer(() => {
                   </Stack>
                   <Stack justifyContent={"center"}>
                     <Tooltip title="Пожаловатся">
-                      <IconButton onClick={reportHandle} disabled={user.status !== AuthState.Authed}>
+                      <IconButton onClick={reportHandle}>
                         <FlagIcon />
                       </IconButton>
                     </Tooltip>
@@ -134,8 +192,8 @@ const VideoPage: React.FC = observer(() => {
                   <MarkVideo id={video.value?.id!} />
                 </Stack>
               </Stack>
-              <Stack className="videopage-description">{video.value?.description}</Stack>
-              <Stack className="videopage-comments">
+              <styles.VideoDescription>{video.value?.description}</styles.VideoDescription>
+              <Stack>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMore />}>Комментарии</AccordionSummary>
                   <AccordionDetails>
@@ -143,8 +201,8 @@ const VideoPage: React.FC = observer(() => {
                   </AccordionDetails>
                 </Accordion>
               </Stack>
-            </Stack>
-            <Stack className="videopage-othervideos" spacing={2}>
+            </styles.VideoPageMain>
+            <styles.OtherVideos spacing={2}>
               {playlistId === undefined ? (
                 <OtherVideos videoId={video.value?.id!} />
               ) : (
@@ -157,14 +215,18 @@ const VideoPage: React.FC = observer(() => {
                   )}
                 </>
               )}
-            </Stack>
-          </div>
+            </styles.OtherVideos>
+          </styles.VideoPage>
 
           <AddToPlaylistModal
             video={video.value!}
             opened={addToPlaylistOpened}
             onClose={() => setAddToPlaylistOpened(false)}
           />
+
+          <AgeBlockerModal isOpen={ageBlockerModalOpened} onClose={() => setAgeBlockerModalOpened(false)} />
+
+          <ReportModal opened={reportModalOpened} onClose={() => setReportModalOpened(false)} />
         </>
       );
   }

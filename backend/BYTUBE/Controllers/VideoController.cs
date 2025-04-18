@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models;
 using BYTUBE.Models.ChannelModels;
 using BYTUBE.Models.VideoModels;
@@ -7,7 +8,6 @@ using BYTUBE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace BYTUBE.Controllers
@@ -16,47 +16,46 @@ namespace BYTUBE.Controllers
     [ApiController]
     public class VideoController : ControllerBase
     {
-        private readonly PostgresDbContext _db;
-        private readonly LocalDataManager _localDataManager;
-        private readonly VideoMediaService _videoMediaService;
+        private readonly PostgresDbContext _dbContext;
+        private readonly LocalDataService _localData;
+        private readonly VideoMediaService _videoMedia;
 
-        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-
-        public VideoController(PostgresDbContext db, LocalDataManager localDataManager, VideoMediaService videoMediaService)
+        public VideoController(PostgresDbContext db, LocalDataService localData, VideoMediaService videoMedia)
         {
-            _db = db;
-            _localDataManager = localDataManager;
-            _videoMediaService = videoMediaService;
+            _dbContext = db;
+            _localData = localData;
+            _videoMedia = videoMedia;
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] int id)
+        public async Task<IResult> Get([FromQuery] Guid id)
         {
             try
             {
-                Video? video = await _db.Videos.FirstOrDefaultAsync(i => i.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (video == null)
-                    throw new ServerException("Видео не найдено", 404);
+                Video video = await _dbContext.Videos.FindAsync(id) 
+                    ?? throw new ServerException("Видео не найдено", 404);
 
-                Channel channel = await _db.Channels.Include(i => i.Subscribes).FirstAsync(i => i.Id == video.OwnerId);
+                Channel channel = await _dbContext.Channels
+                    .Include(i => i.Subscribes)
+                    .FirstAsync(i => i.Id == video.OwnerId);
 
                 if (video.VideoAccess == Video.Access.Private)
                 {
-                    if (!IsAutorize || channel.UserId != UserId)
+                    if (!authData.IsAutorize || channel.UserId != authData.Id)
                         throw new ServerException("Видео вам не доступно", 403);
                 }
 
-                if (video.VideoStatus == Video.Status.Blocked)
+                if (video.VideoStatus == Video.Status.Blocked || channel.Status == Channel.ActiveStatus.Blocked)
                     throw new ServerException("Видео более не доспутно", 403);
 
-                var videoLocalData = _localDataManager.GetVideoData(id);
-                var channelLocalData = _localDataManager.GetChannelData(channel.Id);
+                var videoLocalData = _localData.GetVideoData(id);
+                var channelLocalData = _localData.GetChannelData(channel.Id);
 
                 VideoFullModel model = new VideoFullModel()
                 {
-                    Id = video.Id,
+                    Id = video.Id.ToString(),
                     Title = video.Title,
                     Description = video.Description ?? "",
                     Duration = video.Duration,
@@ -67,20 +66,22 @@ namespace BYTUBE.Controllers
                     PreviewUrl = $"/data/videos/{id}/preview.{videoLocalData.PreviewExtention}",
                     VideoAccess = video.VideoAccess,
                     VideoStatus = video.VideoStatus,
+                    ForAdults = video.ForAdults,
 
                     Channel = new ChannelModel()
                     {
-                        Id = channel.Id,
+                        Id = channel.Id.ToString(),
                         Name = channel.Name,
                         IsSubscripted = false,
                         Subscribes = channel.Subscribes.Count,
+                        Status = channel.Status,
                         IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
                 };
 
-                if (IsAutorize)
+                if (authData.IsAutorize)
                 {
-                    model.Channel.IsSubscripted = channel.Subscribes.Any(i => i.UserId == UserId);
+                    model.Channel.IsSubscripted = channel.Subscribes.Any(i => i.UserId == authData.Id);
                 }
 
                 return Results.Json(model);
@@ -96,34 +97,42 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("channel")]
-        public async Task<IResult> GetChannelVideos([FromQuery] int channelId)
+        public async Task<IResult> GetChannelVideos([FromQuery] Guid channelId)
         {
             try
             {
-                Video[] videos = await _db.Videos.Where(item => item.OwnerId == channelId).Include(video => video.Owner).ToArrayAsync();
+                Video[] videos = await _dbContext.Videos
+                    .Where(
+                    item => item.OwnerId == channelId &&
+                    item.VideoStatus != Video.Status.Blocked &&
+                    item.VideoAccess == Video.Access.All)
+                    .OrderByDescending(i => i.Created)
+                    .Include(video => video.Owner)
+                    .ToArrayAsync();
 
                 List<VideoModel> models = [];
-
                 foreach (Video video in videos)
                 {
-                    var videoLocalData = _localDataManager.GetVideoData(video.Id);
-                    var channelLocalData = _localDataManager.GetChannelData(video.Owner!.Id);
+                    var videoLocalData = _localData.GetVideoData(video.Id);
+                    var channelLocalData = _localData.GetChannelData(video.Owner!.Id);
 
                     VideoModel videoModel = new VideoModel()
                     {
-                        Id = video.Id,
+                        Id = video.Id.ToString(),
                         Title = video.Title,
+                        Description = video.Description,
                         Duration = video.Duration,
                         Created = video.Created,
                         Views = video.Views,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoLocalData.PreviewExtention}",
                         VideoAccess = video.VideoAccess,
                         VideoStatus = video.VideoStatus,
+                        ForAdults = video.ForAdults,
                         Channel = new ChannelModel()
                         {
-                            Id = video.Owner!.Id,
-                            Name = video.Owner!.Name,
-                            Subscribes = video.Owner!.Subscribes.Count,
+                            Id = video.Owner.Id.ToString(),
+                            Name = video.Owner.Name,
+                            Subscribes = video.Owner.Subscribes.Count,
                             IconUrl = $"/data/channels/{video.Owner!.Id}/icon.{channelLocalData.IconExtention}"
                         }
                     };
@@ -140,45 +149,46 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("playlist")]
-        public async Task<IResult> GetPlaylistVideos([FromQuery] int playlistId)
+        public async Task<IResult> GetPlaylistVideos([FromQuery] Guid playlistId)
         {
             try
             {
-                Playlist? playlist = await _db.Playlists.Include(pl => pl.PlaylistItems).FirstOrDefaultAsync(pl => pl.Id == playlistId);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (playlist == null)
-                    throw new ServerException("Плейлист не найден!", 404);
+                Playlist? playlist = await _dbContext.Playlists
+                    .Include(pl => pl.PlaylistItems)
+                    .FirstOrDefaultAsync(pl => pl.Id == playlistId)
+                    ?? throw new ServerException("Плейлист не найден!", 404);
 
                 if (playlist.Access == Playlist.AccessType.Private)
                 {
-                    if (IsAutorize)
+                    if (authData.IsAutorize)
                     {
-                        if (UserId != playlist.UserId)
+                        if (authData.Id != playlist.UserId)
                             throw new ServerException("Видео плейлиста не доступены!", 403);
                     }
                     else
                         throw new ServerException("Не авторизован!", 401);
                 }
 
-                var videos = await _db.Videos
+                var videos = await _dbContext.Videos
                             .Include(video => video.Owner)
                             .ToListAsync();
 
-                videos = videos
-                            .Where(video => playlist.PlaylistItems.Any(item => video.Id == item.VideoId))
-                            .ToList();
+                videos = [.. videos.Where(video => playlist.PlaylistItems.Any(item => video.Id == item.VideoId))];
 
                 List<VideoModel> models = [];
 
                 foreach (Video video in videos)
                 {
-                    var videoLocalData = _localDataManager.GetVideoData(video.Id);
-                    var channelLocalData = _localDataManager.GetChannelData(video.Owner!.Id);
+                    var videoLocalData = _localData.GetVideoData(video.Id);
+                    var channelLocalData = _localData.GetChannelData(video.Owner!.Id);
 
-                    VideoModel videoModel = new VideoModel()
+                    var videoModel = new VideoModel()
                     {
-                        Id = video.Id,
+                        Id = video.Id.ToString(),
                         Title = video.Title,
+                        Description = video.Description,
                         Duration = video.Duration,
                         Created = video.Created,
                         Views = video.Views,
@@ -187,8 +197,8 @@ namespace BYTUBE.Controllers
                         VideoStatus = video.VideoStatus,
                         Channel = new ChannelModel()
                         {
-                            Id = video.Owner!.Id,
-                            Name = video.Owner!.Name,
+                            Id = video.Owner.Id.ToString(),
+                            Name = video.Owner.Name,
                             Subscribes = video.Owner!.Subscribes.Count,
                             IconUrl = $"/data/channels/{video.Owner!.Id}/icon.{channelLocalData.IconExtention}"
                         }
@@ -210,84 +220,122 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("select")]
-        public async Task<IResult> Select([FromQuery] VideoSelectOptions Options)
+        public async Task<IResult> Select([FromQuery] SelectOptions options)
         {
             try
-            {   
-                var videos = await _db.Videos
-                    .Where(video => video.VideoAccess == Video.Access.All)
-                    .Include(i => i.Owner)
-                    .Include(i => i.Owner!.Subscribes)
-                    .ToListAsync();
+            {
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (Options.Ignore != null)
+                var tagPattern = @"#\w+";
+                var tags = Regex.Matches(options.SearchPattern, tagPattern)
+                                .Cast<Match>()
+                                .Select(m => m.Value[1..])
+                                .ToList();
+
+                var searchPatternNoTags = Regex.Replace(options.SearchPattern, tagPattern, "").Trim();
+
+                var query = _dbContext.Videos
+                    .Include(Video => Video.VideoMarks)
+                    .Include(video => video.Owner)
+                        .ThenInclude(o => o.Subscribes)
+                    .Include(video => video.Reports)
+                    .AsQueryable();
+
+
+                if (!(options.AsAdmin && authData.IsAutorize && authData.Role == Entity.Models.User.RoleType.Admin))
                 {
-                    videos = videos.Where(video => Options.Ignore.Split(',').Any(i => int.Parse(i) != video.Id)).ToList();
+                    query = query.Where(video => video.VideoAccess == Video.Access.All);
+
+                    if (options.OnlyUnlimited)
+                        query = query.Where(
+                            video => video.VideoStatus == Video.Status.NoLimit 
+                         && video.Owner.Status == Channel.ActiveStatus.Normal);
+                    else
+                        query = query.Where(video => 
+                            (video.VideoStatus == Video.Status.NoLimit || video.VideoStatus == Video.Status.Limited)
+                         && (video.Owner.Status == Channel.ActiveStatus.Normal || video.Owner.Status == Channel.ActiveStatus.Limited));
                 }
 
-                if (Options.NamePattern != null)
+                if (!string.IsNullOrEmpty(options.Ignore))
                 {
-                    videos = videos.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{Options.NamePattern}(\w)*")).ToList();
+                    var ignoredIds = options.Ignore.Split(',').Select(Guid.Parse);
+                    query = query.Where(video => !ignoredIds.Contains(video.Id));
                 }
 
-                if (IsAutorize)
+                if (!string.IsNullOrEmpty(searchPatternNoTags))
                 {
-                    var user = await _db.Users.FirstAsync(i => i.Id == UserId);
+                    query = query.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{searchPatternNoTags}(\w)*"));
+                }
 
-                    if (Options.Subscribes)
+                if (authData.IsAutorize)
+                {
+                    var user = await _dbContext.Users.FirstAsync(i => i.Id == authData.Id);
+
+                    if (options.OnlyAllAges)
                     {
-                        videos = videos.Where(i => i.Owner!.Subscribes.Any(i => i.UserId == UserId)).ToList();
+                        query = query.Where(video => !video.ForAdults);
                     }
 
-                    if (Options.Favorite)
+                    if (options.Subscribes)
                     {
-                        videos = videos.Where(video => user.LikedVideo.Any(i => i == video.Id)).ToList();
+                        query = query.Where(video => video.Owner!.Subscribes.Any(sub => sub.UserId == authData.Id));
+                    }
+
+                    if (options.Favorite)
+                    {
+                        query = query.Where(video => video.VideoMarks.Any(mark => mark.UserId == user.Id && mark.IsLike));
                     }
                 }
 
-                switch (Options.OrderBy)
+                query = options.OrderBy switch
                 {
-                    case VideoSelectOrderBy.Creation:
-                        videos = videos.OrderBy(i => i.Created).ToList();
-                        break;
-                    case VideoSelectOrderBy.CreationDesc:
-                        videos = videos.OrderByDescending(i => i.Created).ToList();
-                        break;
-                    case VideoSelectOrderBy.None:
-                    default:
-                        break;
+                    SelectOrderBy.Creation => query.OrderBy(video => video.Created),
+                    SelectOrderBy.CreationDesc => query.OrderByDescending(video => video.Created),
+                    SelectOrderBy.Reports => query.OrderBy(video => video.Reports.Count),
+                    SelectOrderBy.ReportsDesc => query.OrderByDescending(video => video.Reports.Count),
+                    SelectOrderBy.Views => query.OrderByDescending(video => video.Views),
+                    _ => query
+                };
+
+                var videos = await query.ToListAsync();
+
+                if (tags.Count != 0)
+                {
+                    videos = videos.Where(video => video.Tags.Any(vtag => tags.Contains(vtag))).ToList();
                 }
 
-                videos = videos.Skip(Options.Skip).Take(Options.Take).ToList();
+                videos = videos.Skip(options.Skip).Take(options.Take).ToList();
 
-                return Results.Json(videos.Select(video =>
+                var result = videos.Select(video =>
                 {
-                    var videoData = _localDataManager.GetVideoData(video.Id);
-                    var channelData = _localDataManager.GetChannelData(video.Owner!.Id);
+                    var videoData = _localData.GetVideoData(video.Id);
+                    var channelData = _localData.GetChannelData(video.Owner!.Id);
 
-                    var subsCount = _db.Subscriptions.Where(i => i.ChannelId == video.Owner!.Id).Count();
-
-                    return new VideoModel()
+                    return new VideoModel
                     {
-                        Id = video.Id,
+                        Id = video.Id.ToString(),
                         Title = video.Title,
                         Duration = video.Duration,
                         Created = video.Created,
                         VideoAccess = video.VideoAccess,
                         VideoStatus = video.VideoStatus,
                         Views = video.Views,
+                        ReportsCount = video.Reports.Count,
+                        ForAdults = video.ForAdults,
+                        Description = video.Description,
                         PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
-
-                        Channel = new ChannelModel()
+                        Channel = new ChannelModel
                         {
-                            Id = video.Owner.Id,
+                            Id = video.Owner.Id.ToString(),
                             Name = video.Owner.Name,
                             IsSubscripted = false,
-                            Subscribes = subsCount,
+                            Subscribes = video.Owner.Subscribes.Count,
                             IconUrl = $"/data/channels/{video.Owner.Id}/icon.{channelData.IconExtention}"
                         }
                     };
-                }));
+                });
+
+                return Results.Json(result);
             }
             catch (ServerException err)
             {
@@ -296,43 +344,52 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost, Authorize]
-        public async Task<IResult> Post([FromForm] CreateVideoModel model, [FromQuery] int channelId)
+        public async Task<IResult> Post([FromForm] CreateVideoModel model, [FromQuery] Guid channelId)
         {
             try
             {
-                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (!await _dbContext.Channels.AnyAsync(c => c.Id == channelId && c.UserId == authData.Id))
                     throw new ServerException("Канал вам не пренадлежит", 403);
 
-                var video = await _db.Videos.AddAsync(new Video()
+                var video = await _dbContext.Videos.AddAsync(new Video()
                 {
                     Title = model.Title,
                     Description = model.Description,
                     Created = DateTime.Now.ToUniversalTime(),
-                    Dislikes = [],
-                    Likes = [],
                     Views = 0,
                     Tags = model.Tags,
                     Duration = "00:00",
                     OwnerId = channelId,
                     VideoAccess = model.VideoAccess,
                     VideoStatus = model.VideoStatus,
+                    ForAdults = model.ForAdults
                 });
 
-                await _db.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-                await _localDataManager.SaveVideoFiles(video.Entity.Id, model.PreviewFile!, model.VideoFile!);
+                await _localData.SaveVideoFiles(video.Entity.Id, model.PreviewFile!, model.VideoFile!);
 
-                var videoInfo = await _videoMediaService
-                    .GetMediaInfo($"{LocalDataManager.VideosPath}/{video.Entity.Id}/video.{_localDataManager.GetVideoData(video.Entity.Id).VideoExtention}");
+                var localVideoData = _localData.GetVideoData(video.Entity.Id);
+
+                var videoInfo = await _videoMedia
+                    .GetMediaInfo($"{LocalDataService.VideosPath}/{video.Entity.Id}/video.{localVideoData.VideoExtention}");
 
                 int minutes = (int)Math.Floor(videoInfo.Duration.TotalSeconds / 60);
                 int secound = (int)videoInfo.Duration.TotalSeconds - (minutes * 60);
 
-                video.Entity.Duration = $"{minutes}:{secound}";
+                string minutesString = minutes.ToString();
+                string secoundsString = secound.ToString();
 
-                _db.Videos.Update(video.Entity);
+                minutesString = minutesString.Length == 1 ? $"0{minutesString}" : minutesString;
+                secoundsString = secoundsString.Length == 1 ? $"0{secoundsString}" : secoundsString;
 
-                await _db.SaveChangesAsync();
+                video.Entity.Duration = $"{minutesString}:{secoundsString}";
+
+                _dbContext.Videos.Update(video.Entity);
+
+                await _dbContext.SaveChangesAsync();
 
                 return Results.Ok();
             }
@@ -340,24 +397,24 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
             }
-            catch
+            catch (Exception err)
             {
-                return Results.Problem("Error", statusCode: 400);
+                return Results.Problem(err.Message, statusCode: 400);
             }
         }
 
         [HttpPut, Authorize]
-        public async Task<IResult> Put([FromForm] EditVideoModel model, [FromQuery] int id, [FromQuery] int channelId)
+        public async Task<IResult> Put([FromForm] EditVideoModel model, [FromQuery] Guid id, [FromQuery] Guid channelId)
         {
             try
             {
-                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (!await _dbContext.Channels.AnyAsync(c => c.Id == channelId && c.UserId == authData.Id))
                     throw new ServerException("Канал вам не пренадлежит", 403);
 
-                Video? video = await _db.Videos.FirstOrDefaultAsync(v => v.Id == id);
-
-                if (video == null)
-                    throw new ServerException("Видео не существует", 404);
+                Video video = await _dbContext.Videos.FindAsync(id)
+                    ?? throw new ServerException("Видео не существует", 404);
 
                 if (video.OwnerId != channelId)
                     throw new ServerException("Видео вам не пренадлежит", 403);
@@ -366,13 +423,14 @@ namespace BYTUBE.Controllers
                 video.Description = model.Description;
                 video.Tags = model.Tags;
                 video.VideoAccess = model.VideoAccess;
+                video.ForAdults = model.ForAdults;
 
                 if (model.PreviewFile != null)
-                    await _localDataManager.SaveVideoFiles(video.Id, model.PreviewFile!);
+                    await _localData.SaveVideoFiles(video.Id, model.PreviewFile!);
 
-                _db.Videos.Update(video);
+                _dbContext.Videos.Update(video);
 
-                await _db.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 return Results.Ok();
             }
@@ -387,25 +445,25 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] int id, [FromQuery] int channelId)
+        public async Task<IResult> Delete([FromQuery] Guid id, [FromQuery] Guid channelId)
         {
             try
             {
-                if (!await _db.Channels.AnyAsync(c => c.Id == channelId && c.UserId == UserId))
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (!await _dbContext.Channels.AnyAsync(c => c.Id == channelId && c.UserId == authData.Id))
                     throw new ServerException("Канал вам не пренадлежит", 403);
 
-                Video? video = await _db.Videos.FirstOrDefaultAsync(v => v.Id == id);
-
-                if (video == null)
-                    throw new ServerException("Видео не существует", 404);
+                Video? video = await _dbContext.Videos.FindAsync(id)
+                    ?? throw new ServerException("Видео не существует", 404);
 
                 if (video.OwnerId != channelId)
                     throw new ServerException("Видео вам не пренадлежит", 403);
 
-                Directory.Delete($"{LocalDataManager.VideosPath}/{id}", true);
+                Directory.Delete($"{LocalDataService.VideosPath}/{id}", true);
 
-                _db.Videos.Remove(video);
-                await _db.SaveChangesAsync();
+                _dbContext.Videos.Remove(video);
+                await _dbContext.SaveChangesAsync();
 
                 return Results.Ok();
             }
@@ -419,21 +477,25 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpGet("/data/videos/{id:int}/video.mp4")]
-        public async Task<IResult> StreamVideo([FromRoute] int id)
+        [HttpGet("/data/videos/{id:guid}/video.mp4")]
+        public async Task<IResult> StreamVideo([FromRoute] Guid id)
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
                 string path = $"./Data/videos/{id}/video.mp4";
 
                 if (!System.IO.File.Exists(path))
                     throw new ServerException("Файла больше не существует!", 404);
 
-                Video video = await _db.Videos.Include(i => i.Owner).FirstAsync(i => i.Id == id);
+                Video video = await _dbContext.Videos
+                    .Include(i => i.Owner)
+                    .FirstAsync(i => i.Id == id);
 
                 if (video.VideoAccess == Video.Access.Private)
                 {
-                    if ((IsAutorize && UserId != video.Owner.UserId) || !IsAutorize)
+                    if ((authData.IsAutorize && authData.Id != video.Owner.UserId) || !authData.IsAutorize)
                         throw new ServerException("Видео файл не доступен!", 403);
                 }
 
@@ -476,26 +538,27 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("mark")]
-        public async Task<IResult> GetMark([FromQuery] int id)
+        public async Task<IResult> GetMark([FromQuery] Guid id)
         {
             try
             {
-                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (video == null)
-                    throw new ServerException("Видео не найдено", 404);
+                var video = await _dbContext.Videos
+                    .Include(video => video.VideoMarks)
+                    .FirstOrDefaultAsync(video => video.Id == id)
+                    ?? throw new ServerException("Видео не найдено", 404);
 
-
-                VideoMarkModel model = new VideoMarkModel
+                VideoMarkModel model = new()
                 {
-                    LikesCount = video.Likes.Count,
-                    DislikesCount = video.Dislikes.Count
+                    LikesCount = video.VideoMarks.Count(mark => mark.IsLike),
+                    DislikesCount = video.VideoMarks.Count(mark => !mark.IsLike)
                 };
 
-                if (IsAutorize)
+                if (authData.IsAutorize)
                 {
-                    model.UserIsLikeIt = video.Likes.Any(i => i == UserId);
-                    model.UserIsDislikeIt = video.Dislikes.Any(i => i == UserId);
+                    model.UserIsLikeIt = video.VideoMarks.Any(mark => mark.UserId == authData.Id && mark.IsLike);
+                    model.UserIsDislikeIt = video.VideoMarks.Any(mark => mark.UserId == authData.Id && !mark.IsLike);
                 }
 
                 return Results.Json(model);
@@ -506,75 +569,40 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpPost("like"), Authorize]
-        public async Task<IResult> LikeVideo([FromQuery] int id)
+        [HttpPost("mark"), Authorize]
+        public async Task<IResult> MarkVideo([FromQuery] Guid id, [FromQuery] bool isLike)
         {
             try
             {
-                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (video == null)
-                    throw new ServerException("Видео не найдено", 404);
+                var video = await _dbContext.Videos
+                    .FindAsync(id)
+                    ?? throw new ServerException("Видео не найдено", 404);
 
-                var user = await _db.Users.FirstAsync(usr => usr.Id == UserId);
+                var user = await _dbContext.Users
+                    .FirstAsync(usr => usr.Id == authData.Id);
 
-                if (!video.Likes.Contains(UserId))
+                var mark = await _dbContext.VideoMarks
+                    .FirstOrDefaultAsync(mark => mark.VideoId == id && mark.UserId == user.Id);
+
+                if (mark is not null)
                 {
-                    video.Likes.Add(UserId);
-
-                    user.LikedVideo.Add(video.Id);
-
-                    if (video.Dislikes.Contains(UserId))
-                        video.Dislikes.Remove(UserId);
+                    mark.IsLike = isLike;
+                    mark.Updated = DateTime.UtcNow;
                 }
                 else
                 {
-                    video.Likes.Remove(UserId);
-                    user.LikedVideo.Remove(video.Id);
-                }
-
-                _db.Videos.Update(video);
-                _db.Users.Update(user);
-
-                await _db.SaveChangesAsync();
-
-                return Results.Ok();
-            }
-            catch (ServerException err)
-            {
-                return Results.Json(err.GetModel(), statusCode: err.Code);
-            }
-        }
-
-        [HttpPost("dislike"), Authorize]
-        public async Task<IResult> DislikeVideo([FromQuery] int id)
-        {
-            try
-            {
-                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
-
-                if (video == null)
-                    throw new ServerException("Видео не найдено", 404);
-
-                var user = await _db.Users.FirstAsync(usr => usr.Id == UserId);
-
-                if (!video.Dislikes.Contains(UserId))
-                {
-                    video.Dislikes.Add(UserId);
-
-                    if (video.Likes.Contains(UserId))
+                    await _dbContext.VideoMarks.AddAsync(new()
                     {
-                        video.Likes.Remove(UserId);
-                        user.LikedVideo.Remove(video.Id);
-                    }
+                        UserId = user.Id,
+                        VideoId = video.Id,
+                        Updated = DateTime.UtcNow,
+                        IsLike = isLike
+                    });
                 }
-                else
-                    video.Dislikes.Remove(UserId);
 
-                _db.Videos.Update(video);
-                _db.Users.Update(user);
-
-                await _db.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 return Results.Ok();
             }
@@ -585,26 +613,90 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("view")]
-        public async Task<IResult> AddView([FromQuery] int id)
+        public async Task<IResult> AddView([FromQuery] Guid id)
         {
             try
             {
-                var video = await _db.Videos.FirstOrDefaultAsync(x => x.Id == id);
+                var video = await _dbContext.Videos.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (video == null)
                     throw new ServerException("Video not found", 404);
 
                 video.Views++;
 
-                _db.Videos.Update(video);
+                _dbContext.Videos.Update(video);
 
-                await _db.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 return Results.Ok();
             }
             catch (ServerException err)
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpDelete("delete"), Authorize(Roles = "Admin")]
+        public async Task<IResult> DeleteByAdmin([FromQuery] Guid id)
+        {
+            try
+            {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (authData.Role != Entity.Models.User.RoleType.Admin)
+                    throw new ServerException("Вы не администратор!", 403);
+
+                var video = await _dbContext.Videos
+                    .Include(i => i.Owner)
+                    .FirstOrDefaultAsync(x => x.Id == id) 
+                    ?? throw new ServerException("Видео не найдена!", 404);
+
+                Directory.Delete($"{LocalDataService.VideosPath}/{id}", true);
+
+                _dbContext.Videos.Remove(video);
+
+                await _dbContext.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Json(err.Message, statusCode: 500);
+            }
+        }
+
+        [HttpPut("status"), Authorize(Roles = "Admin")]
+        public async Task<IResult> ChangeStatusByAdmin([FromQuery] Guid id, [FromQuery] Video.Status status)
+        {
+            try
+            {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (authData.Role != Entity.Models.User.RoleType.Admin)
+                    throw new ServerException("Вы не администратор!", 403);
+
+                var video = await _dbContext.Videos.FindAsync(id)
+                    ?? throw new ServerException("Видео не найдена!", 404);
+
+                video.VideoStatus = status;
+
+                _dbContext.Videos.Update(video);
+
+                await _dbContext.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+            catch (Exception err)
+            {
+                return Results.Json(err.Message, statusCode: 500);
             }
         }
     }

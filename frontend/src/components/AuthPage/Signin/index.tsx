@@ -3,11 +3,12 @@ import { useCallback, useRef, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import ServerError from "@type/ServerError";
 import QueriesUrls from "@helpers/QeuriesUrls";
+import UnknownUserImage from "@assets/images/UnknownUser.jpg";
 import "./style.scss";
 
 const Signin: React.FC = () => {
   const [state, setState] = useState(0);
-  const [userImgUrl, setUserImgUrl] = useState("/data/users/template/icon.png");
+  const [userImgUrl, setUserImgUrl] = useState(UnknownUserImage);
   const [error, SetError] = useState("");
 
   const email = useRef("");

@@ -1,5 +1,6 @@
 ﻿using BYTUBE.Entity.Models;
 using BYTUBE.Exceptions;
+using BYTUBE.Helpers;
 using BYTUBE.Models;
 using BYTUBE.Models.UserModels;
 using BYTUBE.Services;
@@ -14,25 +15,25 @@ namespace BYTUBE.Controllers
     public class CommentController : ControllerBase
     {
         private readonly PostgresDbContext _db;
-        private readonly LocalDataManager _localData;
+        private readonly LocalDataService _localData;
 
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
-
-        public CommentController(PostgresDbContext db, LocalDataManager localData)
+        public CommentController(PostgresDbContext db, LocalDataService localData)
         {
             _db = db;
             _localData = localData;
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] int id)
+        public async Task<IResult> Get([FromQuery] string id)
         {
             try
             {
-                Comment? comment = await _db.Comments.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("Id is not correct!");
+
+                Comment? comment = await _db.Comments.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == guid);
 
                 if (comment == null || comment.User == null)
                     throw new ServerException("Комментарий не найден", 404);
@@ -41,18 +42,19 @@ namespace BYTUBE.Controllers
 
                 bool userIsLikeIt = false;
 
-                if (IsAutorize)
-                    userIsLikeIt = comment.Likes.Contains(UserId);
+                if (authData.IsAutorize)
+                    userIsLikeIt = comment.Likes.Contains(authData.Id);
 
                 return Results.Json(new CommentModel()
                 {
                     Id = id,
                     Message = comment.Message,
-                    UserId = comment.UserId,
-                    VideoId = comment.VideoId,
+                    UserId = comment.UserId.ToString(),
+                    VideoId = comment.VideoId.ToString(),
                     LikesCount = comment.Likes.Count,
                     UserIsLikeIt = userIsLikeIt,
                     Created = comment.Created,
+                    IsVideoOwner = false,
                     User = new UserPublicModel()
                     {
                         IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
@@ -68,13 +70,20 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("video")]
-        public async Task<IResult> GetVideoComments([FromQuery] int vid)
+        public async Task<IResult> GetVideoComments([FromQuery] string vid)
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (!Guid.TryParse(vid, out Guid vguid))
+                    throw new ServerException("vId is not correct!");
+
                 Comment[] comments = await _db.Comments
                     .Include(i => i.User)
-                    .Where(i => i.VideoId == vid)
+                    .Include(i => i.Video)
+                    .Include(i => i.Video!.Owner)
+                    .Where(i => i.VideoId == vguid)
                     .OrderBy(i => i.Created)
                     .ToArrayAsync();
 
@@ -83,24 +92,29 @@ namespace BYTUBE.Controllers
                     var usrData = _localData.GetUserData(comment.User.Id);
 
                     bool userIsLikeIt = false;
+                    bool isVideoOwner = false;
 
-                    if (IsAutorize)
-                        userIsLikeIt = comment.Likes.Contains(UserId);
+                    if (authData.IsAutorize)
+                    {
+                        userIsLikeIt = comment.Likes.Contains(authData.Id);
+                        isVideoOwner = comment.Video!.Owner!.UserId == authData.Id;
+                    } 
 
                     return new CommentModel()
                     {
-                        Id = comment.Id,
+                        Id = comment.Id.ToString(),
                         Message = comment.Message,
-                        VideoId = comment.VideoId,
-                        UserId = comment.UserId,
+                        VideoId = comment.VideoId.ToString(),
+                        UserId = comment.UserId.ToString(),
                         LikesCount = comment.Likes.Count,
                         UserIsLikeIt = userIsLikeIt,
+                        IsVideoOwner = isVideoOwner,
                         Created = comment.Created,
                         User = new UserPublicModel()
                         {
                             IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
                             Name = comment.User.Name,
-                            Id = comment.UserId,
+                            Id = comment.UserId.ToString(),
                         }
                     };
                 }));
@@ -116,11 +130,16 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                var authData = AuthorizeData.FromContext(HttpContext);
+
+                if (!Guid.TryParse(model.VideoId, out Guid vguid))
+                    throw new ServerException("Video id is not correct!");
+
                 _db.Comments.Add(new Comment()
                 {
                     Message = model.Message,
-                    VideoId = model.VideoId,
-                    UserId = UserId,
+                    VideoId = vguid,
+                    UserId = authData.Id,
                     Likes = [],
                     Created = DateTime.Now.ToUniversalTime(),
                 });
@@ -136,19 +155,22 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("like"), Authorize]
-        public async Task<IResult> LikeComment([FromQuery] int id)
+        public async Task<IResult> LikeComment([FromQuery] string id)
         {
             try
             {
-                var comment = await _db.Comments.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (comment == null)
-                    throw new ServerException("Комментарий не найден!", 404);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("id is not correct!");
 
-                if (!comment.Likes.Contains(UserId))
-                    comment.Likes.Add(UserId);
+                var comment = await _db.Comments.FindAsync(guid)
+                        ?? throw new ServerException("Комментарий не найден!", 404);
+
+                if (!comment.Likes.Contains(authData.Id))
+                    comment.Likes.Add(authData.Id);
                 else
-                    comment.Likes.Remove(UserId);
+                    comment.Likes.Remove(authData.Id);
 
                 _db.Comments.Update(comment);
 
@@ -163,16 +185,19 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPut, Authorize]
-        public async Task<IResult> Put([FromBody] CommentModel model, [FromQuery] int id)
+        public async Task<IResult> Put([FromBody] CommentModel model, [FromQuery] Guid id)
         {
             try
             {
-                Comment? comment = await _db.Comments.FirstOrDefaultAsync(c => c.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (comment == null)
-                    throw new ServerException("Комментарий не найден!", 404);
+                Comment? comment = await _db.Comments
+                    .Include(i => i.Video)
+                        .ThenInclude(i => i.Owner)
+                    .FirstOrDefaultAsync(c => c.Id == id)
+                    ?? throw new ServerException("Комментарий не найден!", 404);
 
-                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
+                if (comment.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 comment.Message = model.Message;
@@ -190,16 +215,24 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] int id)
+        public async Task<IResult> Delete([FromQuery] string id)
         {
             try
             {
-                Comment? comment = await _db.Comments.FirstOrDefaultAsync(c => c.Id == id);
+                var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (comment == null)
-                    throw new ServerException("Комментарий не найден!", 404);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("id is not correct!");
 
-                if (comment.UserId != UserId && Role != Entity.Models.User.RoleType.Admin)
+                Comment? comment = await _db.Comments
+                                        .Include(i => i.Video)
+                                        .Include(i => i.Video!.Owner)
+                                        .FirstOrDefaultAsync(c => c.Id == guid)
+                    ?? throw new ServerException("Комментарий не найден!", 404);
+
+                if (comment.UserId != authData.Id 
+                 && authData.Role != Entity.Models.User.RoleType.Admin 
+                 && comment.Video.Owner.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);

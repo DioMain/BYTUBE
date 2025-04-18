@@ -13,16 +13,19 @@ enum Status {
 }
 
 interface VideoModel {
-  id: number;
+  id: string;
   title: string;
-  description?: string;
+  description: string;
   created: string;
   duration: string;
+
+  forAdults: boolean;
 
   videoAccess: Access;
   videoStatus: Status;
 
   views: number;
+  reportsCount?: number;
 
   tags?: string[];
 

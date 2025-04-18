@@ -1,12 +1,13 @@
 import { User } from "./UserModel";
 
 interface CommentModel {
-  id?: number;
+  id?: string;
   message: string;
-  userId: number;
-  videoId: number;
+  userId: string;
+  videoId: string;
   likesCount?: number;
   userIsLikeIt?: boolean;
+  isVideoOwner?: boolean;
   created?: string;
 
   user?: User;

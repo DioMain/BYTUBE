@@ -12,8 +12,9 @@ import { useStores } from "appStoreContext";
 import ServerError from "@type/ServerError";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { VSEProps } from "../types";
-import "./style.scss";
 import { LoadingButton } from "@mui/lab";
+import styles from "./styled";
+import "./style.scss";
 
 const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
   const videoAccesses = ["Для всех", "По ссылке", "Для меня"];
@@ -23,7 +24,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [nolimit, setNolimit] = useState(true);
+  const [forYoungs, setForYoungs] = useState(true);
   const [access, setAccess] = useState("0");
 
   const { channel } = useStores();
@@ -75,6 +76,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
 
     formData.append("Title", nameInput.current?.value!);
     formData.append("Description", descInput.current?.value!);
+    formData.append("ForAdults", forYoungs ? "false" : "true");
 
     tags.forEach((val) => {
       formData.append("Tags", val);
@@ -83,7 +85,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
     formData.append("PreviewFile", previewInput.current?.files?.item(0)!);
     formData.append("VideoFile", videoInput.current?.files?.item(0)!);
     formData.append("VideoAccess", access);
-    formData.append("VideoStatus", nolimit ? "0" : "1");
+    formData.append("VideoStatus", "0");
 
     setLoading(true);
 
@@ -114,7 +116,7 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
 
         setLoading(false);
       });
-  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, nolimit]);
+  }, [tags, videoInput, previewInput, nameInput, descInput, setError, setLoading, access, forYoungs]);
 
   return (
     <Stack className="studio-videocreate">
@@ -148,20 +150,20 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
             </label>
           </Stack>
         </Stack>
-        <Stack className="studio-videocreate-namefield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Название</h4>
           <Stack direction={"row"}>
-            <input ref={nameInput} type="text" />
+            <styles.VideoNameInput ref={nameInput} type="text" />
           </Stack>
         </Stack>
-        <Stack className="studio-videocreate-descfield" spacing={1}>
+        <Stack spacing={1}>
           <h4>Описание</h4>
-          <textarea ref={descInput} rows={6}></textarea>
+          <styles.VideoDescriptionTextArea spellCheck ref={descInput} rows={6}></styles.VideoDescriptionTextArea>
         </Stack>
         <Stack className="studio-videocreate-tags" spacing={1}>
           <h4>Теги</h4>
           <Stack direction={"row"} spacing={2}>
-            <input ref={tagInput} type="text" />
+            <styles.VideoTagInput ref={tagInput} type="text" />
             <IconButton onClick={addTag}>
               <Add />
             </IconButton>
@@ -231,13 +233,16 @@ const VideoCreate: React.FC<VSEProps> = ({ setPage }) => {
         </Stack>
         <Stack direction={"row"}>
           <FormControlLabel
-            checked={nolimit}
-            onChange={(evt, checked) => setNolimit(checked)}
+            checked={forYoungs}
+            onChange={(evt, checked) => setForYoungs(checked)}
             label="Это видео могут смотреть люди не достигшие 18 лет?"
             labelPlacement="end"
             control={<Checkbox color="primary" />}
           />
         </Stack>
+        {loading && (
+          <h3 style={{ textAlign: "center" }}>Видео загружается не закрывайте и не перезагружайте страницу!</h3>
+        )}
         <Stack className="studio-videocreate-error">{error !== "" && <Alert severity="error">{error}</Alert>}</Stack>
         <Stack direction={"row"} justifyContent={"end"}>
           <LoadingButton

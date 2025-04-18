@@ -6,17 +6,16 @@ namespace BYTUBE.Entity.Models
     public class PlaylistItem
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public int PlaylistId { get; set; }
+        public required Guid PlaylistId { get; set; }
         [ForeignKey(nameof(PlaylistId))]
         public Playlist? Playlist { get; set; }
 
-        public int VideoId { get; set; }
+        public required Guid VideoId { get; set; }
         [ForeignKey(nameof(VideoId))]
         public Video? Video { get; set; }
 
-        [Required]
-        public int Order {  get; set; }
+        public required int Order {  get; set; }
     }
 }

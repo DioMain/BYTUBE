@@ -7,6 +7,12 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+USER root
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+
+USER app
+
 # Этот этап используется для сборки проекта службы
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release

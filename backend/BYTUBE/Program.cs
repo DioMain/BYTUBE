@@ -1,5 +1,6 @@
+using BYTUBE.Helpers;
+using BYTUBE.Hubs;
 using BYTUBE.Middleware;
-using BYTUBE.Models;
 using BYTUBE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
@@ -18,10 +19,16 @@ internal class Program
         var salt = builder.Configuration["Salt"];
         var ffmpegPath = builder.Configuration["FFMpegPath"];
 
-        builder.Services.AddSingleton(new JwtManager(accessToken!, refreshToken!));
-        builder.Services.AddSingleton(new PasswordHasher(salt!));
-        builder.Services.AddSingleton(new LocalDataManager());
+        const string w2gPath = "/WatchTogetherHub";
+
+        Console.WriteLine(ffmpegPath);
+
+        builder.Services.AddSingleton(new JwtService(accessToken!, refreshToken!));
+        builder.Services.AddSingleton(new PasswordHasherService(salt!));
+        builder.Services.AddSingleton(new LocalDataService());
         builder.Services.AddSingleton(new VideoMediaService(ffmpegPath!));
+        builder.Services.AddSingleton(new WatchTogetherLobbyService());
+        builder.Services.AddHostedService<WatchTogetherLobbyCleaningService>();
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -40,7 +47,22 @@ internal class Program
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = JwtManager.GetParameters(accessToken);
+                options.TokenValidationParameters = JwtService.GetParameters(accessToken);
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Cookies["AccessToken"];
+
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments(w2gPath))
+                        {
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         builder.Services.AddControllers();
@@ -70,22 +92,33 @@ internal class Program
         builder.Services.AddDbContext<PostgresDbContext>(options =>
         {
             options.UseNpgsql(dataSource);
+            options.EnableSensitiveDataLogging(false);
         });
+
+        // FOR DEBUG
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials()
+                      .SetIsOriginAllowed(origin => true);
+            });
+        });
+
+        builder.Services.AddSignalR();
 
         // DataSource
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-
         app.UseHttpsRedirection();
 
-        app.UseGetToken();
+        app.UseParseToken();
 
         app.UseAuthentication();
         app.UseAuthorization();
-
-        Console.WriteLine(Directory.GetCurrentDirectory());
 
         app.UseStaticFiles(new StaticFileOptions
         {
@@ -102,10 +135,15 @@ internal class Program
 
         app.UseSession();
 
+        // FOR DEBUG
+        app.UseCors();
+
         app.MapControllers();
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        app.MapHub<WatchTogetherHub>(w2gPath);
 
         app.Run();
     }

@@ -1,0 +1,13 @@
+@import "@styles/Inputs.scss";
+
+.reportmodal {
+  padding: 16px;
+
+  &-title {
+    text-align: center;
+  }
+
+  &__other {
+    @include TextField;
+  }
+}

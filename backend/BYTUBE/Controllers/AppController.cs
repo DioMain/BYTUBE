@@ -15,6 +15,12 @@ namespace BYTUBE.Controllers
             return Results.Text(System.IO.File.ReadAllText("./Public/index.html"), contentType: "text/html");
         }
 
+        [HttpGet, Route("/")]
+        public IResult GetPageRed0()
+        {
+            return Results.Redirect("/App/Main");
+        }
+
         [HttpGet, Route("/App/Main")]
         public IResult GetPage0()
         {
@@ -41,6 +47,42 @@ namespace BYTUBE.Controllers
 
         [HttpGet, Route("/Studio")]
         public IResult GetPage4()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/Admin")]
+        public IResult GetPage5()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/Search")]
+        public IResult GetPage6()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/Channel")]
+        public IResult GetPage7()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/WatchTogether/Main")]
+        public IResult GetPage8()
+        {
+            return GetView();   
+        }
+
+        [HttpGet, Route("/App/WatchTogether/Lobby")]
+        public IResult GetPage9()
+        {
+            return GetView();
+        }
+
+        [HttpGet, Route("/App/Privacy")]
+        public IResult GetPage10()
         {
             return GetView();
         }

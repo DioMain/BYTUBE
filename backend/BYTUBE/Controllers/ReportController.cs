@@ -13,31 +13,28 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
 
-        private int UserId => int.Parse(HttpContext.User.Claims.ToArray()[0].Value);
-        private User.RoleType Role => Enum.Parse<User.RoleType>(HttpContext.User.Claims.ToArray()[1].Value);
-        private bool IsAutorize => HttpContext.User.Claims.Any();
-
         public ReportController(PostgresDbContext db)
         {
             _db = db;
         }
 
         [HttpGet, Authorize]
-        public async Task<IResult> Get([FromQuery] int id)
+        public async Task<IResult> Get([FromQuery] string id)
         {
             try
             {
-                var report = await _db.Reports.FirstOrDefaultAsync(r => r.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("id is not correct!");
 
-                if (report == null)
-                    throw new ServerException("Репорт не найден", 404);
+                var report = await _db.Reports.FindAsync(guid)
+                    ?? throw new ServerException("Репорт не найден", 404);
 
                 return Results.Json(new ReportModel()
                 {
                     Id = id,
                     Description = report.Description,
                     Type = report.Type,
-                    VideoId = report.VideoId,
+                    VideoGuid = report.VideoId.ToString(),
                     Created = report.Created,
                 });
             }
@@ -52,11 +49,15 @@ namespace BYTUBE.Controllers
         {
             try
             {
+                if (!Guid.TryParse(model.VideoGuid, out Guid vguid))
+                    throw new ServerException("id is not correct!");
+
                 _db.Reports.Add(new Report()
                 {
-                    VideoId = model.VideoId,
+                    VideoId = vguid,
                     Description = model.Description,
                     Type = model.Type,
+                    Created = DateTime.UtcNow
                 });
 
                 await _db.SaveChangesAsync();
@@ -69,18 +70,16 @@ namespace BYTUBE.Controllers
             }
         }
 
-        [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] int id)
+        [HttpDelete, Authorize(Roles = "Admin")]
+        public async Task<IResult> Delete([FromQuery] string id)
         {
             try
             {
-                var report = _db.Reports.FirstOrDefault(r => r.Id == id);
+                if (!Guid.TryParse(id, out Guid guid))
+                    throw new ServerException("id is not correct!");
 
-                if (report == null)
-                    throw new ServerException("Репорт не найден", 404);
-
-                if (Role != Entity.Models.User.RoleType.Admin)
-                    throw new ServerException("Admin only", 403);
+                var report = await _db.Reports.FindAsync(guid) 
+                    ?? throw new ServerException("Репорт не найден", 404);
 
                 _db.Reports.Remove(report);
 
@@ -95,18 +94,21 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("video"), Authorize]
-        public async Task<IResult> GetVideoReports([FromQuery] int vid)
+        public async Task<IResult> GetVideoReports([FromQuery] string vid)
         {
             try
             {
-                var reports = await _db.Reports.Where(r => r.VideoId == vid).ToArrayAsync();
+                if (!Guid.TryParse(vid, out Guid guid))
+                    throw new ServerException("id is not correct!");
+
+                var reports = await _db.Reports.Where(r => r.VideoId == guid).ToArrayAsync();
 
                 return Results.Json(reports.Select(report => new ReportModel()
                 {
-                    Id = report.Id,
+                    Id = report.Id.ToString(),
                     Description = report.Description,
                     Type = report.Type,
-                    VideoId = report.VideoId,
+                    VideoGuid = report.VideoId.ToString(),
                     Created = report.Created,
                 }));
             }

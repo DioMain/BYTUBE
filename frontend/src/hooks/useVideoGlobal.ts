@@ -1,4 +1,5 @@
 import QueriesUrls from "@helpers/QeuriesUrls";
+import ServerError from "@type/ServerError";
 import StatusBase from "@type/StatusBase";
 import { useStores } from "appStoreContext";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -22,9 +23,15 @@ function useVideoGlobal(id: number) {
         setStatus(StatusBase.Success);
       })
       .catch((error: AxiosError) => {
-        console.error(error.message);
-        setFail(error.message);
-        setStatus(StatusBase.Failed);
+        if (error.code === "401") {
+          setFail(error.message);
+          setStatus(StatusBase.Failed);
+        } else {
+          let err = new ServerError(error.response?.data);
+
+          setFail(err.getFirstError());
+          setStatus(StatusBase.Failed);
+        }
       });
   }, [id]);
 

@@ -11,22 +11,17 @@ namespace BYTUBE.Entity.Models
         }
 
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Required]
-        public string Name { get; set; } = string.Empty;
-        [Required, ]
-        public string Email { get; set; } = string.Empty;
-        [Required]
-        public string Password { get; set; } = string.Empty;
+        public required string Name { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
 
-        [Column(TypeName = "int")]
-        public RoleType Role { get; set; } = RoleType.User;
+        public DateOnly BirthDay { get; set; }
+
+        public required RoleType Role { get; set; }
 
         public string? Token { get; set; }
-
-        [Column(TypeName = "jsonb")]
-        public List<int> LikedVideo { get; set; } = [];
 
         public List<Channel> Channels { get; set; } = [];
 
@@ -35,5 +30,7 @@ namespace BYTUBE.Entity.Models
         public List<Playlist> Playlists { get; set; } = [];
 
         public List<Comment> Comments { get; set; } = [];
+
+        public List<VideoMark> VideoMarks { get; set; } = [];
     }
 }

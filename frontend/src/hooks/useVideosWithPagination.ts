@@ -1,5 +1,5 @@
 import StatusBase from "@type/StatusBase";
-import useOnSeeElement from "./useOnScrollEnd";
+import useOnSeeElement from "./useOnSeeElement";
 import useVideos, { SelectOptions } from "./useVideos";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import VideoModel from "@type/models/VideoModel";
@@ -17,7 +17,7 @@ function useVideosWithPagination(observeDivElement: RefObject<HTMLDivElement | n
     isWaitResponce.current = false;
   });
 
-  useOnSeeElement(observeDivElement.current, () => {
+  useOnSeeElement(observeDivElement, () => {
     if (selectResult.status === StatusBase.Success && !ended && !isWaitResponce.current) {
       selectOptions.current.skip += selectOptions.current.take;
       selectOptions.current.take += selectOptions.current.take;

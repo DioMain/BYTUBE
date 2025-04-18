@@ -5,13 +5,16 @@ $innerPadding: 64px;
 @mixin upload {
   padding: 8px;
 
-  border-radius: 8px;
+  border-radius: 100%;
 
-  outline: solid 1px rgb(120, 120, 120);
+  width: 24px;
+  height: 24px;
+
+  outline: solid 1px white;
   background-color: rgba(0, 0, 0, 0.25);
 
   &:hover {
-    outline: solid 2px rgb(139, 139, 139);
+    outline: solid 2px white;
     background-color: rgba(0, 0, 0, 0.5);
   }
 }
@@ -30,10 +33,11 @@ $innerPadding: 64px;
 
     &__name {
       padding: 8px;
+      border-radius: 8px;
 
-      border-radius: 12px;
+      background-color: rgba(0, 0, 0, 0.35);
 
-      background-color: rgba(0, 0, 0, 0.25);
+      color: white;
     }
 
     &__btn {
@@ -58,16 +62,6 @@ $innerPadding: 64px;
 
     &__btn {
       @include upload;
-    }
-
-    &__namefield {
-      @include TextField;
-
-      width: 25%;
-    }
-
-    &__descriptionfield {
-      @include Textarea;
     }
   }
 }

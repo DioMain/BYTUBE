@@ -13,12 +13,17 @@ import ChannelSettings from "./ChannelSettings";
 
 import "./style.scss";
 import VideosSettings from "./VideosSettings";
+import { useNavigate } from "react-router-dom";
+import ChannelOverview from "./ChannelOverview";
 
 const StudioPage: React.FC = observer(() => {
   const cid = GetUrlParams().get("channelid") as number;
 
   useAuth();
   useProtected();
+
+  const navigator = useNavigate();
+
   const { status } = useOwnChannel(cid);
   const { user, channel } = useStores();
 
@@ -31,8 +36,10 @@ const StudioPage: React.FC = observer(() => {
   const getElementByTab = () => {
     switch (tabIndex) {
       case 0:
-        return <VideosSettings />;
+        return <ChannelOverview />;
       case 1:
+        return <VideosSettings />;
+      case 2:
         return <ChannelSettings />;
       default:
         return <></>;
@@ -41,7 +48,7 @@ const StudioPage: React.FC = observer(() => {
 
   if (user.status === AuthState.Loading || status === StatusBase.Loading) return <LinearProgress />;
 
-  if (status === StatusBase.Failed) window.location.assign("/App/Main");
+  if (status === StatusBase.Failed) navigator("/App/Main");
 
   return (
     <Stack className="studio">
@@ -49,7 +56,7 @@ const StudioPage: React.FC = observer(() => {
         <Stack spacing={2} direction={"row"}>
           <Logo />
           <Stack justifyContent={"center"}>
-            <h3>StuDIO</h3>
+            <h3>Студиа</h3>
           </Stack>
         </Stack>
         <Stack direction={"row"} justifyContent={"end"} spacing={2}>
@@ -64,6 +71,7 @@ const StudioPage: React.FC = observer(() => {
       </Stack>
       <Stack className="studio__tabs" justifyContent={"center"}>
         <Tabs value={tabIndex} onChange={(evt, val) => handleTabChange(val)} variant="standard">
+          <Tab label="Обзор" />
           <Tab label="Видео" />
           <Tab label="Настройки канала" />
         </Tabs>

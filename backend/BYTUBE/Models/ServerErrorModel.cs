@@ -9,7 +9,7 @@
 
         public ServerErrorModel(int status, string title = "Some errors!")
         {
-            type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";
+            type = "https://tools.ietf.org/html/rfc9110";
             this.title = title;
             this.status = status;
             errors = new Dictionary<string, string[]>();

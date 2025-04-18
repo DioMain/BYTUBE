@@ -22,10 +22,13 @@ function useVideos(options: SelectOptions, onLoaded?: (data: VideoModel[]) => vo
             skip: options.skip,
             take: options.take,
             ignore: options.ignore?.join(","),
-            namePattern: options.namePattern,
+            searchPattern: options.searchPattern === "" ? undefined : options.searchPattern,
             orderBy: options.orderBy,
             subscribes: options.subscribes,
             favorite: options.favorite,
+            asAdmin: options.asAdmin,
+            onlyAllAges: options.onlyAllAges,
+            onlyUnlimited: options.onlyUnlimited,
           },
         })
         .then((responce: AxiosResponse) => {

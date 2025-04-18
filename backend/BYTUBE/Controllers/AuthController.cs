@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BYTUBE.Services;
 using BYTUBE.Models;
-using System.IO;
-using Npgsql;
 using BYTUBE.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using BYTUBE.Models.AuthModels;
 
 namespace BYTUBE.Controllers
 {
@@ -12,12 +11,12 @@ namespace BYTUBE.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly JwtManager _jwtManager;
-        private readonly PasswordHasher _passwordHasher;
+        private readonly JwtService _jwtManager;
+        private readonly PasswordHasherService _passwordHasher;
         private readonly PostgresDbContext _db;
-        private readonly LocalDataManager _localDataManager;
+        private readonly LocalDataService _localDataManager;
 
-        public AuthController(JwtManager jwtManager, PasswordHasher passwordHasher, PostgresDbContext db, LocalDataManager localDataManager)
+        public AuthController(JwtService jwtManager, PasswordHasherService passwordHasher, PostgresDbContext db, LocalDataService localDataManager)
         {
             _jwtManager = jwtManager;
             _passwordHasher = passwordHasher;
@@ -26,7 +25,7 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IResult> signinJwt([FromBody] SigninModel model)
+        public async Task<IResult> SignIn([FromBody] SigninModel model)
         {
             try
             {
@@ -39,11 +38,11 @@ namespace BYTUBE.Controllers
 
                 HttpContext.Response.Cookies.Append(
                     "AccessToken",
-                    JwtManager.GenerateJwtToken(_jwtManager.AccessToken, user),
+                    JwtService.GenerateJwtToken(_jwtManager.AccessToken, new() { Id = user.Id, Role = user.Role}),
                     _jwtManager.JwtCookieOptions
                 );
 
-                string token = JwtManager.GenerateJwtToken(_jwtManager.RefreshToken, user);
+                string token = JwtService.GenerateJwtToken(_jwtManager.RefreshToken, new() { Id = user.Id, Role = user.Role });
 
                 HttpContext.Response.Cookies.Append(
                     "RefreshToken",
@@ -51,11 +50,11 @@ namespace BYTUBE.Controllers
                     _jwtManager.JwtCookieOptions
                 );
 
-                //user.Token = token;
+                user.Token = token;
 
-                //_db.Users.Update(user);
+                _db.Users.Update(user);
 
-                //await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 return Results.Ok();
             }
@@ -70,7 +69,7 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("signout")]
-        public IResult logoutJwt()
+        public IResult Logout()
         {
             HttpContext.Response.Cookies.Delete("AccessToken");
             HttpContext.Response.Cookies.Delete("RefreshToken");
@@ -87,7 +86,9 @@ namespace BYTUBE.Controllers
                 {
                     Name = model.UserName,
                     Email = model.Email,
-                    Password = _passwordHasher.Hash(model.Password)
+                    Password = _passwordHasher.Hash(model.Password),
+                    Role = Entity.Models.User.RoleType.User,
+                    BirthDay = DateOnly.Parse(model.BirthDay)
                 });
 
                 await _db.SaveChangesAsync();

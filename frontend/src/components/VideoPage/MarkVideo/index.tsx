@@ -10,7 +10,7 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import { useStores } from "appStoreContext";
 import StatusBase from "@type/StatusBase";
 
-const MarkVideo: React.FC<{ id: number }> = ({ id }) => {
+const MarkVideo: React.FC<{ id: string }> = ({ id }) => {
   const greenLine = useRef<HTMLDivElement>(null);
   const redLine = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);
@@ -30,11 +30,16 @@ const MarkVideo: React.FC<{ id: number }> = ({ id }) => {
     redLine.current!.style.width = `${totalWidth * redLineAspect}px`;
   }, [bar, data]);
 
+  useEffect(() => {
+    setState(StatusBase.Loading);
+  }, [id]);
+
   const likeHandle = () => {
     axios
-      .post(QueriesUrls.VIDEO_LIKE, null, {
+      .post(QueriesUrls.VIDEO_MARK, null, {
         params: {
           id: id,
+          isLike: true,
         },
       })
       .then(() => setState(StatusBase.Loading));
@@ -42,9 +47,10 @@ const MarkVideo: React.FC<{ id: number }> = ({ id }) => {
 
   const dislikeHandle = () => {
     axios
-      .post(QueriesUrls.VIDEO_DISLIKE, null, {
+      .post(QueriesUrls.VIDEO_MARK, null, {
         params: {
           id: id,
+          isLike: false,
         },
       })
       .then(() => setState(StatusBase.Loading));

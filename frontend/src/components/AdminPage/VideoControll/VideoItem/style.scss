@@ -1,0 +1,28 @@
+.admin-videoitem {
+  border-radius: 8px;
+  background-color: #ddd;
+
+  padding: 8px;
+
+  &:hover,
+  &-selected {
+    background-color: #d6d6d6;
+  }
+
+  &-channel {
+    color: rgb(105, 105, 105);
+    font-size: 12px;
+
+    width: max-content;
+
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-reportscounter {
+    font-size: 12px;
+  }
+}

@@ -1,8 +1,8 @@
 import React from "react";
-import "./style.scss";
 import VideoModel from "@type/models/VideoModel";
 import { IconButton, Stack } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import styles from "./styled";
 
 interface PMVI_Props {
   video: VideoModel;
@@ -12,20 +12,16 @@ interface PMVI_Props {
 
 const VideoItem: React.FC<PMVI_Props> = ({ video, onClick, onDelete }) => {
   return (
-    <Stack direction={"row"} justifyContent={"space-between"} className="plm-videoitem" onClick={onClick}>
+    <styles.PlaylistModalItem direction={"row"} justifyContent={"space-between"} onClick={onClick}>
       <Stack direction={"row"} spacing={2}>
-        <Stack
-          style={{ backgroundImage: `url("${video.previewUrl}")` }}
-          justifyContent={"end"}
-          className="plm-videoitem-image"
-        >
+        <styles.ItemImage style={{ backgroundImage: `url("${video.previewUrl}")` }} justifyContent={"end"}>
           <Stack direction={"row"} justifyContent={"end"}>
-            <div className="plm-videoitem-image__duration">{video.duration}</div>
+            <styles.ItemImageDuration>{video.duration}</styles.ItemImageDuration>
           </Stack>
-        </Stack>
+        </styles.ItemImage>
         <Stack spacing={1}>
-          <h5 className="plm-videoitem-title">{video.title}</h5>
-          <div className="plm-videoitem-chname">{video.channel?.name}</div>
+          <h5>{video.title}</h5>
+          <styles.ItemChannelName>{video.channel?.name}</styles.ItemChannelName>
         </Stack>
       </Stack>
       <Stack justifyContent={"end"}>
@@ -41,7 +37,7 @@ const VideoItem: React.FC<PMVI_Props> = ({ video, onClick, onDelete }) => {
           </IconButton>
         </Stack>
       </Stack>
-    </Stack>
+    </styles.PlaylistModalItem>
   );
 };
 

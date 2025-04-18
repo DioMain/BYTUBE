@@ -1,7 +1,5 @@
 import { Stack } from "@mui/material";
 import PlaylistModel from "@type/models/PlaylistModel";
-
-import "./style.scss";
 import { useEffect, useState } from "react";
 import VideoModel from "@type/models/VideoModel";
 import axios, { AxiosResponse } from "axios";
@@ -9,6 +7,7 @@ import QueriesUrls from "@helpers/QeuriesUrls";
 import VideoItem from "./VideoItem";
 import { useStores } from "appStoreContext";
 import SortVideosByOrder from "@helpers/SortVideosByOrder";
+import styles from "./styled";
 
 interface PVProps {
   playlist: PlaylistModel | null;
@@ -34,10 +33,8 @@ const PlaylistViewer: React.FC<PVProps> = ({ playlist }) => {
   }, []);
 
   return (
-    <Stack className="playlistview" spacing={2}>
-      <div>
-        плейлист: <span className="playlistview-title">{playlist.name}</span>
-      </div>
+    <styles.PlaylistView spacing={2}>
+      <styles.PlaylistViewTitle>{playlist.name}</styles.PlaylistViewTitle>
       <Stack spacing={1}>
         {videos.map((item, index) => {
           return (
@@ -52,7 +49,7 @@ const PlaylistViewer: React.FC<PVProps> = ({ playlist }) => {
           );
         })}
       </Stack>
-    </Stack>
+    </styles.PlaylistView>
   );
 };
 

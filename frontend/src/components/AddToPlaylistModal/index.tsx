@@ -8,9 +8,9 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-
-import "./styles.scss";
 import AuthState from "@type/AuthState";
+import { BoxStyled } from "@styles/Common";
+import styles from "./styled";
 
 interface ARPM_Props {
   opened: boolean;
@@ -29,9 +29,9 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
     axios.get(QueriesUrls.GET_USER_PLAYLISTS).then((res: AxiosResponse) => {
       setPlaylists(res.data);
     });
-  }, []);
+  }, [user.status]);
 
-  const addHandle = (playlist: number) => {
+  const addHandle = (playlist: string) => {
     axios
       .post(QueriesUrls.ADD_ELEMENT_TO_PLAYLIST, null, {
         params: {
@@ -43,34 +43,22 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
   };
 
   return (
-    <Modal open={opened} onClose={onClose} className="addtoplaylist">
-      <Box
-        sx={{
-          top: "50%",
-          left: "50%",
-          position: "absolute",
-          backgroundColor: "#404040",
-          padding: "12px",
-          borderRadius: "8px",
-          transform: "translate(-50%, -50%)",
-          width: "300px",
-        }}
-      >
+    <Modal open={opened} onClose={onClose}>
+      <BoxStyled>
         <Stack spacing={2}>
           <h5 style={{ textAlign: "center" }}>Плейлисты</h5>
           {playlists.map((playlist, index) => {
             const hasVideo = playlist.playlistItems.some((item) => item.videoId === video.id);
 
             return (
-              <button
+              <styles.AddToPlayListItem
                 key={`AddToPlaylistModal-item-${index}`}
-                className="addtoplaylist__item"
                 disabled={hasVideo}
                 onClick={() => addHandle(playlist.id)}
               >
                 <Stack direction={"row"} justifyContent={"space-between"}>
                   <Stack spacing={1} direction={"row"}>
-                    {hasVideo ? <PlaylistAddCheckIcon color="success" /> : <PlaylistAddIcon />}
+                    {hasVideo ? <PlaylistAddCheckIcon sx={{ color: "greenyellow" }} /> : <PlaylistAddIcon />}
 
                     <Stack justifyContent={"center"}>
                       <div>{playlist.name}</div>
@@ -82,11 +70,11 @@ const AddToPlaylistModal: React.FC<ARPM_Props> = ({ opened, onClose, video }) =>
                     </Stack>
                   )}
                 </Stack>
-              </button>
+              </styles.AddToPlayListItem>
             );
           })}
         </Stack>
-      </Box>
+      </BoxStyled>
     </Modal>
   );
 };

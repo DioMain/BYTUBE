@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;8600</NoWarn>
+    <NoWarn>1701;1702;8600;8618;8602</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;8600</NoWarn>
+    <NoWarn>1701;1702;8600;8618;8602</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,23 +35,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.9.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
-    <PackageReference Include="VideoLibrary" Version="3.2.6" />
     <PackageReference Include="Xabe.FFmpeg" Version="5.2.6" />
   </ItemGroup>
 
@@ -173,9 +171,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\users\template\icon.png">
+    <None Update="Assets\BannerTemplate.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Assets\IconTemplate.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

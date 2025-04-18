@@ -3,11 +3,12 @@ import PropsBase from "@type/PropsBase";
 import { IconButton, Stack, Tooltip } from "@mui/material";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
-
-import "./style.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";
+import { useStores } from "appStoreContext";
+import AuthState from "@type/AuthState";
+import styles from "./styled";
 
 interface CVProps extends PropsBase {
   channel: ChannelModel;
@@ -15,6 +16,8 @@ interface CVProps extends PropsBase {
 
 const ChannelButton: React.FC<CVProps> = ({ channel }) => {
   const [subscribed, setSubsribed] = useState(channel.isSubscripted);
+
+  const { user } = useStores();
 
   const handleSubscribe = () => {
     axios
@@ -45,12 +48,12 @@ const ChannelButton: React.FC<CVProps> = ({ channel }) => {
   };
 
   return (
-    <Stack direction={"row"} className="vp-channelview" spacing={1} onClick={handleChannelClick}>
-      <Stack className="vp-channelview__image" style={{ backgroundImage: `url("${channel.iconUrl}")` }}></Stack>
-      <Stack className="vp-channelview-info">
+    <styles.ChannelView direction={"row"} spacing={1} onClick={handleChannelClick}>
+      <styles.ChannelViewImage style={{ backgroundImage: `url("${channel.iconUrl}")` }}></styles.ChannelViewImage>
+      <styles.ChannelViewInfo className="info">
         <h4>{channel.name}</h4>
         <div>Подписчиков: {channel.subscribes}</div>
-      </Stack>
+      </styles.ChannelViewInfo>
       <Stack justifyContent={"center"}>
         {subscribed ? (
           <Tooltip title="Отписаться">
@@ -72,13 +75,14 @@ const ChannelButton: React.FC<CVProps> = ({ channel }) => {
 
                 handleSubscribe();
               }}
+              disabled={user.status !== AuthState.Authed}
             >
               <TurnedInNotIcon />
             </IconButton>
           </Tooltip>
         )}
       </Stack>
-    </Stack>
+    </styles.ChannelView>
   );
 };
 

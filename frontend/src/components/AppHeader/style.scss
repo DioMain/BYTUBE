@@ -6,7 +6,7 @@
   padding: 8px;
   padding-right: 16px;
 
-  background-color: rgb(31, 31, 31);
+  background-color: rgb(255, 255, 255);
 
   position: sticky;
 
@@ -40,8 +40,6 @@
         background-color: transparent;
         border: none;
 
-        color: white;
-
         &:focus {
           outline: none;
         }
@@ -59,8 +57,12 @@
 
       cursor: pointer;
 
+      animation: sbtn_hover_out 0.075s linear;
+
       &:hover {
-        background-color: rgb(70, 70, 70);
+        background-color: rgb(200, 200, 200);
+
+        animation: sbtn_hover_in 0.075s linear;
       }
     }
   }
@@ -104,4 +106,21 @@
 
 .MuiPaper-root {
   background-color: black;
+}
+
+@keyframes sbtn_hover_in {
+  from {
+    background-color: white;
+  }
+  to {
+    background-color: rgb(200, 200, 200);
+  }
+}
+@keyframes sbtn_hover_out {
+  from {
+    background-color: rgb(200, 200, 200);
+  }
+  to {
+    background-color: white;
+  }
 }

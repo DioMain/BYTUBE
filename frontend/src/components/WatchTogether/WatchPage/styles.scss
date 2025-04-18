@@ -1,0 +1,108 @@
+@import "@styles/Mixins";
+@import "@styles/Inputs";
+
+.w2g {
+  margin: 16px;
+
+  &-video {
+    width: 60%;
+  }
+
+  &-lobbyTitle {
+    background-color: #ddd;
+    border-left: solid 1px gray;
+
+    padding: 8px;
+
+    vertical-align: middle;
+
+    & > h5 {
+      text-decoration: underline;
+    }
+  }
+
+  &-selectButton {
+    padding: 8px;
+
+    border-radius: 8px;
+
+    border: 2px solid;
+
+    border-color: rgb(117, 117, 117);
+
+    text-align: center;
+
+    background-color: #ddd;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #ddd;
+    }
+
+    &__title {
+    }
+  }
+
+  &-userlist {
+    padding: 16px;
+    background-color: #ddd;
+
+    border-radius: 4px;
+
+    max-width: 400px;
+
+    height: min-content;
+
+    &-item {
+      &__avatar {
+        @include Avatar(64px);
+      }
+    }
+  }
+
+  &-footer {
+    flex-direction: row;
+    display: flex;
+    gap: 4px;
+    justify-content: space-between;
+
+    margin: 32px;
+  }
+
+  &-chat {
+    background-color: #ddd;
+    padding: 8px;
+    min-width: 450px;
+    border-radius: 4px;
+
+    max-width: 650px;
+
+    &-container {
+      background-color: #ddd;
+      padding: 4px;
+
+      height: 400px;
+      max-height: 400px;
+
+      overflow-y: auto;
+    }
+
+    &__inputMessage {
+      @include TextField;
+
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .w2g {
+    &-video {
+      width: 90%;
+    }
+
+    &-footer {
+      flex-direction: column;
+    }
+  }
+}
