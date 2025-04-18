@@ -35,6 +35,7 @@ import ServerError from "@type/ServerError";
 import styles from "./styled";
 import AgeBlockerModal from "../AgeBlockerModal";
 import { Status } from "@type/models/VideoModel";
+import { ChannelStatus } from "@type/models/ChannelModel";
 
 const VideoPage: React.FC = observer(() => {
   const id = GetUrlParams().get("id") as number;
@@ -77,7 +78,14 @@ const VideoPage: React.FC = observer(() => {
       const userBirthDay = new Date(user.value?.birthDay!);
       const nowDate = new Date();
       const userAge = nowDate.getFullYear() - userBirthDay.getFullYear();
-      if (userAge < 18 && (video.value?.forAdults || video.value?.videoStatus === Status.Limited)) {
+
+      console.log(video.value?.channel);
+      if (
+        userAge < 18 &&
+        (video.value?.forAdults ||
+          video.value?.videoStatus === Status.Limited ||
+          video.value?.channel?.status === ChannelStatus.Limited)
+      ) {
         setAgeBlockerModalOpened(true);
       }
     }

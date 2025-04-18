@@ -37,6 +37,8 @@ const StudioPage: React.FC = observer(() => {
       case 0:
         return <VideosSettings />;
       case 1:
+        return <VideosSettings />;
+      case 2:
         return <ChannelSettings />;
       default:
         return <></>;

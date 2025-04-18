@@ -54,6 +54,7 @@ namespace BYTUBE.Controllers
                     Description = channel.Description!,
                     Subscribes = channel.Subscribes.Count,
                     IsSubscripted = isSubscribed,
+                    Status = channel.Status,
                     IconUrl = $"/data/channels/{id}/icon.{localData.IconExtention}",
                     BannerUrl = $"/data/channels/{id}/banner.{localData.BannerExtention}",
                 });
@@ -166,19 +167,16 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] string id)
+        public async Task<IResult> Delete([FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("Id is not correct!");
-
-                Channel? channel = await _db.Channels.FirstOrDefaultAsync(c => c.Id == guid);
-
-                if (channel == null)
-                    throw new ServerException("Канал не найден!", 404);
+                Channel channel = await _db.Channels
+                    .Include(channel => channel.Videos)
+                    .FirstOrDefaultAsync(c => c.Id == id)
+                    ?? throw new ServerException("Канал не найден!", 404);
 
                 if (channel.UserId != authData.Id)
                     throw new ServerException("Канал вам не пренадлежит!", 403);
@@ -190,7 +188,7 @@ namespace BYTUBE.Controllers
                     _db.Videos.Remove(video);
                 }
 
-                Directory.Delete($"{LocalDataService.ChannelsPath}/{guid}", true);
+                Directory.Delete($"{LocalDataService.ChannelsPath}/{id}", true);
 
                 _db.Channels.Remove(channel);
 
@@ -230,6 +228,7 @@ namespace BYTUBE.Controllers
                         Id = channel.Id.ToString(),
                         Name = channel.Name,
                         Subscribes = channel.Subscribes.Count,
+                        Status = channel.Status,
                         IsSubscripted = true,
                         IconUrl = $"/data/channels/{channel.Id}/icon.{localData.IconExtention}",
                     };
@@ -335,6 +334,7 @@ namespace BYTUBE.Controllers
                             Subscribes = channel.Subscribes.Count,
                             Created = channel.Created,
                             IsSubscripted = false,
+                            Status = channel.Status,
                             IconUrl = $"/data/channels/{channel.Id}/icon.{channelData.IconExtention}",
                             BannerUrl = $"/data/channels/{channel.Id}/banner.{channelData.BannerExtention}",
                         },
@@ -349,6 +349,57 @@ namespace BYTUBE.Controllers
                         }
                     };
                 }));
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpPut("statusbyadmin"), Authorize(Roles = "Admin")]
+        public async Task<IResult> SetStatusByAdmin([FromQuery] Guid id, [FromQuery] Channel.ActiveStatus status)
+        {
+            try
+            {
+                var channel = await _db.Channels.FindAsync(id)
+                    ?? throw new ServerException("Канал не найден!");
+
+                channel.Status = status;
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
+            }
+            catch (ServerException err)
+            {
+                return Results.Json(err.GetModel(), statusCode: err.Code);
+            }
+        }
+
+        [HttpDelete("deletebyadmin"), Authorize(Roles = "Admin")]
+        public async Task<IResult> DeleteByAdmin([FromQuery] Guid id)
+        {
+            try
+            {
+                var channel = await _db.Channels
+                    .Include(channel => channel.Videos)
+                    .FirstOrDefaultAsync(channel => channel.Id == id)
+                    ?? throw new ServerException("Канал не найден!");
+
+                foreach (var video in channel.Videos)
+                {
+                    Directory.Delete($"{LocalDataService.VideosPath}/{video.Id}", true);
+
+                    _db.Videos.Remove(video);
+                }
+
+                Directory.Delete($"{LocalDataService.ChannelsPath}/{id}", true);
+
+                _db.Channels.Remove(channel);
+
+                await _db.SaveChangesAsync();
+
+                return Results.Ok();
             }
             catch (ServerException err)
             {

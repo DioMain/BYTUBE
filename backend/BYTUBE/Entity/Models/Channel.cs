@@ -7,7 +7,7 @@ namespace BYTUBE.Entity.Models
     {
         public enum ActiveStatus
         {
-            Normal, Limied, Blocked, 
+            Normal, Limited, Blocked, 
         }
 
         [Key]

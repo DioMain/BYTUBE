@@ -78,6 +78,23 @@ const ChannelControll: React.FC = observer(() => {
     [setSelectedItem]
   );
 
+  const onItemChangedHandle = (value: AdminControllDTO) => {
+    const items = models;
+
+    const index = items.findIndex((element) => element.channel.id === value.channel.id);
+
+    items[index] = value;
+
+    setModels([...items]);
+  };
+
+  const onItemDeletedHandle = (value: AdminControllDTO) => {
+    const index = models.findIndex((element) => element.channel.id === value.channel.id);
+
+    setModels([...models.splice(0, index), ...models.splice(1, models.length - 1)]);
+    setSelectedItem(null);
+  };
+
   return (
     <styles.ChannelControll spacing={2}>
       {isLoading && <LinearProgress />}
@@ -95,7 +112,15 @@ const ChannelControll: React.FC = observer(() => {
         <Grid2 size={6}>
           <Stack spacing={2}>
             {models.map((value, key) => {
-              return <ChannelItem key={`channel-${key}`} item={value} onClick={onItemClickHandle} />;
+              return (
+                <ChannelItem
+                  key={`channel-${key}`}
+                  item={value}
+                  onClick={onItemClickHandle}
+                  onItemChanged={onItemChangedHandle}
+                  onItemDeleted={onItemDeletedHandle}
+                />
+              );
             })}
           </Stack>
         </Grid2>

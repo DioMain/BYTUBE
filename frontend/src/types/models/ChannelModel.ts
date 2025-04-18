@@ -1,8 +1,16 @@
+enum ChannelStatus {
+  Normal,
+  Limited,
+  Blocked,
+}
+
 interface ChannelModel {
   id: string;
   name: string;
   description?: string;
   created?: string;
+
+  status: ChannelStatus;
 
   subscribes: number;
 
@@ -13,3 +21,5 @@ interface ChannelModel {
 }
 
 export default ChannelModel;
+
+export { ChannelStatus };

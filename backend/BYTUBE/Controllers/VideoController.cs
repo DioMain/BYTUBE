@@ -37,7 +37,7 @@ namespace BYTUBE.Controllers
                 Video video = await _dbContext.Videos.FindAsync(id) 
                     ?? throw new ServerException("Видео не найдено", 404);
 
-                Entity.Models.Channel channel = await _dbContext.Channels
+                Channel channel = await _dbContext.Channels
                     .Include(i => i.Subscribes)
                     .FirstAsync(i => i.Id == video.OwnerId);
 
@@ -47,7 +47,7 @@ namespace BYTUBE.Controllers
                         throw new ServerException("Видео вам не доступно", 403);
                 }
 
-                if (video.VideoStatus == Video.Status.Blocked)
+                if (video.VideoStatus == Video.Status.Blocked || channel.Status == Channel.ActiveStatus.Blocked)
                     throw new ServerException("Видео более не доспутно", 403);
 
                 var videoLocalData = _localData.GetVideoData(id);
@@ -74,6 +74,7 @@ namespace BYTUBE.Controllers
                         Name = channel.Name,
                         IsSubscripted = false,
                         Subscribes = channel.Subscribes.Count,
+                        Status = channel.Status,
                         IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
                 };
@@ -246,9 +247,13 @@ namespace BYTUBE.Controllers
                     query = query.Where(video => video.VideoAccess == Video.Access.All);
 
                     if (options.OnlyUnlimited)
-                        query = query.Where(video => video.VideoStatus == Video.Status.NoLimit);
+                        query = query.Where(
+                            video => video.VideoStatus == Video.Status.NoLimit 
+                         && video.Owner.Status == Channel.ActiveStatus.Normal);
                     else
-                        query = query.Where(video => video.VideoStatus == Video.Status.NoLimit || video.VideoStatus == Video.Status.Limited);
+                        query = query.Where(video => 
+                            (video.VideoStatus == Video.Status.NoLimit || video.VideoStatus == Video.Status.Limited)
+                         && (video.Owner.Status == Channel.ActiveStatus.Normal || video.Owner.Status == Channel.ActiveStatus.Limited));
                 }
 
                 if (!string.IsNullOrEmpty(options.Ignore))

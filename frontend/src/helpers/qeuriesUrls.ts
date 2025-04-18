@@ -27,6 +27,8 @@ const QueriesUrls = {
   GET_USER_SUB_CHANNELS: "/api/channel/user",
   SUB_USER: "/api/channel/subscribe",
   GET_CHANNELS_BY_ADMIN: "/api/channel/getchannelsbyadmin",
+  SET_CHANNEL_STATUS_BY_ADMIN: "/api/channel/statusbyadmin",
+  DELETE_CHANNEL_BY_ADMIN: "/api/channel/deletebyadmin",
 
   PLAYLIST_COMMON: "/api/playlist",
   GET_USER_PLAYLISTS: "/api/playlist/user",
