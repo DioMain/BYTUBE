@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Search } from "@mui/icons-material";
 import styles from "./styled";
-import AdminControllDTO from "@type/AdminControllDTO";
+import AdminControllDTO from "@type/ChannelControllDTO";
 import useOnSeeElement from "@hooks/useOnSeeElement";
 import axios from "axios";
 import QueriesUrls from "@helpers/QeuriesUrls";

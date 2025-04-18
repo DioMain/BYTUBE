@@ -54,7 +54,7 @@ const VideoPage: React.FC = observer(() => {
 
   useEffect(() => {
     if (videoResponce.status === StatusBase.Success) {
-      axios.post(QueriesUrls.VIDEO_ADD_VIEW, null, {
+      axios.post(QueriesUrls.VIDEO_VIEW_COMMON, null, {
         params: {
           id: video.value?.id,
         },

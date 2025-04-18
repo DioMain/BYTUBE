@@ -1,4 +1,4 @@
-import AdminControllDTO from "@type/AdminControllDTO";
+import AdminControllDTO from "@type/ChannelControllDTO";
 import styles from "./styled";
 import { IconButton, Stack, Tooltip } from "@mui/material";
 import { Block, Delete, Lock } from "@mui/icons-material";

@@ -19,7 +19,7 @@ const QueriesUrls = {
   GET_PLAYLIST_VIDEOS: "/api/video/playlist",
   GET_VIDEO_MARKS: "/api/video/mark",
   VIDEO_MARK: "/api/video/mark",
-  VIDEO_ADD_VIEW: "/api/video/view",
+  VIDEO_VIEW_COMMON: "/api/video/view",
 
   CHANNEL_COMMON: "/api/channel",
   GET_CHANNEL_VIDEOS: "/api/video/channel",

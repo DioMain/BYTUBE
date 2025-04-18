@@ -24,8 +24,6 @@ namespace BYTUBE.Entity.Models
 
         public string Description { get; set; } = string.Empty;
 
-        public int Views { get; set; } = 0;
-
         [Required]
         public string Duration { get; set; } = string.Empty;
 
@@ -40,10 +38,10 @@ namespace BYTUBE.Entity.Models
         public required Status VideoStatus { get; set; } = Status.NoLimit;
 
         [Required]
-        public required Guid OwnerId { get; set; }
+        public required Guid ChannelId { get; set; }
 
-        [ForeignKey(nameof(OwnerId))]
-        public Channel? Owner { get; set; }
+        [ForeignKey(nameof(ChannelId))]
+        public Channel? Channel { get; set; }
 
         public List<Report> Reports { get; set; } = [];
 
@@ -51,6 +49,8 @@ namespace BYTUBE.Entity.Models
 
         public List<PlaylistItem> PlaylistItems { get; set; } = [];
 
-        public List<VideoMark> VideoMarks { get; set; } = [];
+        public List<VideoMark> Marks { get; set; } = [];
+
+        public List<VideoView> Views { get; set; } = [];
     }
 }

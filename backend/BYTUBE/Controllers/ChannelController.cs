@@ -182,7 +182,7 @@ namespace BYTUBE.Controllers
                 if (channel.UserId != authData.Id)
                     throw new ServerException("Канал вам не пренадлежит!", 403);
 
-                foreach (var video in _db.Videos.Where(i => i.OwnerId == channel.Id))
+                foreach (var video in _db.Videos.Where(i => i.ChannelId == channel.Id))
                 {
                     Directory.Delete($"{LocalDataService.VideosPath}/{video.Id}", true);
 

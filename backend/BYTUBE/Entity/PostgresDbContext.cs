@@ -16,6 +16,7 @@ public class PostgresDbContext : DbContext
     public DbSet<Playlist> Playlists { get; set; }
     public DbSet<PlaylistItem> PlaylistItems { get; set; }
     public DbSet<VideoMark> VideoMarks { get; set; }
+    public DbSet<VideoView> VideoViews { get; set; }
 
     public PostgresDbContext(DbContextOptions<PostgresDbContext> options) : base(options)
     {

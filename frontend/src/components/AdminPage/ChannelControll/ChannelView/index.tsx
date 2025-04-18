@@ -1,4 +1,4 @@
-import AdminControllDTO from "@type/AdminControllDTO";
+import AdminControllDTO from "@type/ChannelControllDTO";
 import styles from "./styled";
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Stack } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
@@ -55,9 +55,11 @@ const ChannelView: React.FC<ChannelViewProps> = ({ item }) => {
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMore />}>Видео</AccordionSummary>
             <AccordionDetails>
-              {videos.map((video, index) => {
-                return <ChannelVideoItem video={video} key={`channel-video-${index}`} />;
-              })}
+              <Stack spacing={1}>
+                {videos.map((video, index) => {
+                  return <ChannelVideoItem video={video} key={`channel-video-${index}`} />;
+                })}
+              </Stack>
             </AccordionDetails>
           </Accordion>
         </>

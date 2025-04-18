@@ -82,7 +82,7 @@ namespace BYTUBE.Controllers
                 Comment[] comments = await _db.Comments
                     .Include(i => i.User)
                     .Include(i => i.Video)
-                    .Include(i => i.Video!.Owner)
+                    .Include(i => i.Video!.Channel)
                     .Where(i => i.VideoId == vguid)
                     .OrderBy(i => i.Created)
                     .ToArrayAsync();
@@ -97,7 +97,7 @@ namespace BYTUBE.Controllers
                     if (authData.IsAutorize)
                     {
                         userIsLikeIt = comment.Likes.Contains(authData.Id);
-                        isVideoOwner = comment.Video!.Owner!.UserId == authData.Id;
+                        isVideoOwner = comment.Video!.Channel!.UserId == authData.Id;
                     } 
 
                     return new CommentModel()
@@ -193,7 +193,7 @@ namespace BYTUBE.Controllers
 
                 Comment? comment = await _db.Comments
                     .Include(i => i.Video)
-                        .ThenInclude(i => i.Owner)
+                        .ThenInclude(i => i.Channel)
                     .FirstOrDefaultAsync(c => c.Id == id)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
@@ -226,13 +226,13 @@ namespace BYTUBE.Controllers
 
                 Comment? comment = await _db.Comments
                                         .Include(i => i.Video)
-                                        .Include(i => i.Video!.Owner)
+                                        .Include(i => i.Video!.Channel)
                                         .FirstOrDefaultAsync(c => c.Id == guid)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
                 if (comment.UserId != authData.Id 
                  && authData.Role != Entity.Models.User.RoleType.Admin 
-                 && comment.Video.Owner.UserId != authData.Id)
+                 && comment.Video.Channel.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
                 _db.Comments.Remove(comment);
