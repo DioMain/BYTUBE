@@ -1,12 +1,14 @@
-import { observer } from "mobx-react-lite";
-import styles from "./styled";
+import { Alert, Grid2, IconButton, LinearProgress, Stack } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import AdminControllDTO from "@type/AdminControllDTO";
-import { Alert, IconButton, LinearProgress, Stack } from "@mui/material";
-import useOnSeeElement from "@hooks/useOnSeeElement";
-import axios, { AxiosError } from "axios";
-import QueriesUrls from "@helpers/QeuriesUrls";
+import { observer } from "mobx-react-lite";
 import { Search } from "@mui/icons-material";
+import styles from "./styled";
+import AdminControllDTO from "@type/AdminControllDTO";
+import useOnSeeElement from "@hooks/useOnSeeElement";
+import axios from "axios";
+import QueriesUrls from "@helpers/QeuriesUrls";
+import ChannelItem from "./ChannelItem";
+import ChannelView from "./ChannelView";
 
 const ChannelControll: React.FC = observer(() => {
   const paginationOffset = useRef(0);
@@ -18,6 +20,7 @@ const ChannelControll: React.FC = observer(() => {
   const [models, setModels] = useState<AdminControllDTO[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [isEnded, setEnded] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<AdminControllDTO | null>(null);
 
   const onSeeHandle = useCallback(() => {
     setLoading(true);
@@ -68,6 +71,13 @@ const ChannelControll: React.FC = observer(() => {
     setLoading(true);
   };
 
+  const onItemClickHandle = useCallback(
+    (item: AdminControllDTO) => {
+      setSelectedItem(item);
+    },
+    [setSelectedItem]
+  );
+
   return (
     <styles.ChannelControll spacing={2}>
       {isLoading && <LinearProgress />}
@@ -81,11 +91,18 @@ const ChannelControll: React.FC = observer(() => {
         </styles.SearchInput>
       </Stack>
 
-      <Stack>
-        {models.map((value, key) => {
-          return <div key={`channel-${key}`}>{value.channel.name}</div>;
-        })}
-      </Stack>
+      <Grid2 container spacing={1}>
+        <Grid2 size={6}>
+          <Stack spacing={2}>
+            {models.map((value, key) => {
+              return <ChannelItem key={`channel-${key}`} item={value} onClick={onItemClickHandle} />;
+            })}
+          </Stack>
+        </Grid2>
+        <Grid2 size={6}>
+          <ChannelView item={selectedItem} />
+        </Grid2>
+      </Grid2>
 
       {!isEnded ? (
         !isLoading && <div ref={observerDiv}></div>

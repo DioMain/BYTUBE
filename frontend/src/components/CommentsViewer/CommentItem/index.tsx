@@ -60,9 +60,9 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onLike, onDelete, on
 
   return (
     <styles.ListItem direction={"row"} spacing={2}>
-      <styles.ItemIcon style={{ backgroundImage: `url("${comment.user?.iconUrl}")`, width: "48px" }}></styles.ItemIcon>
+      <styles.ItemIcon style={{ backgroundImage: `url("${comment.user?.iconUrl}")` }}></styles.ItemIcon>
 
-      <Stack spacing={1} style={{ width: "90%" }}>
+      <Stack spacing={1} style={{ width: "100%" }}>
         <Stack direction={"row"} justifyContent={"space-between"}>
           <styles.ItemName>{comment.user?.name}</styles.ItemName>
           <styles.ItemCreated>{getCreatedTimeText(comment.created!)}</styles.ItemCreated>

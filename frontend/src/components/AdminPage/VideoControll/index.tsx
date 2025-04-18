@@ -1,14 +1,11 @@
-import Logo from "@components/Logo";
 import { Alert, Grid2, LinearProgress, Stack, TextField, IconButton, Tabs, Tab } from "@mui/material";
 import { useRef, useState } from "react";
 import { SelectOrderBy } from "@type/SelectOptions";
 import { useStores } from "appStoreContext";
 import { observer } from "mobx-react-lite";
-import { Role } from "@type/models/UserModel";
 import { Search } from "@mui/icons-material";
 import AuthState from "@type/AuthState";
 import QueriesUrls from "@helpers/QeuriesUrls";
-import useAuth from "@hooks/useAuth";
 import useVideosWithPagination from "@hooks/useVideosWithPagination";
 import VideoItem from "./VideoItem";
 import StatusBase from "@type/StatusBase";
@@ -16,7 +13,6 @@ import VideoModel from "@type/models/VideoModel";
 import axios from "axios";
 import CommentsViewer from "@components/CommentsViewer";
 import ReportView from "./ReportView/intex";
-import useProtected from "@hooks/useProtected";
 import styles from "./styled";
 
 const VideoControll: React.FC = observer(() => {

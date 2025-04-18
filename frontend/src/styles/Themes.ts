@@ -49,6 +49,7 @@ const lightThemeMUI = createTheme({
         },
       },
     },
+
     MuiFormLabel: {
       styleOverrides: {
         root: {
@@ -65,6 +66,21 @@ const lightThemeMUI = createTheme({
         indicator: {
           height: "4px",
           borderRadius: "4px",
+        },
+      },
+    },
+
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          borderRadius: ThemeValues.commonBorderRadius,
+          outline: "none",
+
+          border: "1px solid #666",
+
+          "::before": {
+            display: "none",
+          },
         },
       },
     },

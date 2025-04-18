@@ -109,7 +109,7 @@ namespace BYTUBE.Controllers
                 {
                     Name = model.Name,
                     Description = model.Description,
-                    Created = DateTime.Now.ToUniversalTime(),
+                    Created = DateTime.UtcNow,
                     UserId = authData.Id,
                 })).Entity;
 
@@ -333,6 +333,7 @@ namespace BYTUBE.Controllers
                             Name = channel.Name,
                             Description = channel.Description!,
                             Subscribes = channel.Subscribes.Count,
+                            Created = channel.Created,
                             IsSubscripted = false,
                             IconUrl = $"/data/channels/{channel.Id}/icon.{channelData.IconExtention}",
                             BannerUrl = $"/data/channels/{channel.Id}/banner.{channelData.BannerExtention}",

@@ -26,6 +26,8 @@ const ListItem = styled(Stack)`
 
 const ItemIcon = styled.div`
   ${Avatar("48px")}
+
+  min-width: 48px;
 `;
 
 const ItemName = styled(Stack)`

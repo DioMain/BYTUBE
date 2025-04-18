@@ -15,8 +15,11 @@ const BoldFont = (fontSize: string) => `
 `;
 
 const Avatar = (size: string) => `
-  width: ${size};
-  height: ${size};
+  min-width: ${size};
+  min-height: ${size};
+
+  max-width: ${size};
+  max-height: ${size};
 
   border-radius: 100%;
 
