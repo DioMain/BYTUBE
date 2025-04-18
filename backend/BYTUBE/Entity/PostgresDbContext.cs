@@ -2,6 +2,7 @@
 using BYTUBE.Services;
 using Microsoft.EntityFrameworkCore;
 using NAudio.CoreAudioApi;
+using System.Globalization;
 using System.Xml.Linq;
 
 public class PostgresDbContext : DbContext
@@ -47,7 +48,7 @@ public class PostgresDbContext : DbContext
             Name = "ADMIN",
             Email = "ADMIN@mail.com",
             Password = hasher.Hash("Pravoda01"),
-            BirthDay = DateOnly.Parse("16.04.2004")
+            BirthDay = DateOnly.ParseExact("16.04.2004", "dd.MM.yyyy", CultureInfo.InvariantCulture)
         },
         new User()
         {
@@ -56,7 +57,7 @@ public class PostgresDbContext : DbContext
             Name = "DataGenerator",
             Email = "Generator@mail.com",
             Password = hasher.Hash("123456"),
-            BirthDay = DateOnly.Parse("16.04.2004")
+            BirthDay = DateOnly.ParseExact("16.04.2004", "dd.MM.yyyy", CultureInfo.InvariantCulture)
         });
 
         builder.Entity<Channel>().HasData(new Channel()

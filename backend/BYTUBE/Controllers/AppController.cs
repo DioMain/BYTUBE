@@ -72,7 +72,7 @@ namespace BYTUBE.Controllers
         [HttpGet, Route("/App/WatchTogether/Main")]
         public IResult GetPage8()
         {
-            return GetView();
+            return GetView();   
         }
 
         [HttpGet, Route("/App/WatchTogether/Lobby")]
