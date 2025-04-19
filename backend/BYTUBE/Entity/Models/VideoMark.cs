@@ -16,8 +16,8 @@ namespace BYTUBE.Entity.Models
         [ForeignKey(nameof(VideoId))]
         public Video? Video { get; set; }
 
-        [Required]
-        public bool IsLike { get; set; }
+        public bool IsLike { get; set; } = false;
+        public bool IsDisLike { get; set; } = false;
 
         public DateTime Updated { get; set; }
     }

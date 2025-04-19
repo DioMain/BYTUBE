@@ -549,13 +549,13 @@ namespace BYTUBE.Controllers
                 VideoMarkModel model = new()
                 {
                     LikesCount = video.Marks.Count(mark => mark.IsLike),
-                    DislikesCount = video.Marks.Count(mark => !mark.IsLike)
+                    DislikesCount = video.Marks.Count(mark => mark.IsDisLike)
                 };
 
                 if (authData.IsAutorize)
                 {
                     model.UserIsLikeIt = video.Marks.Any(mark => mark.UserId == authData.Id && mark.IsLike);
-                    model.UserIsDislikeIt = video.Marks.Any(mark => mark.UserId == authData.Id && !mark.IsLike);
+                    model.UserIsDislikeIt = video.Marks.Any(mark => mark.UserId == authData.Id && mark.IsDisLike);
                 }
 
                 return Results.Json(model);
@@ -585,7 +585,17 @@ namespace BYTUBE.Controllers
 
                 if (mark is not null)
                 {
-                    mark.IsLike = isLike;
+                    if (isLike)
+                    {
+                        mark.IsLike = !mark.IsLike;
+                        mark.IsDisLike = false;
+                    }
+                    else
+                    {
+                        mark.IsLike = false;
+                        mark.IsDisLike = !mark.IsDisLike;
+                    }
+
                     mark.Updated = DateTime.UtcNow;
                 }
                 else
@@ -595,7 +605,8 @@ namespace BYTUBE.Controllers
                         UserId = user.Id,
                         VideoId = video.Id,
                         Updated = DateTime.UtcNow,
-                        IsLike = isLike
+                        IsLike = isLike,
+                        IsDisLike = !isLike
                     });
                 }
 
