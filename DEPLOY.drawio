@@ -1,43 +1,51 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
   <diagram name="Страница — 1" id="qOJu4JuCVVwuThiOHZwM">
-    <mxGraphModel dx="1877" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1863" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-1" value="&lt;div style=&quot;&quot;&gt;&amp;nbsp;Window Server 2022 10.20348.169&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="-790" y="310" width="560" height="250" as="geometry" />
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-1" value="&lt;div style=&quot;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Window Server 2022 10.20348.169&lt;/font&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="-790" y="310" width="570" height="250" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-4" value="&lt;div style=&quot;&quot;&gt;Docker Compose 4.39.0&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-4" value="&lt;div style=&quot;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Docker Compose 4.39.0&lt;/font&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-780" y="360" width="530" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-6" value="&lt;div style=&quot;&quot;&gt;Docker Container 27.3.1&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-6" value="&lt;div style=&quot;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;Docker 27.3.1 / Linux Ubuntu 24.04.1&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-770" y="410" width="190" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-7" value="PostgreSQL&amp;nbsp;&lt;div&gt;Server 17&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-7" value="&lt;font face=&quot;Times New Roman&quot;&gt;PostgreSQL&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;PsWC1AURi9-9PKMxuaQ1&quot;&gt;Server 17&lt;/font&gt;&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-740" y="460" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-8" value="&lt;div style=&quot;&quot;&gt;Docker Container 27.3.1&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-8" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;Docker 27.3.1 / Linux Ubuntu 24.04.1&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
           <mxGeometry x="-465" y="410" width="190" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-9" value=".NET 8.0.401&lt;div&gt;ASP.NET Core&lt;br&gt;bundle.js&lt;br&gt;&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-9" value="&lt;font face=&quot;Times New Roman&quot;&gt;.NET 8.0.401&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;_Fa3z_QzgGxzjxVkz4UR&quot;&gt;ASP.NET Core&lt;br&gt;bundle.js&lt;/font&gt;&lt;br&gt;&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-430" y="460" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-13" value="TCP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=70;exitDy=190;exitPerimeter=0;startArrow=classic;startFill=1;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-8" edge="1">
-          <mxGeometry x="-0.0125" y="-10" relative="1" as="geometry">
-            <mxPoint x="10" y="-10" as="offset" />
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-13" value="TCP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=70;exitDy=190;exitPerimeter=0;startArrow=classic;startFill=1;fontFamily=Times New Roman;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-8" edge="1">
+          <mxGeometry x="-0.0557" relative="1" as="geometry">
+            <mxPoint as="offset" />
             <mxPoint x="-581" y="480" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-14" value="&lt;div style=&quot;&quot;&gt;Client Browser / Edge&amp;nbsp;&lt;span style=&quot;font-family: &amp;quot;system-ui&amp;quot;, sans-serif; text-align: start; background-color: rgb(255, 255, 255);&quot;&gt;131.0.2903.99&lt;/span&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-14" value="&lt;div style=&quot;&quot;&gt;Client Browser / Edge&amp;nbsp;&lt;span style=&quot;text-align: start; background-color: rgb(255, 255, 255);&quot;&gt;131.0.2903.99&lt;/span&gt;&lt;/div&gt;" style="verticalAlign=top;align=center;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;fontFamily=Times New Roman;" parent="1" vertex="1">
           <mxGeometry x="-60" y="405" width="240" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-15" value="React 18.3.1&lt;div&gt;Mobx 6.13.5&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-15" value="React 18.3.1&lt;div&gt;Mobx 6.13.5&lt;/div&gt;" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;fontFamily=Times New Roman;" parent="1" vertex="1">
           <mxGeometry x="-10" y="460" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-16" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-8" target="PNTqQ1LK-q0UgE5t2Ike-14" edge="1">
-          <mxGeometry x="0.0476" y="15" relative="1" as="geometry">
+        <mxCell id="PNTqQ1LK-q0UgE5t2Ike-16" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;exitX=0.605;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-4" target="PNTqQ1LK-q0UgE5t2Ike-14" edge="1">
+          <mxGeometry x="0.0526" relative="1" as="geometry">
             <mxPoint as="offset" />
             <mxPoint x="-250" y="410" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p1JWkdtKyG1zRt0eny7l-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.646;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.71;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-14" target="PNTqQ1LK-q0UgE5t2Ike-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p1JWkdtKyG1zRt0eny7l-2" value="WebSocket" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Times New Roman;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="p1JWkdtKyG1zRt0eny7l-1" vertex="1" connectable="0">
+          <mxGeometry x="-0.0585" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
