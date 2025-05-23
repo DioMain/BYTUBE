@@ -29,7 +29,4 @@ README.md
 !.git/packed-refs
 !.git/refs/heads/**
 
-channels/**
-users/**
-build/**
-videos/**
+**/Data

@@ -1,4 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
+using BYTUBE.Entity.Repositories;
 using BYTUBE.Exceptions;
 using BYTUBE.Helpers;
 using BYTUBE.Models;
@@ -16,11 +17,13 @@ namespace BYTUBE.Controllers
     {
         private readonly PostgresDbContext _db;
         private readonly LocalDataService _localData;
+        private readonly CommentRepository _commentRepository;
 
         public CommentController(PostgresDbContext db, LocalDataService localData)
         {
             _db = db;
             _localData = localData;
+            _commentRepository = new CommentRepository(db);
         }
 
         [HttpGet]
@@ -33,10 +36,8 @@ namespace BYTUBE.Controllers
                 if (!Guid.TryParse(id, out Guid guid))
                     throw new ServerException("Id is not correct!");
 
-                Comment? comment = await _db.Comments.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == guid);
-
-                if (comment == null || comment.User == null)
-                    throw new ServerException("Комментарий не найден", 404);
+                Comment comment = await _commentRepository.GetCommentWithAuthor(guid)
+                    ?? throw new ServerException("Комментарий не найден", 404); 
 
                 var usrData = _localData.GetUserData(comment.User.Id);
 
