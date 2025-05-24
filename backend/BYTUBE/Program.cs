@@ -1,3 +1,4 @@
+using BYTUBE.Entity.Repositories;
 using BYTUBE.Helpers;
 using BYTUBE.Hubs;
 using BYTUBE.Middleware;
@@ -110,6 +111,11 @@ internal class Program
 
         builder.Services.AddSignalR();
 
+        builder.Services.AddScoped<CommentRepository>();
+        builder.Services.AddScoped<VideoRepository>();
+
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
         // DataSource
 
         var app = builder.Build();
@@ -143,6 +149,8 @@ internal class Program
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        app.UseExceptionHandler("/", );
 
         app.MapHub<WatchTogetherHub>(w2gPath);
 

@@ -19,11 +19,11 @@ namespace BYTUBE.Controllers
         private readonly LocalDataService _localData;
         private readonly CommentRepository _commentRepository;
 
-        public CommentController(PostgresDbContext db, LocalDataService localData)
+        public CommentController(PostgresDbContext db, LocalDataService localData, CommentRepository repository)
         {
             _db = db;
             _localData = localData;
-            _commentRepository = new CommentRepository(db);
+            _commentRepository = repository;
         }
 
         [HttpGet]
@@ -80,13 +80,7 @@ namespace BYTUBE.Controllers
                 if (!Guid.TryParse(vid, out Guid vguid))
                     throw new ServerException("vId is not correct!");
 
-                Comment[] comments = await _db.Comments
-                    .Include(i => i.User)
-                    .Include(i => i.Video)
-                    .Include(i => i.Video!.Channel)
-                    .Where(i => i.VideoId == vguid)
-                    .OrderBy(i => i.Created)
-                    .ToArrayAsync();
+                Comment[] comments = await _commentRepository.GetVideoComments(vguid);
 
                 return Results.Json(comments.Select(comment =>
                 {

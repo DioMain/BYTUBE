@@ -1,9 +1,8 @@
 ﻿namespace BYTUBE.Entity
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : class
     {
         public T? Get(Guid guid);
-        public List<T> GetAll();
 
         public void Create(T value);
         public void Update(T value);

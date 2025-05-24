@@ -1,4 +1,5 @@
 ﻿using BYTUBE.Entity.Models;
+using BYTUBE.Entity.Repositories;
 using BYTUBE.Exceptions;
 using BYTUBE.Helpers;
 using BYTUBE.Models;
@@ -19,12 +20,14 @@ namespace BYTUBE.Controllers
         private readonly PostgresDbContext _dbContext;
         private readonly LocalDataService _localData;
         private readonly VideoMediaService _videoMedia;
+        private readonly VideoRepository _repository;
 
-        public VideoController(PostgresDbContext db, LocalDataService localData, VideoMediaService videoMedia)
+        public VideoController(PostgresDbContext db, LocalDataService localData, VideoMediaService videoMedia, VideoRepository repository)
         {
             _dbContext = db;
             _localData = localData;
             _videoMedia = videoMedia;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -219,126 +222,40 @@ namespace BYTUBE.Controllers
         [HttpGet("select")]
         public async Task<IResult> Select([FromQuery] SelectOptions options)
         {
-            try
+            var authData = AuthorizeData.FromContext(HttpContext);
+
+            var videos = await _repository.Select(options, authData);
+
+            var result = videos.Select(video =>
             {
-                var authData = AuthorizeData.FromContext(HttpContext);
+                var videoData = _localData.GetVideoData(video.Id);
+                var channelData = _localData.GetChannelData(video.Channel!.Id);
 
-                var tagPattern = @"#\w+";
-                var tags = Regex.Matches(options.SearchPattern, tagPattern)
-                                .Cast<Match>()
-                                .Select(m => m.Value[1..])
-                                .ToList();
-
-                var searchPatternNoTags = Regex.Replace(options.SearchPattern, tagPattern, "").Trim();
-
-                var query = _dbContext.Videos
-                    .Include(Video => Video.Marks)
-                    .Include(Video => Video.Views)
-                    .Include(video => video.Channel)
-                        .ThenInclude(o => o.Subscribes)
-                    .Include(video => video.Reports)
-                    .AsQueryable();
-
-
-                if (!(options.AsAdmin && authData.IsAutorize && authData.Role == Entity.Models.User.RoleType.Admin))
+                return new VideoModel
                 {
-                    query = query.Where(video => video.VideoAccess == Video.Access.All);
-
-                    if (options.OnlyUnlimited)
-                        query = query.Where(
-                            video => video.VideoStatus == Video.Status.NoLimit 
-                         && video.Channel.Status == Channel.ActiveStatus.Normal);
-                    else
-                        query = query.Where(video => 
-                            (video.VideoStatus == Video.Status.NoLimit || video.VideoStatus == Video.Status.Limited)
-                         && (video.Channel.Status == Channel.ActiveStatus.Normal || video.Channel.Status == Channel.ActiveStatus.Limited));
-                }
-
-                if (!string.IsNullOrEmpty(options.Ignore))
-                {
-                    var ignoredIds = options.Ignore.Split(',').Select(Guid.Parse);
-                    query = query.Where(video => !ignoredIds.Contains(video.Id));
-                }
-
-                if (!string.IsNullOrEmpty(searchPatternNoTags))
-                {
-                    query = query.Where(video => Regex.IsMatch(video.Title, $@"(\w)*{searchPatternNoTags}(\w)*"));
-                }
-
-                if (authData.IsAutorize)
-                {
-                    var user = await _dbContext.Users.FirstAsync(i => i.Id == authData.Id);
-
-                    if (options.OnlyAllAges)
+                    Id = video.Id.ToString(),
+                    Title = video.Title,
+                    Duration = video.Duration,
+                    Created = video.Created,
+                    VideoAccess = video.VideoAccess,
+                    VideoStatus = video.VideoStatus,
+                    Views = video.Views.Count,
+                    ReportsCount = video.Reports.Count,
+                    ForAdults = video.ForAdults,
+                    Description = video.Description,
+                    PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
+                    Channel = new ChannelModel
                     {
-                        query = query.Where(video => !video.ForAdults);
+                        Id = video.Channel.Id.ToString(),
+                        Name = video.Channel.Name,
+                        IsSubscripted = false,
+                        Subscribes = video.Channel.Subscribes.Count,
+                        IconUrl = $"/data/channels/{video.Channel.Id}/icon.{channelData.IconExtention}"
                     }
-
-                    if (options.Subscribes)
-                    {
-                        query = query.Where(video => video.Channel!.Subscribes.Any(sub => sub.UserId == authData.Id));
-                    }
-
-                    if (options.Favorite)
-                    {
-                        query = query.Where(video => video.Marks.Any(mark => mark.UserId == user.Id && mark.IsLike));
-                    }
-                }
-
-                query = options.OrderBy switch
-                {
-                    SelectOrderBy.Creation => query.OrderBy(video => video.Created),
-                    SelectOrderBy.CreationDesc => query.OrderByDescending(video => video.Created),
-                    SelectOrderBy.Reports => query.OrderBy(video => video.Reports.Count),
-                    SelectOrderBy.ReportsDesc => query.OrderByDescending(video => video.Reports.Count),
-                    SelectOrderBy.Views => query.OrderByDescending(video => video.Views.Count),
-                    _ => query
                 };
+            });
 
-                var videos = await query.ToListAsync();
-
-                if (tags.Count != 0)
-                {
-                    videos = videos.Where(video => video.Tags.Any(vtag => tags.Contains(vtag))).ToList();
-                }
-
-                videos = videos.Skip(options.Skip).Take(options.Take).ToList();
-
-                var result = videos.Select(video =>
-                {
-                    var videoData = _localData.GetVideoData(video.Id);
-                    var channelData = _localData.GetChannelData(video.Channel!.Id);
-
-                    return new VideoModel
-                    {
-                        Id = video.Id.ToString(),
-                        Title = video.Title,
-                        Duration = video.Duration,
-                        Created = video.Created,
-                        VideoAccess = video.VideoAccess,
-                        VideoStatus = video.VideoStatus,
-                        Views = video.Views.Count,
-                        ReportsCount = video.Reports.Count,
-                        ForAdults = video.ForAdults,
-                        Description = video.Description,
-                        PreviewUrl = $"/data/videos/{video.Id}/preview.{videoData.PreviewExtention}",
-                        Channel = new ChannelModel
-                        {
-                            Id = video.Channel.Id.ToString(),
-                            Name = video.Channel.Name,
-                            IsSubscripted = false,
-                            Subscribes = video.Channel.Subscribes.Count,
-                            IconUrl = $"/data/channels/{video.Channel.Id}/icon.{channelData.IconExtention}"
-                        }
-                    };
-                });
-
-                return Results.Json(result);
-            }
-            catch (ServerException err)
-            {
-                return Results.Json(err.GetModel(), statusCode: err.Code);
-            }
+            return Results.Json(result);
         }
 
         [HttpPost, Authorize]

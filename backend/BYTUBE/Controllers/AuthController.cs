@@ -62,10 +62,6 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(apperr.GetModel(), statusCode: apperr.Code);
             }
-            catch (Exception err)
-            {
-                return Results.Problem(err.Message, statusCode: 400);
-            }
         }
 
         [HttpGet("signout")]
