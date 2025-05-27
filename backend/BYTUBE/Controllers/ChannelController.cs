@@ -202,10 +202,6 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
             }
-            catch (Exception err)
-            {
-                return Results.Problem(err.Message);
-            }
         }
 
         [HttpGet("user"), Authorize]

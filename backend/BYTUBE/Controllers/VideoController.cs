@@ -58,7 +58,7 @@ namespace BYTUBE.Controllers
 
                 var views = await _dbContext.VideoViews.Where(v => v.VideoId == id).CountAsync();
 
-                VideoFullModel model = new()
+                return Results.Json(new VideoFullModel()
                 {
                     Id = video.Id.ToString(),
                     Title = video.Title,
@@ -77,27 +77,16 @@ namespace BYTUBE.Controllers
                     {
                         Id = channel.Id.ToString(),
                         Name = channel.Name,
-                        IsSubscripted = false,
+                        IsSubscripted = channel.Subscribes.Any(i => i.UserId == authData.Id),
                         Subscribes = channel.Subscribes.Count,
                         Status = channel.Status,
                         IconUrl = $"/data/channels/{channel.Id}/icon.{channelLocalData.IconExtention}"
                     }
-                };
-
-                if (authData.IsAutorize)
-                {
-                    model.Channel.IsSubscripted = channel.Subscribes.Any(i => i.UserId == authData.Id);
-                }
-
-                return Results.Json(model);
+                });
             }
             catch (ServerException srverr)
             {
                 return Results.Json(srverr.GetModel(), statusCode: srverr.Code);
-            }
-            catch
-            {
-                return Results.Problem(statusCode: 400);
             }
         }
 
@@ -161,11 +150,7 @@ namespace BYTUBE.Controllers
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                Playlist? playlist = await _dbContext.Playlists
-                    .Include(pl => pl.PlaylistItems)
-                        .ThenInclude(item => item.Video)
-                            .ThenInclude(video => video.Channel)
-                    .FirstOrDefaultAsync(pl => pl.Id == playlistId)
+                Playlist playlist = await _repository.GetPlaylistWithVideo(playlistId)
                     ?? throw new ServerException("Плейлист не найден!", 404);
 
                 if (playlist.Access == Playlist.AccessType.Private)
@@ -212,10 +197,6 @@ namespace BYTUBE.Controllers
             catch (ServerException err)
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
-            }
-            catch (Exception err)
-            {
-                return Results.Problem(detail: err.Message, statusCode: 400);
             }
         }
 
@@ -324,13 +305,10 @@ namespace BYTUBE.Controllers
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!await _dbContext.Channels.AnyAsync(c => c.Id == channelId && c.UserId == authData.Id))
-                    throw new ServerException("Канал вам не пренадлежит", 403);
+                Video video = await _repository.FindVideoWithChannel(id, channelId)
+                    ?? throw new ServerException("Такого видео не существует", 404);
 
-                Video video = await _dbContext.Videos.FindAsync(id)
-                    ?? throw new ServerException("Видео не существует", 404);
-
-                if (video.ChannelId != channelId)
+                if (await _dbContext.Channels.AnyAsync(channel => channel.UserId == authData.Id))
                     throw new ServerException("Видео вам не пренадлежит", 403);
 
                 video.Title = model.Title;
@@ -352,10 +330,6 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
             }
-            catch
-            {
-                return Results.Problem("Error", statusCode: 400);
-            }
         }
 
         [HttpDelete, Authorize]
@@ -365,13 +339,10 @@ namespace BYTUBE.Controllers
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!await _dbContext.Channels.AnyAsync(c => c.Id == channelId && c.UserId == authData.Id))
-                    throw new ServerException("Канал вам не пренадлежит", 403);
+                Video video = await _repository.FindVideoWithChannel(id, channelId)
+                    ?? throw new ServerException("Такого видео не существует", 404);
 
-                Video? video = await _dbContext.Videos.FindAsync(id)
-                    ?? throw new ServerException("Видео не существует", 404);
-
-                if (video.ChannelId != channelId)
+                if (await _dbContext.Channels.AnyAsync(channel => channel.UserId == authData.Id))
                     throw new ServerException("Видео вам не пренадлежит", 403);
 
                 Directory.Delete($"{LocalDataService.VideosPath}/{id}", true);
@@ -384,10 +355,6 @@ namespace BYTUBE.Controllers
             catch (ServerException srvErr)
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
-            }
-            catch
-            {
-                return Results.Problem("Error", statusCode: 400);
             }
         }
 
@@ -444,10 +411,6 @@ namespace BYTUBE.Controllers
             catch (ServerException srvErr)
             {
                 return Results.Json(srvErr.GetModel(), statusCode: srvErr.Code);
-            }
-            catch (Exception err)
-            {
-                return Results.Problem(err.Message, statusCode: 400);
             }
         }
 
@@ -618,10 +581,6 @@ namespace BYTUBE.Controllers
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
             }
-            catch (Exception err)
-            {
-                return Results.Json(err.Message, statusCode: 500);
-            }
         }
 
         [HttpPut("status"), Authorize(Roles = "Admin")]
@@ -634,24 +593,20 @@ namespace BYTUBE.Controllers
                 if (authData.Role != Entity.Models.User.RoleType.Admin)
                     throw new ServerException("Вы не администратор!", 403);
 
-                var video = await _dbContext.Videos.FindAsync(id)
+                var video = await _repository.GetAsync(id)
                     ?? throw new ServerException("Видео не найдена!", 404);
 
                 video.VideoStatus = status;
 
-                _dbContext.Videos.Update(video);
+                _repository.Update(video);
 
-                await _dbContext.SaveChangesAsync();
+                await _repository.SaveChanges();
 
                 return Results.Ok();
             }
             catch (ServerException err)
             {
                 return Results.Json(err.GetModel(), statusCode: err.Code);
-            }
-            catch (Exception err)
-            {
-                return Results.Json(err.Message, statusCode: 500);
             }
         }
     }

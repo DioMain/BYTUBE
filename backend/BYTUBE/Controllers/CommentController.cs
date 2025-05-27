@@ -15,28 +15,23 @@ namespace BYTUBE.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private readonly PostgresDbContext _db;
         private readonly LocalDataService _localData;
         private readonly CommentRepository _commentRepository;
 
-        public CommentController(PostgresDbContext db, LocalDataService localData, CommentRepository repository)
+        public CommentController(LocalDataService localData, CommentRepository repository)
         {
-            _db = db;
             _localData = localData;
             _commentRepository = repository;
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] string id)
+        public async Task<IResult> Get([FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("Id is not correct!");
-
-                Comment comment = await _commentRepository.GetCommentWithAuthor(guid)
+                Comment comment = await _commentRepository.GetCommentWithAuthor(id)
                     ?? throw new ServerException("Комментарий не найден", 404); 
 
                 var usrData = _localData.GetUserData(comment.User.Id);
@@ -48,7 +43,7 @@ namespace BYTUBE.Controllers
 
                 return Results.Json(new CommentModel()
                 {
-                    Id = id,
+                    Id = id.ToString(),
                     Message = comment.Message,
                     UserId = comment.UserId.ToString(),
                     VideoId = comment.VideoId.ToString(),
@@ -60,7 +55,7 @@ namespace BYTUBE.Controllers
                     {
                         IconUrl = $"/data/users/{comment.User.Id}/icon.{usrData.IconExtention}",
                         Name = comment.User.Name,
-                        Id = id,
+                        Id = comment.UserId.ToString(),
                     }
                 });
             }
@@ -71,16 +66,13 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet("video")]
-        public async Task<IResult> GetVideoComments([FromQuery] string vid)
+        public async Task<IResult> GetVideoComments([FromQuery] Guid vid)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(vid, out Guid vguid))
-                    throw new ServerException("vId is not correct!");
-
-                Comment[] comments = await _commentRepository.GetVideoComments(vguid);
+                Comment[] comments = await _commentRepository.GetVideoComments(vid);
 
                 return Results.Json(comments.Select(comment =>
                 {
@@ -130,7 +122,7 @@ namespace BYTUBE.Controllers
                 if (!Guid.TryParse(model.VideoId, out Guid vguid))
                     throw new ServerException("Video id is not correct!");
 
-                _db.Comments.Add(new Comment()
+                await _commentRepository.CreateAsync(new Comment()
                 {
                     Message = model.Message,
                     VideoId = vguid,
@@ -139,7 +131,7 @@ namespace BYTUBE.Controllers
                     Created = DateTime.Now.ToUniversalTime(),
                 });
 
-                await _db.SaveChangesAsync();
+                await _commentRepository.SaveChanges();
 
                 return Results.Ok();
             }
@@ -150,16 +142,13 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("like"), Authorize]
-        public async Task<IResult> LikeComment([FromQuery] string id)
+        public async Task<IResult> LikeComment([FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
-                var comment = await _db.Comments.FindAsync(guid)
+                var comment = await _commentRepository.GetAsync(id)
                         ?? throw new ServerException("Комментарий не найден!", 404);
 
                 if (!comment.Likes.Contains(authData.Id))
@@ -167,9 +156,9 @@ namespace BYTUBE.Controllers
                 else
                     comment.Likes.Remove(authData.Id);
 
-                _db.Comments.Update(comment);
+                _commentRepository.Update(comment);
 
-                await _db.SaveChangesAsync();
+                await _commentRepository.SaveChanges();
 
                 return Results.Ok();
             }
@@ -186,10 +175,7 @@ namespace BYTUBE.Controllers
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                Comment? comment = await _db.Comments
-                    .Include(i => i.Video)
-                        .ThenInclude(i => i.Channel)
-                    .FirstOrDefaultAsync(c => c.Id == id)
+                Comment comment = await _commentRepository.GetWithVideoAndChannel(id)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
                 if (comment.UserId != authData.Id)
@@ -197,9 +183,9 @@ namespace BYTUBE.Controllers
 
                 comment.Message = model.Message;
 
-                _db.Comments.Update(comment);
+                _commentRepository.Update(comment);
 
-                await _db.SaveChangesAsync();
+                await _commentRepository.SaveChanges();
 
                 return Results.Ok();
             }
@@ -210,19 +196,13 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete, Authorize]
-        public async Task<IResult> Delete([FromQuery] string id)
+        public async Task<IResult> Delete([FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
-                Comment? comment = await _db.Comments
-                                        .Include(i => i.Video)
-                                        .Include(i => i.Video!.Channel)
-                                        .FirstOrDefaultAsync(c => c.Id == guid)
+                Comment comment = await _commentRepository.GetWithVideoAndChannel(id)
                     ?? throw new ServerException("Комментарий не найден!", 404);
 
                 if (comment.UserId != authData.Id 
@@ -230,9 +210,9 @@ namespace BYTUBE.Controllers
                  && comment.Video.Channel.UserId != authData.Id)
                     throw new ServerException("Комментарий вам не пренадлежит", 403);
 
-                _db.Comments.Remove(comment);
+                _commentRepository.Delete(comment.Id);
 
-                await _db.SaveChangesAsync();
+                await _commentRepository.SaveChanges();
 
                 return Results.Ok();
             }

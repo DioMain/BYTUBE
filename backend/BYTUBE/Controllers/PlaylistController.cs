@@ -20,20 +20,16 @@ namespace BYTUBE.Controllers
         }
 
         [HttpGet]
-        public async Task<IResult> Get([FromQuery] string id)
+        public async Task<IResult> Get([FromQuery] Guid id)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
                 Playlist? playlist = await _db.Playlists
                     .Include(i => i.PlaylistItems)
-                    .FirstOrDefaultAsync(i => i.Id == guid)
+                    .FirstOrDefaultAsync(i => i.Id == id)
                     ?? throw new ServerException("Плейлист не найден!", 404);
-
 
                 if (playlist.Access == Playlist.AccessType.Private)
                 {
@@ -42,11 +38,10 @@ namespace BYTUBE.Controllers
                     else if (authData.Id != playlist.UserId)
                         throw new ServerException("Плейлист вам не принодлежит!", 403);
                 }
-                    
 
                 return Results.Json(new PlaylistModel()
                 {
-                    Id = id,
+                    Id = id.ToString(),
                     Name = playlist.Name,
                     Access = playlist.Access,
                     UserId = playlist.UserId.ToString(),
@@ -124,20 +119,14 @@ namespace BYTUBE.Controllers
         }
 
         [HttpPost("add"), Authorize]
-        public async Task<IResult> AddVideoToPlaylist([FromQuery] string id, [FromQuery] string vid)
+        public async Task<IResult> AddVideoToPlaylist([FromQuery] Guid id, [FromQuery] Guid vid)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
-                if (!Guid.TryParse(vid, out Guid vguid))
-                    throw new ServerException("vid is not correct!");
-
-                Playlist? playlist = await _db.Playlists.FindAsync(guid);
-                Video? video = await _db.Videos.FindAsync(vguid);
+                Playlist? playlist = await _db.Playlists.FindAsync(id);
+                Video? video = await _db.Videos.FindAsync(vid);
 
                 if (playlist == null || video == null)
                     throw new ServerException("Видео или плейлист не найден", 404);
@@ -146,7 +135,7 @@ namespace BYTUBE.Controllers
                     throw new ServerException("Плейлист вам не принадлежит", 403);
 
                 var playlistItems = await _db.PlaylistItems
-                    .Where(PlaylistItem => PlaylistItem.PlaylistId == guid)
+                    .Where(PlaylistItem => PlaylistItem.PlaylistId == id)
                     .ToArrayAsync();
 
                 int order = 0;
@@ -172,20 +161,14 @@ namespace BYTUBE.Controllers
         }
 
         [HttpDelete("remove"), Authorize]
-        public async Task<IResult> RemoveVideoFromPlaylist([FromQuery] string id, [FromQuery] string vid)
+        public async Task<IResult> RemoveVideoFromPlaylist([FromQuery] Guid id, [FromQuery] Guid vid)
         {
             try
             {
                 var authData = AuthorizeData.FromContext(HttpContext);
 
-                if (!Guid.TryParse(id, out Guid guid))
-                    throw new ServerException("id is not correct!");
-
-                if (!Guid.TryParse(vid, out Guid vguid))
-                    throw new ServerException("vid is not correct!");
-
-                Playlist? playlist = await _db.Playlists.FindAsync(guid);
-                Video? video = await _db.Videos.FindAsync(vguid);
+                Playlist? playlist = await _db.Playlists.FindAsync(id);
+                Video? video = await _db.Videos.FindAsync(vid);
 
                 if (playlist == null || video == null)
                     throw new ServerException("Видео или плейлист не найден", 404);

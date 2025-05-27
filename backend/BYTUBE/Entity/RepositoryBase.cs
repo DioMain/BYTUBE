@@ -52,7 +52,7 @@ namespace BYTUBE.Entity
             _context.Update(value);
         }
 
-        public async Task SaveChanged()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }

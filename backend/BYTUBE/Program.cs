@@ -150,7 +150,7 @@ internal class Program
         app.UseSwagger();
         app.UseSwaggerUI();
 
-        app.UseExceptionHandler("/", );
+        app.UseExceptionHandler("/");
 
         app.MapHub<WatchTogetherHub>(w2gPath);
 

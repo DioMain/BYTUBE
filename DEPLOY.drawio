@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
   <diagram name="Страница — 1" id="qOJu4JuCVVwuThiOHZwM">
-    <mxGraphModel dx="1863" dy="613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1427" dy="355" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -23,8 +23,8 @@
           <mxGeometry x="-430" y="460" width="120" height="50" as="geometry" />
         </mxCell>
         <mxCell id="PNTqQ1LK-q0UgE5t2Ike-13" value="TCP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=70;exitDy=190;exitPerimeter=0;startArrow=classic;startFill=1;fontFamily=Times New Roman;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-8" edge="1">
-          <mxGeometry x="-0.0557" relative="1" as="geometry">
-            <mxPoint as="offset" />
+          <mxGeometry x="-0.0128" y="-12" relative="1" as="geometry">
+            <mxPoint x="-2" as="offset" />
             <mxPoint x="-581" y="480" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -35,17 +35,19 @@
           <mxGeometry x="-10" y="460" width="120" height="50" as="geometry" />
         </mxCell>
         <mxCell id="PNTqQ1LK-q0UgE5t2Ike-16" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;exitX=0.605;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-4" target="PNTqQ1LK-q0UgE5t2Ike-14" edge="1">
-          <mxGeometry x="0.0526" relative="1" as="geometry">
+          <mxGeometry x="0.0526" y="15" relative="1" as="geometry">
             <mxPoint as="offset" />
             <mxPoint x="-250" y="410" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="p1JWkdtKyG1zRt0eny7l-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.646;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.71;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-14" target="PNTqQ1LK-q0UgE5t2Ike-4" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="p1JWkdtKyG1zRt0eny7l-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.754;exitY=1.001;exitDx=0;exitDy=0;exitPerimeter=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=classic;startFill=1;endArrow=classic;" parent="1" source="PNTqQ1LK-q0UgE5t2Ike-14" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-250" y="510" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="p1JWkdtKyG1zRt0eny7l-2" value="WebSocket" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=Times New Roman;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="p1JWkdtKyG1zRt0eny7l-1" vertex="1" connectable="0">
           <mxGeometry x="-0.0585" y="2" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>

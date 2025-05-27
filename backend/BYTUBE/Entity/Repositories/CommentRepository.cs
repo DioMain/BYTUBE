@@ -22,10 +22,18 @@ namespace BYTUBE.Entity.Repositories
             return await _context.Comments
                     .Include(i => i.User)
                     .Include(i => i.Video)
-                    .Include(i => i.Video!.Channel)
+                        .ThenInclude(i => i.Channel)
                     .Where(i => i.VideoId == videoGuid)
                     .OrderBy(i => i.Created)
                     .ToArrayAsync();
+        }
+
+        public async Task<Comment?> GetWithVideoAndChannel(Guid guid)
+        {
+            return await _context.Comments
+                          .Include(i => i.Video)
+                            .ThenInclude(i => i.Channel)
+                          .FirstOrDefaultAsync(c => c.Id == guid);
         }
     }
 }

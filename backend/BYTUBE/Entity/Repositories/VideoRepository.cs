@@ -13,6 +13,13 @@ namespace BYTUBE.Entity.Repositories
         {
         }
 
+        public async Task<Video?> FindVideoWithChannel(Guid guid, Guid channelGuid)
+        {
+            return await _context.Videos
+                .Include(video => video.Channel)
+                .FirstOrDefaultAsync(video => video.Id == guid && video.Channel.Id == channelGuid);
+        }
+
         public async Task<Video[]> Select(SelectOptions options, AuthorizeData authData)
         {
             var tagPattern = @"#\w+";
@@ -95,6 +102,15 @@ namespace BYTUBE.Entity.Repositories
             }
 
             return videos.Skip(options.Skip).Take(options.Take).ToArray();
+        }
+
+        public async Task<Playlist?> GetPlaylistWithVideo(Guid playlistGuid)
+        {
+            return await _context.Playlists
+                    .Include(pl => pl.PlaylistItems)
+                        .ThenInclude(item => item.Video)
+                            .ThenInclude(video => video.Channel)
+                    .FirstOrDefaultAsync(pl => pl.Id == playlistGuid);
         }
     }
 }
